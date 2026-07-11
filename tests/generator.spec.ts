@@ -44,7 +44,7 @@ describe("generateProject", () => {
 
     expect(main).toContain('createApp(App).mount("#app")');
     expect(viteConfig).toContain("elfuiMacroPlugin()");
-    expect(manifest.dependencies).toHaveProperty("elfui");
+    expect(manifest.dependencies).toHaveProperty("@elfui/core");
     expect(manifest.devDependencies).toHaveProperty("@elfui/vite-plugin");
     expect(manifest.dependencies).not.toHaveProperty("@elfui/chain");
     await access(join(projectDir, ".gitignore"));
@@ -131,7 +131,7 @@ describe("generateProject", () => {
               router && style !== "none",
             );
             expect(manifest.dependencies).toHaveProperty(
-              componentMode === "macro" ? "elfui" : "@elfui/chain",
+              componentMode === "macro" ? "@elfui/core" : "@elfui/chain",
             );
             expect(manifest.devDependencies).toHaveProperty("vite");
             if (componentMode === "macro") {

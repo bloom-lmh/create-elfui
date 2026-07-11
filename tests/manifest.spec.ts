@@ -9,7 +9,7 @@ describe("createPackageManifest", () => {
     const manifest = createPackageManifest(createScaffoldOptions("pnpm"));
 
     expect(manifest.dependencies).toEqual({
-      elfui: frameworkDependencyVersions.elfui,
+      "@elfui/core": frameworkDependencyVersions.core,
     });
     expect(manifest.devDependencies).toMatchObject({
       "@elfui/vite-plugin": frameworkDependencyVersions.vitePlugin,

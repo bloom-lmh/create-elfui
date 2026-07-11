@@ -33,7 +33,7 @@ export const createPackageManifest = (
   };
 
   if (options.componentMode === "macro") {
-    dependencies.elfui = versions.elfui;
+    dependencies["@elfui/core"] = versions.core;
     devDependencies["@elfui/vite-plugin"] = versions.vitePlugin;
   } else {
     dependencies["@elfui/chain"] = versions.chain;
