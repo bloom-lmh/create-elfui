@@ -3,7 +3,8 @@ import { basename, dirname, join, parse, resolve } from "node:path";
 
 import { InvalidOptionError } from "./errors";
 
-export type TargetDirectoryState = "missing" | "empty" | "git-only" | "non-empty";
+export type TargetDirectoryState =
+  "missing" | "empty" | "git-only" | "non-empty";
 
 export const resolveProjectRoot = (projectDir: string): string => {
   const root = resolve(projectDir);
@@ -13,7 +14,9 @@ export const resolveProjectRoot = (projectDir: string): string => {
   return root;
 };
 
-export const inspectTargetDirectory = async (target: string): Promise<TargetDirectoryState> => {
+export const inspectTargetDirectory = async (
+  target: string,
+): Promise<TargetDirectoryState> => {
   try {
     const targetStat = await stat(target);
     if (!targetStat.isDirectory()) {
@@ -30,21 +33,30 @@ export const inspectTargetDirectory = async (target: string): Promise<TargetDire
   return "non-empty";
 };
 
-export const createStagingDirectory = async (target: string): Promise<string> => {
+export const createStagingDirectory = async (
+  target: string,
+): Promise<string> => {
   const parent = dirname(target);
   await mkdir(parent, { recursive: true });
   return mkdtemp(join(parent, `.${basename(target)}-`));
 };
 
-export const clearDirectoryPreservingGit = async (target: string): Promise<void> => {
+export const clearDirectoryPreservingGit = async (
+  target: string,
+): Promise<void> => {
   const entries = await readdir(target);
   await Promise.all(
     entries
       .filter((entry) => entry !== ".git")
-      .map((entry) => rm(join(target, entry), { recursive: true, force: true }))
+      .map((entry) =>
+        rm(join(target, entry), { recursive: true, force: true }),
+      ),
   );
 };
 
-export const moveStagingDirectory = async (staging: string, target: string): Promise<void> => {
+export const moveStagingDirectory = async (
+  staging: string,
+  target: string,
+): Promise<void> => {
   await rename(staging, target);
 };

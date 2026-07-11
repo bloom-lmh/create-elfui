@@ -23,7 +23,11 @@ describe("CLI", () => {
     const target = join(temporaryDirectory, "dry-run-app");
     const rawArgs = ["--default", "--dry-run", target];
 
-    await createProgram(rawArgs).parseAsync(["node", "create-elfui", ...rawArgs]);
+    await createProgram(rawArgs).parseAsync([
+      "node",
+      "create-elfui",
+      ...rawArgs,
+    ]);
 
     expect(log).toHaveBeenCalledWith(expect.stringContaining("将使用以下配置"));
     expect(log).toHaveBeenCalledWith(expect.stringContaining("src/App.ts"));
@@ -34,7 +38,7 @@ describe("CLI", () => {
     const rawArgs = ["--component", "chain", "--macro", "--dry-run", target];
 
     await expect(
-      createProgram(rawArgs).parseAsync(["node", "create-elfui", ...rawArgs])
+      createProgram(rawArgs).parseAsync(["node", "create-elfui", ...rawArgs]),
     ).rejects.toThrow("--component chain 与 --macro 不能同时使用。");
   });
 
@@ -43,8 +47,14 @@ describe("CLI", () => {
     const target = join(temporaryDirectory, "no-install-app");
     const rawArgs = ["--no-install", "--dry-run", target];
 
-    await createProgram(rawArgs).parseAsync(["node", "create-elfui", ...rawArgs]);
+    await createProgram(rawArgs).parseAsync([
+      "node",
+      "create-elfui",
+      ...rawArgs,
+    ]);
 
-    expect(log).toHaveBeenCalledWith(expect.stringContaining('"install": false'));
+    expect(log).toHaveBeenCalledWith(
+      expect.stringContaining('"install": false'),
+    );
   });
 });

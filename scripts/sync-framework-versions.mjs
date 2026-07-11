@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+﻿import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -12,10 +12,10 @@ const generatedFile = resolve(
 const checkOnly = process.argv.includes("--check");
 
 const entries = [
-  ["elfui", "^0.1.0-beta.0"],
-  ["vitePlugin", "^0.1.0-beta.0"],
-  ["router", "^0.1.0-beta.0"],
-  ["chain", "^0.1.0-beta.0"],
+  ["elfui", "^0.1.0-beta.1"],
+  ["vitePlugin", "^0.1.0-beta.1"],
+  ["router", "^0.1.0-beta.1"],
+  ["chain", "^0.1.0-beta.1"],
 ];
 
 const source = [
@@ -26,10 +26,7 @@ const source = [
   "}",
   "",
   "export const frameworkDependencyVersions: FrameworkDependencyVersions = {",
-  ...entries.map(
-    ([key, version], index) =>
-      `  ${key}: "${version}"${index === entries.length - 1 ? "" : ","}`,
-  ),
+  ...entries.map(([key, version]) => `  ${key}: "${version}",`),
   "};",
   "",
 ].join("\n");
@@ -41,8 +38,10 @@ try {
   if (error?.code !== "ENOENT") throw error;
 }
 
+const normalizeNewlines = (value) => value.replace(/\r\n/g, "\n");
+
 if (checkOnly) {
-  if (currentSource !== source) {
+  if (normalizeNewlines(currentSource) !== source) {
     throw new Error(
       "Framework package versions changed. Run pnpm sync:versions.",
     );

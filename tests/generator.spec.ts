@@ -1,4 +1,11 @@
-import { access, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+﻿import {
+  access,
+  mkdir,
+  mkdtemp,
+  readFile,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 
@@ -24,8 +31,13 @@ describe("generateProject", () => {
     await generateProject(createScaffoldOptions("pnpm", { projectDir }));
 
     const main = await readFile(join(projectDir, "src", "main.ts"), "utf8");
-    const viteConfig = await readFile(join(projectDir, "vite.config.ts"), "utf8");
-    const manifest = JSON.parse(await readFile(join(projectDir, "package.json"), "utf8")) as {
+    const viteConfig = await readFile(
+      join(projectDir, "vite.config.ts"),
+      "utf8",
+    );
+    const manifest = JSON.parse(
+      await readFile(join(projectDir, "package.json"), "utf8"),
+    ) as {
       dependencies: Record<string, string>;
       devDependencies: Record<string, string>;
     };
@@ -47,13 +59,15 @@ describe("generateProject", () => {
         componentMode: "chain",
         style: "less",
         router: true,
-        vitest: true
-      })
+        vitest: true,
+      }),
     );
 
     const indexHtml = await readFile(join(projectDir, "index.html"), "utf8");
     const app = await readFile(join(projectDir, "src", "App.js"), "utf8");
-    const manifest = JSON.parse(await readFile(join(projectDir, "package.json"), "utf8")) as {
+    const manifest = JSON.parse(
+      await readFile(join(projectDir, "package.json"), "utf8"),
+    ) as {
       dependencies: Record<string, string>;
       devDependencies: Record<string, string>;
     };
@@ -68,9 +82,9 @@ describe("generateProject", () => {
     await access(join(projectDir, "src", "router", "index.js"));
     await access(join(projectDir, "src", "App.less"));
     await access(join(projectDir, "src", "pages", "page.less"));
-    expect(await readFile(join(projectDir, "src", "pages", "Home.js"), "utf8")).toContain(
-      ".style(styles)"
-    );
+    expect(
+      await readFile(join(projectDir, "src", "pages", "Home.js"), "utf8"),
+    ).toContain(".style(styles)");
   });
 
   it("renders every language, component, style and Router combination", async () => {
@@ -80,49 +94,61 @@ describe("generateProject", () => {
           for (const router of [false, true]) {
             const projectDir = join(
               temporaryDirectory,
-              `${language}-${componentMode}-${style}-${router ? "router" : "plain"}`
+              `${language}-${componentMode}-${style}-${router ? "router" : "plain"}`,
             );
             const options = createScaffoldOptions("pnpm", {
               projectDir,
               language,
               componentMode,
               style,
-              router
+              router,
             });
             const result = await generateProject(options);
             const manifest = JSON.parse(
-              await readFile(join(projectDir, "package.json"), "utf8")
+              await readFile(join(projectDir, "package.json"), "utf8"),
             ) as {
               dependencies: Record<string, string>;
               devDependencies: Record<string, string>;
             };
 
-            expect(result.files.every((file) => !file.endsWith(".ejs"))).toBe(true);
+            expect(result.files.every((file) => !file.endsWith(".ejs"))).toBe(
+              true,
+            );
             const generatedContents = await Promise.all(
-              result.files.map((file) => readFile(join(projectDir, file), "utf8"))
+              result.files.map((file) =>
+                readFile(join(projectDir, file), "utf8"),
+              ),
             );
             expect(generatedContents.join("\n")).not.toMatch(/<%[-=#]?|%>/);
             expect(result.files).toContain(`src/App.${language}`);
-            expect(result.files.includes(`src/App.${style}`)).toBe(style !== "none");
-            expect(result.files.includes(`src/router/index.${language}`)).toBe(router);
+            expect(result.files.includes(`src/App.${style}`)).toBe(
+              style !== "none",
+            );
+            expect(result.files.includes(`src/router/index.${language}`)).toBe(
+              router,
+            );
             expect(result.files.includes(`src/pages/page.${style}`)).toBe(
-              router && style !== "none"
+              router && style !== "none",
             );
             expect(manifest.dependencies).toHaveProperty(
-              componentMode === "macro" ? "elfui" : "@elfui/chain"
+              componentMode === "macro" ? "elfui" : "@elfui/chain",
             );
             expect(manifest.devDependencies).toHaveProperty("vite");
             if (componentMode === "macro") {
               expect(manifest.devDependencies).toHaveProperty(
                 "@elfui/vite-plugin",
-                "^0.1.0-beta.0"
+                "^0.1.0-beta.1",
               );
             } else {
-              expect(manifest.devDependencies).not.toHaveProperty("@elfui/vite-plugin");
+              expect(manifest.devDependencies).not.toHaveProperty(
+                "@elfui/vite-plugin",
+              );
             }
             if (router && style !== "none") {
               expect(generatedContents.join("\n")).toContain(
-                componentMode === "macro" ? "defineStyle(styles)" : ".style(styles)"
+                componentMode === "macro"
+                  ? "defineStyle(styles)"
+                  : ".style(styles)",
               );
             }
           }
@@ -137,11 +163,14 @@ describe("generateProject", () => {
       createScaffoldOptions("pnpm", {
         projectDir,
         eslint: true,
-        prettier: true
-      })
+        prettier: true,
+      }),
     );
 
-    const eslintConfig = await readFile(join(projectDir, "eslint.config.js"), "utf8");
+    const eslintConfig = await readFile(
+      join(projectDir, "eslint.config.js"),
+      "utf8",
+    );
     await access(join(projectDir, "prettier.config.js"));
     await access(join(projectDir, ".prettierignore"));
     expect(eslintConfig).toContain("eslintConfigPrettier");
@@ -152,7 +181,7 @@ describe("generateProject", () => {
     const options = createScaffoldOptions("pnpm", {
       projectDir,
       style: "none",
-      dryRun: true
+      dryRun: true,
     });
 
     const result = await generateProject(options);
@@ -168,7 +197,7 @@ describe("generateProject", () => {
     await writeFile(join(projectDir, "keep.txt"), "user content", "utf8");
 
     await expect(
-      generateProject(createScaffoldOptions("pnpm", { projectDir }))
+      generateProject(createScaffoldOptions("pnpm", { projectDir })),
     ).rejects.toBeInstanceOf(TargetDirectoryNotEmptyError);
   });
 
@@ -178,7 +207,9 @@ describe("generateProject", () => {
     await writeFile(join(projectDir, ".git", "config"), "[core]", "utf8");
     await writeFile(join(projectDir, "obsolete.txt"), "obsolete", "utf8");
 
-    await generateProject(createScaffoldOptions("pnpm", { projectDir, force: true }));
+    await generateProject(
+      createScaffoldOptions("pnpm", { projectDir, force: true }),
+    );
 
     await access(join(projectDir, ".git", "config"));
     await access(join(projectDir, "src", "App.ts"));

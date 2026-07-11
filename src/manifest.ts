@@ -12,20 +12,24 @@ export interface PackageManifest {
 }
 
 const sortObject = (entries: Record<string, string>): Record<string, string> =>
-  Object.fromEntries(Object.entries(entries).sort(([left], [right]) => left.localeCompare(right)));
+  Object.fromEntries(
+    Object.entries(entries).sort(([left], [right]) =>
+      left.localeCompare(right),
+    ),
+  );
 
 export const createPackageManifest = (
   options: ScaffoldOptions,
-  versions: DependencyVersions = dependencyVersions
+  versions: DependencyVersions = dependencyVersions,
 ): PackageManifest => {
   const dependencies: Record<string, string> = {};
   const devDependencies: Record<string, string> = {
-    vite: versions.vite
+    vite: versions.vite,
   };
   const scripts: Record<string, string> = {
     dev: "vite",
     build: "vite build",
-    preview: "vite preview"
+    preview: "vite preview",
   };
 
   if (options.componentMode === "macro") {
@@ -43,7 +47,8 @@ export const createPackageManifest = (
     scripts.typecheck = "tsc --noEmit";
   }
 
-  if (options.style === "scss") devDependencies["sass-embedded"] = versions.sassEmbedded;
+  if (options.style === "scss")
+    devDependencies["sass-embedded"] = versions.sassEmbedded;
   if (options.style === "less") devDependencies.less = versions.less;
 
   if (options.vitest) {
@@ -63,7 +68,8 @@ export const createPackageManifest = (
 
   if (options.prettier) {
     devDependencies.prettier = versions.prettier;
-    if (options.eslint) devDependencies["eslint-config-prettier"] = versions.eslintConfigPrettier;
+    if (options.eslint)
+      devDependencies["eslint-config-prettier"] = versions.eslintConfigPrettier;
     scripts.format = "prettier . --write";
     scripts["format:check"] = "prettier . --check";
   }
@@ -74,9 +80,11 @@ export const createPackageManifest = (
     private: true,
     type: "module",
     scripts,
-    ...(Object.keys(dependencies).length > 0 ? { dependencies: sortObject(dependencies) } : {}),
+    ...(Object.keys(dependencies).length > 0
+      ? { dependencies: sortObject(dependencies) }
+      : {}),
     ...(Object.keys(devDependencies).length > 0
       ? { devDependencies: sortObject(devDependencies) }
-      : {})
+      : {}),
   };
 };

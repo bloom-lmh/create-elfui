@@ -62,15 +62,18 @@ export const toValidPackageName = (value: string): string => {
 
 export const inferPackageName = (projectDir: string): string => {
   const directoryName = basename(resolve(projectDir));
-  return isValidPackageName(directoryName) ? directoryName : toValidPackageName(directoryName);
+  return isValidPackageName(directoryName)
+    ? directoryName
+    : toValidPackageName(directoryName);
 };
 
 export const createScaffoldOptions = (
   packageManager: PackageManager,
-  overrides: ScaffoldOptionOverrides = {}
+  overrides: ScaffoldOptionOverrides = {},
 ): ScaffoldOptions => {
   const projectDir = overrides.projectDir?.trim() || "elfui-app";
-  const packageName = overrides.packageName?.trim() || inferPackageName(projectDir);
+  const packageName =
+    overrides.packageName?.trim() || inferPackageName(projectDir);
 
   return {
     projectDir,
@@ -86,6 +89,6 @@ export const createScaffoldOptions = (
     packageManager: overrides.packageManager ?? packageManager,
     install: overrides.install ?? false,
     force: overrides.force ?? false,
-    dryRun: overrides.dryRun ?? false
+    dryRun: overrides.dryRun ?? false,
   };
 };

@@ -9,7 +9,10 @@ export type TemplateContext = Record<string, unknown>;
 export const getTemplateRoot = (): string =>
   fileURLToPath(new URL("../templates/", import.meta.url));
 
-const ensureInsideProject = (projectRoot: string, destination: string): void => {
+const ensureInsideProject = (
+  projectRoot: string,
+  destination: string,
+): void => {
   const relativePath = relative(projectRoot, destination);
   if (relativePath.startsWith("..") || relativePath === "") {
     throw new Error(`模板目标路径越界：${destination}`);
@@ -21,7 +24,7 @@ export const renderTemplate = async (
   sourcePath: string,
   destinationPath: string,
   context: TemplateContext,
-  templateRoot = getTemplateRoot()
+  templateRoot = getTemplateRoot(),
 ): Promise<void> => {
   const source = resolve(templateRoot, sourcePath);
   const destination = resolve(projectRoot, destinationPath);
@@ -37,7 +40,7 @@ export const copyTemplate = async (
   projectRoot: string,
   sourcePath: string,
   destinationPath: string,
-  templateRoot = getTemplateRoot()
+  templateRoot = getTemplateRoot(),
 ): Promise<void> => {
   const source = resolve(templateRoot, sourcePath);
   const destination = resolve(projectRoot, destinationPath);
@@ -47,4 +50,5 @@ export const copyTemplate = async (
   await copyFile(source, destination);
 };
 
-export const templatePath = (...segments: string[]): string => join(...segments);
+export const templatePath = (...segments: string[]): string =>
+  join(...segments);

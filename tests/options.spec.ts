@@ -4,19 +4,21 @@ import {
   createScaffoldOptions,
   inferPackageName,
   isValidPackageName,
-  toValidPackageName
+  toValidPackageName,
 } from "../src/options";
 import {
   formatCommand,
   getDevCommand,
   getInstallCommand,
   inferPackageManager,
-  requiresPackageManagerShell
+  requiresPackageManagerShell,
 } from "../src/package-manager";
 
 describe("options", () => {
   it("uses the documented default configuration", () => {
-    const options = createScaffoldOptions("pnpm", { projectDir: "my-elfui-app" });
+    const options = createScaffoldOptions("pnpm", {
+      projectDir: "my-elfui-app",
+    });
 
     expect(options).toMatchObject({
       projectDir: "my-elfui-app",
@@ -25,7 +27,7 @@ describe("options", () => {
       componentMode: "macro",
       style: "css",
       router: false,
-      install: false
+      install: false,
     });
   });
 
@@ -37,8 +39,12 @@ describe("options", () => {
   });
 
   it("infers supported package managers from npm user agents", () => {
-    expect(inferPackageManager("pnpm/10.28.0 npm/? node/v22.22.0 win32 x64")).toBe("pnpm");
-    expect(inferPackageManager("npm/11.0.0 node/v22.22.0 win32 x64")).toBe("npm");
+    expect(
+      inferPackageManager("pnpm/10.28.0 npm/? node/v22.22.0 win32 x64"),
+    ).toBe("pnpm");
+    expect(inferPackageManager("npm/11.0.0 node/v22.22.0 win32 x64")).toBe(
+      "npm",
+    );
     expect(inferPackageManager("unknown/1.0.0")).toBe("pnpm");
   });
 

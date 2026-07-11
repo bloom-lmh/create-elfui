@@ -5,7 +5,7 @@ import {
   inferPackageName,
   isValidPackageName,
   toValidPackageName,
-  type ScaffoldOptions
+  type ScaffoldOptions,
 } from "./options";
 import { packageManagers, type PackageManager } from "./package-manager";
 
@@ -27,7 +27,7 @@ const ask = async <T>(prompt: Promise<T | symbol | undefined>): Promise<T> =>
 
 export const promptForOptions = async (
   initial: ScaffoldOptions,
-  promptOptions: PromptOptions
+  promptOptions: PromptOptions,
 ): Promise<ScaffoldOptions> => {
   intro("创建 ElfUI 项目");
 
@@ -37,8 +37,8 @@ export const promptForOptions = async (
       text({
         message: "项目目录",
         initialValue: projectDir,
-        validate: (value) => (value?.trim() ? undefined : "项目目录不能为空。")
-      })
+        validate: (value) => (value?.trim() ? undefined : "项目目录不能为空。"),
+      }),
     );
   }
 
@@ -53,12 +53,13 @@ export const promptForOptions = async (
           return isValidPackageName(candidate)
             ? undefined
             : `建议使用：${toValidPackageName(candidate)}`;
-        }
-      })
+        },
+      }),
     );
   }
 
-  if (!promptOptions.askFeatures) return { ...initial, projectDir, packageName };
+  if (!promptOptions.askFeatures)
+    return { ...initial, projectDir, packageName };
 
   const language = await ask(
     select({
@@ -66,9 +67,9 @@ export const promptForOptions = async (
       initialValue: initial.language,
       options: [
         { value: "ts", label: "TypeScript", hint: "推荐" },
-        { value: "js", label: "JavaScript" }
-      ]
-    })
+        { value: "js", label: "JavaScript" },
+      ],
+    }),
   );
   const componentMode = await ask(
     select({
@@ -76,9 +77,13 @@ export const promptForOptions = async (
       initialValue: initial.componentMode,
       options: [
         { value: "macro", label: "Macro", hint: "新项目主线，构建期编译" },
-        { value: "chain", label: "Chain", hint: "旧站嵌入、小 demo、运行时模板" }
-      ]
-    })
+        {
+          value: "chain",
+          label: "Chain",
+          hint: "旧站嵌入、小 demo、运行时模板",
+        },
+      ],
+    }),
   );
   const style = await ask(
     select({
@@ -88,27 +93,38 @@ export const promptForOptions = async (
         { value: "css", label: "CSS" },
         { value: "scss", label: "Sass (SCSS)" },
         { value: "less", label: "Less" },
-        { value: "none", label: "None" }
-      ]
-    })
+        { value: "none", label: "None" },
+      ],
+    }),
   );
-  const router = await ask(confirm({ message: "加入 Router？", initialValue: initial.router }));
+  const router = await ask(
+    confirm({ message: "加入 Router？", initialValue: initial.router }),
+  );
   const vitest = await ask(
-    confirm({ message: "加入 Vitest 单元测试？", initialValue: initial.vitest })
+    confirm({
+      message: "加入 Vitest 单元测试？",
+      initialValue: initial.vitest,
+    }),
   );
-  const eslint = await ask(confirm({ message: "加入 ESLint？", initialValue: initial.eslint }));
+  const eslint = await ask(
+    confirm({ message: "加入 ESLint？", initialValue: initial.eslint }),
+  );
   const prettier = await ask(
-    confirm({ message: "加入 Prettier？", initialValue: initial.prettier })
+    confirm({ message: "加入 Prettier？", initialValue: initial.prettier }),
   );
-  const bare = await ask(confirm({ message: "生成 Bare 最小项目？", initialValue: initial.bare }));
+  const bare = await ask(
+    confirm({ message: "生成 Bare 最小项目？", initialValue: initial.bare }),
+  );
   const packageManager = await ask(
     select({
       message: "包管理器",
       initialValue: initial.packageManager,
-      options: packageManagers.map((value) => ({ value, label: value }))
-    })
+      options: packageManagers.map((value) => ({ value, label: value })),
+    }),
   );
-  const install = await ask(confirm({ message: "现在安装依赖？", initialValue: initial.install }));
+  const install = await ask(
+    confirm({ message: "现在安装依赖？", initialValue: initial.install }),
+  );
 
   return {
     ...initial,
@@ -123,7 +139,7 @@ export const promptForOptions = async (
     prettier,
     bare,
     packageManager: packageManager as PackageManager,
-    install
+    install,
   };
 };
 
@@ -131,6 +147,6 @@ export const confirmOverwrite = async (target: string): Promise<boolean> =>
   ask(
     confirm({
       message: `目录 ${target} 不为空，是否清理其中内容后继续？`,
-      initialValue: false
-    })
+      initialValue: false,
+    }),
   );

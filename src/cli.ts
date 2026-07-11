@@ -3,7 +3,11 @@ import chalk from "chalk";
 import { Command, Option } from "commander";
 import { relative } from "node:path";
 
-import { InvalidOptionError, TargetDirectoryNotEmptyError, UserCancelledError } from "./errors";
+import {
+  InvalidOptionError,
+  TargetDirectoryNotEmptyError,
+  UserCancelledError,
+} from "./errors";
 import { inspectTargetDirectory, resolveProjectRoot } from "./filesystem";
 import { generateProject } from "./generator";
 import {
@@ -11,7 +15,7 @@ import {
   type ComponentMode,
   type Language,
   type ScaffoldOptionOverrides,
-  type StyleSolution
+  type StyleSolution,
 } from "./options";
 import {
   getDevCommand,
@@ -19,7 +23,7 @@ import {
   inferPackageManager,
   formatCommand,
   runInstall,
-  type PackageManager
+  type PackageManager,
 } from "./package-manager";
 import { confirmOverwrite, promptForOptions } from "./prompts";
 
@@ -54,11 +58,13 @@ const featureFlags = [
   "--vitest",
   "--eslint",
   "--prettier",
-  "--bare"
+  "--bare",
 ] as const;
 
 const hasFlag = (rawArgs: string[], flag: string): boolean =>
-  rawArgs.some((argument) => argument === flag || argument.startsWith(`${flag}=`));
+  rawArgs.some(
+    (argument) => argument === flag || argument.startsWith(`${flag}=`),
+  );
 
 const resolveLanguage = (options: CliOptions): Language | undefined => {
   if (options.ts && options.js) {
@@ -75,7 +81,9 @@ const resolveLanguage = (options: CliOptions): Language | undefined => {
   return options.language;
 };
 
-const resolveComponentMode = (options: CliOptions): ComponentMode | undefined => {
+const resolveComponentMode = (
+  options: CliOptions,
+): ComponentMode | undefined => {
   if (options.macro && options.chain) {
     throw new InvalidOptionError("--macro 与 --chain 不能同时使用。");
   }
@@ -108,7 +116,7 @@ const formatDirectory = (root: string): string => {
 const createNextSteps = (
   root: string,
   packageManager: PackageManager,
-  installed: boolean
+  installed: boolean,
 ): string[] => {
   const steps = [`cd ${formatDirectory(root)}`];
   if (!installed) steps.push(formatCommand(getInstallCommand(packageManager)));
@@ -120,14 +128,16 @@ const validateDefaultFlag = (rawArgs: string[], defaultMode: boolean): void => {
   if (!defaultMode) return;
   const changedFeature = featureFlags.find((flag) => hasFlag(rawArgs, flag));
   if (changedFeature) {
-    throw new InvalidOptionError(`--default 不能与 ${changedFeature} 同时使用。`);
+    throw new InvalidOptionError(
+      `--default 不能与 ${changedFeature} 同时使用。`,
+    );
   }
 };
 
 const createInitialOptions = (
   directory: string | undefined,
   options: CliOptions,
-  rawArgs: string[]
+  rawArgs: string[],
 ) => {
   const packageManager = options.packageManager ?? inferPackageManager();
   const overrides: ScaffoldOptionOverrides = {};
@@ -151,13 +161,19 @@ const createInitialOptions = (
   return createScaffoldOptions(packageManager, overrides);
 };
 
-const runCreate = async (directory: string | undefined, options: CliOptions, rawArgs: string[]) => {
+const runCreate = async (
+  directory: string | undefined,
+  options: CliOptions,
+  rawArgs: string[],
+) => {
   const defaultMode = options.default === true;
   validateDefaultFlag(rawArgs, defaultMode);
 
   const hasFeatureFlags = featureFlags.some((flag) => hasFlag(rawArgs, flag));
-  const hasInstallFlag = hasFlag(rawArgs, "--install") || hasFlag(rawArgs, "--no-install");
-  const interactiveFeatureSelection = !defaultMode && !hasFeatureFlags && !hasInstallFlag;
+  const hasInstallFlag =
+    hasFlag(rawArgs, "--install") || hasFlag(rawArgs, "--no-install");
+  const interactiveFeatureSelection =
+    !defaultMode && !hasFeatureFlags && !hasInstallFlag;
   const needsDirectoryPrompt = !directory;
   const interactive = interactiveFeatureSelection || needsDirectoryPrompt;
   let scaffoldOptions = createInitialOptions(directory, options, rawArgs);
@@ -166,7 +182,7 @@ const runCreate = async (directory: string | undefined, options: CliOptions, raw
     scaffoldOptions = await promptForOptions(scaffoldOptions, {
       askProjectDirectory: needsDirectoryPrompt,
       askFeatures: interactiveFeatureSelection,
-      askPackageName: interactiveFeatureSelection
+      askPackageName: interactiveFeatureSelection,
     });
   }
 
@@ -192,15 +208,19 @@ const runCreate = async (directory: string | undefined, options: CliOptions, raw
   }
 
   if (scaffoldOptions.install) {
-    console.log(chalk.cyan(`正在使用 ${scaffoldOptions.packageManager} 安装依赖...`));
+    console.log(
+      chalk.cyan(`正在使用 ${scaffoldOptions.packageManager} 安装依赖...`),
+    );
     try {
       await runInstall(result.root, scaffoldOptions.packageManager);
     } catch (error) {
-      const retry = formatCommand(getInstallCommand(scaffoldOptions.packageManager));
+      const retry = formatCommand(
+        getInstallCommand(scaffoldOptions.packageManager),
+      );
       console.error(
         chalk.yellow(
-          `依赖安装失败，项目文件已保留。进入项目后可重试：cd ${formatDirectory(result.root)} && ${retry}`
-        )
+          `依赖安装失败，项目文件已保留。进入项目后可重试：cd ${formatDirectory(result.root)} && ${retry}`,
+        ),
       );
       throw error;
     }
@@ -209,7 +229,7 @@ const runCreate = async (directory: string | undefined, options: CliOptions, raw
   const steps = createNextSteps(
     result.root,
     scaffoldOptions.packageManager,
-    scaffoldOptions.install
+    scaffoldOptions.install,
   );
   const message = `项目已创建：${result.root}\n\n${steps.map((step) => `  ${step}`).join("\n")}`;
   if (interactive) outro(message);
@@ -224,14 +244,26 @@ export const createProgram = (rawArgs: string[]): Command => {
     .description("创建一个新的 ElfUI Vite 项目")
     .argument("[directory]", "项目目录")
     .option("--default", "使用默认配置并跳过功能问答")
-    .addOption(new Option("--language <language>", "选择语言").choices(["ts", "js"]))
+    .addOption(
+      new Option("--language <language>", "选择语言").choices(["ts", "js"]),
+    )
     .option("--ts", "--language ts 的别名")
     .option("--js", "--language js 的别名")
-    .addOption(new Option("--component <component>", "选择组件模式").choices(["macro", "chain"]))
+    .addOption(
+      new Option("--component <component>", "选择组件模式").choices([
+        "macro",
+        "chain",
+      ]),
+    )
     .option("--macro", "--component macro 的别名")
     .option("--chain", "--component chain 的别名")
     .addOption(
-      new Option("--style <style>", "选择样式方案").choices(["css", "scss", "less", "none"])
+      new Option("--style <style>", "选择样式方案").choices([
+        "css",
+        "scss",
+        "less",
+        "none",
+      ]),
     )
     .option("--router", "加入 @elfui/router")
     .option("--vitest", "加入 Vitest")
@@ -239,7 +271,12 @@ export const createProgram = (rawArgs: string[]): Command => {
     .option("--prettier", "加入 Prettier")
     .option("--bare", "生成最小项目，不生成教学示例")
     .addOption(
-      new Option("--package-manager <name>", "选择包管理器").choices(["pnpm", "npm", "yarn", "bun"])
+      new Option("--package-manager <name>", "选择包管理器").choices([
+        "pnpm",
+        "npm",
+        "yarn",
+        "bun",
+      ]),
     )
     .option("--install", "生成后安装依赖")
     .option("--no-install", "生成后不安装依赖")
@@ -249,7 +286,11 @@ export const createProgram = (rawArgs: string[]): Command => {
     .version("0.0.0", "-v, --version", "输出版本");
 
   program.action(async (directory) => {
-    await runCreate(directory as string | undefined, program.opts() as CliOptions, rawArgs);
+    await runCreate(
+      directory as string | undefined,
+      program.opts() as CliOptions,
+      rawArgs,
+    );
   });
 
   return program;

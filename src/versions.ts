@@ -1,6 +1,6 @@
 import {
   frameworkDependencyVersions,
-  type FrameworkDependencyVersions
+  type FrameworkDependencyVersions,
 } from "./framework-versions.generated";
 
 export interface DependencyVersions extends FrameworkDependencyVersions {
@@ -31,5 +31,5 @@ export const dependencyVersions: DependencyVersions = {
   eslintConfigPrettier: "^10.1.8",
   prettier: "^3.9.5",
   sassEmbedded: "^1.100.0",
-  less: "^4.6.7"
+  less: "^4.6.7",
 };

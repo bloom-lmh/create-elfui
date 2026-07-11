@@ -8,8 +8,8 @@ export interface FrameworkDependencyVersions {
 }
 
 export const frameworkDependencyVersions: FrameworkDependencyVersions = {
-  elfui: "^0.1.0-beta.0",
-  vitePlugin: "^0.1.0-beta.0",
-  router: "^0.1.0-beta.0",
-  chain: "^0.1.0-beta.0"
+  elfui: "^0.1.0-beta.1",
+  vitePlugin: "^0.1.0-beta.1",
+  router: "^0.1.0-beta.1",
+  chain: "^0.1.0-beta.1",
 };
