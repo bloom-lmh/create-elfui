@@ -1,0 +1,25 @@
+import js from "@eslint/js";
+import tseslint from "typescript-eslint";
+<% if (prettier) { -%>
+import eslintConfigPrettier from "eslint-config-prettier";
+<% } -%>
+
+export default tseslint.config(
+  {
+    ignores: ["dist", "coverage", "node_modules"]
+  },
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  {
+    files: ["**/*.{ts,js}"],
+    languageOptions: {
+      globals: {
+        HTMLElement: "readonly",
+        customElements: "readonly",
+        document: "readonly",
+        window: "readonly"
+      }
+    }
+  }<% if (prettier) { %>,
+  eslintConfigPrettier<% } %>
+);

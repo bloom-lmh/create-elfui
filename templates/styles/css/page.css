@@ -1,0 +1,23 @@
+:host {
+  display: block;
+}
+
+.page {
+  box-sizing: border-box;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 24px 72px;
+  color: #172033;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: #147d66;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+h1 {
+  margin: 0 0 16px;
+  font-size: 36px;
+}

@@ -1,0 +1,14 @@
+import { defineHtml, html<% if (hasStyle) { %>, defineStyle<% } %> } from "elfui";
+<% if (hasStyle) { -%>
+import styles from "./page.<%= styleExtension %>?inline";
+
+defineStyle(styles);
+<% } -%>
+
+export default defineHtml(html`
+  <section class="page">
+    <p class="eyebrow">首页</p>
+    <h1>欢迎来到 ElfUI</h1>
+    <p>从这里开始创建你的 Web Components 应用。</p>
+  </section>
+`);

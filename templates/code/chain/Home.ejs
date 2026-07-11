@@ -1,0 +1,18 @@
+import { ElfUI } from "@elfui/chain";
+<% if (hasStyle) { -%>
+import styles from "./page.<%= styleExtension %>?inline";
+<% } -%>
+
+export default ElfUI.createComponent()
+  .name("elf-home-page")
+  .template(
+    `<section class="page">
+      <p class="eyebrow">首页</p>
+      <h1>欢迎来到 ElfUI</h1>
+      <p>从这里开始创建你的 Web Components 应用。</p>
+    </section>`
+  )
+<% if (hasStyle) { -%>
+  .style(styles)
+<% } -%>
+  .register();

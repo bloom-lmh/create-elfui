@@ -1,0 +1,56 @@
+@accent: #147d66;
+@ink: #172033;
+
+:host {
+  display: block;
+}
+
+.app-shell {
+  box-sizing: border-box;
+  min-height: 100vh;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 72px 24px;
+  color: @ink;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 64px;
+}
+
+.brand {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.app-nav {
+  display: flex;
+  gap: 16px;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: @accent;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+h1 {
+  margin: 0 0 16px;
+  font-size: 36px;
+}
+
+.counter {
+  margin-top: 20px;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #ffffff;
+  background: @accent;
+  cursor: pointer;
+}

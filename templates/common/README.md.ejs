@@ -1,0 +1,14 @@
+# <%= packageName %>
+
+由 `create-elfui` 创建。
+
+## 开发
+
+```bash
+<%= packageManager %> install
+<%= packageManager === "npm" ? "npm run dev" : `${packageManager} dev` %>
+```
+
+<% if (componentMode === "macro") { %>项目使用 Macro 组件和 `@elfui/vite-plugin`。根组件通过 `createApp(App).mount("#app")` 挂载。<% } else { %>项目使用 Chain 链式组件。根组件在模块加载时注册为 `<elf-app>`。<% } %>
+
+<% if (router) { %>已启用 hash 模式的 `@elfui/router`。<% } %>

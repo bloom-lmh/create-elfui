@@ -1,0 +1,18 @@
+import { ElfUI } from "@elfui/chain";
+<% if (hasStyle) { -%>
+import styles from "./page.<%= styleExtension %>?inline";
+<% } -%>
+
+export default ElfUI.createComponent()
+  .name("elf-about-page")
+  .template(
+    `<section class="page">
+      <p class="eyebrow">关于</p>
+      <h1>Chain 组件</h1>
+      <p>组件在运行时编译模板，适合渐进嵌入和低构建约束页面。</p>
+    </section>`
+  )
+<% if (hasStyle) { -%>
+  .style(styles)
+<% } -%>
+  .register();

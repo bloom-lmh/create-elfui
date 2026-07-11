@@ -1,0 +1,45 @@
+import { ElfUI<% if (!router && !bare) { %>, useRef<% } %> } from "@elfui/chain";
+<% if (hasStyle) { -%>
+import styles from "./App.<%= styleExtension %>?inline";
+<% } -%>
+
+export const App = ElfUI.createComponent()
+  .name("elf-app")
+<% if (!router && !bare) { -%>
+  .setup(() => {
+    const count = useRef(0);
+    const increment = ()<% if (isTypeScript) { %>: void<% } %> => {
+      count.set(count.peek() + 1);
+    };
+    return { count, increment };
+  })
+<% } -%>
+  .template(
+<% if (router) { -%>
+    `<main class="app-shell">
+      <header class="app-header">
+        <a class="brand" href="#/">ElfUI</a>
+        <nav class="app-nav" aria-label="主导航">
+          <elf-link to="/">首页</elf-link>
+          <elf-link to="/about">关于</elf-link>
+        </nav>
+      </header>
+      <elf-router-view></elf-router-view>
+    </main>`
+<% } else if (bare) { -%>
+    `<main class="app-shell"></main>`
+<% } else { -%>
+    `<main class="app-shell">
+      <p class="eyebrow">ElfUI + Vite</p>
+      <h1>项目已经启动</h1>
+      <p>这是一个运行时模板的 Chain 应用。</p>
+      <button class="counter" @click="increment">已点击 {{ count }} 次</button>
+    </main>`
+<% } -%>
+  )
+<% if (hasStyle) { -%>
+  .style(styles)
+<% } -%>
+  .register();
+
+export default App;

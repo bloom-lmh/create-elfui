@@ -1,0 +1,55 @@
+{
+  "name": "create-elfui",
+  "version": "0.0.0",
+  "private": false,
+  "description": "Project scaffolding CLI for creating ElfUI applications and libraries.",
+  "type": "module",
+  "bin": {
+    "create-elfui": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "templates",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "scripts": {
+    "sync:versions": "node ./scripts/sync-framework-versions.mjs",
+    "check:versions": "node ./scripts/sync-framework-versions.mjs --check",
+    "build": "node ./scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "lint": "pnpm exec eslint --no-ignore src tests scripts",
+    "format:check": "pnpm exec prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "smoke": "node ./scripts/smoke.mjs",
+    "pack:check": "node ./scripts/verify-package.mjs",
+    "verify": "pnpm build && pnpm typecheck && pnpm lint && pnpm format:check && pnpm test && pnpm smoke && pnpm check:versions && pnpm pack:check",
+    "prepack": "pnpm build"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.7.0",
+    "chalk": "^5.6.2",
+    "commander": "^14.0.3",
+    "ejs": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/node": "25.8.0",
+    "esbuild": "^0.28.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.10"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bloom-lmh/create-elfui.git"
+  },
+  "homepage": "https://github.com/bloom-lmh/create-elfui",
+  "bugs": {
+    "url": "https://github.com/bloom-lmh/create-elfui/issues"
+  }
+}

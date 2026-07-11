@@ -1,0 +1,14 @@
+import { defineHtml, html<% if (hasStyle) { %>, defineStyle<% } %> } from "elfui";
+<% if (hasStyle) { -%>
+import styles from "./page.<%= styleExtension %>?inline";
+
+defineStyle(styles);
+<% } -%>
+
+export default defineHtml(html`
+  <section class="page">
+    <p class="eyebrow">关于</p>
+    <h1>Macro 组件</h1>
+    <p>组件在普通 TypeScript 或 JavaScript 文件中定义，并由 Vite 插件在构建期编译。</p>
+  </section>
+`);
