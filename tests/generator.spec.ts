@@ -43,7 +43,8 @@ describe("generateProject", () => {
     };
 
     expect(main).toContain('createApp(App).mount("#app")');
-    expect(viteConfig).toContain("elfuiMacroPlugin()");
+    expect(viteConfig).toContain('macroImport: "@elfui/core"');
+    expect(viteConfig).toContain('runtimeImport: "@elfui/core"');
     expect(manifest.dependencies).toHaveProperty("@elfui/core");
     expect(manifest.devDependencies).toHaveProperty("@elfui/vite-plugin");
     expect(manifest.dependencies).not.toHaveProperty("@elfui/chain");
@@ -174,6 +175,24 @@ describe("generateProject", () => {
     await access(join(projectDir, "prettier.config.js"));
     await access(join(projectDir, ".prettierignore"));
     expect(eslintConfig).toContain("eslintConfigPrettier");
+  });
+
+  it("configures the Macro compiler for @elfui/core in Vitest projects", async () => {
+    const projectDir = join(temporaryDirectory, "macro-vitest-app");
+    await generateProject(
+      createScaffoldOptions("pnpm", {
+        projectDir,
+        vitest: true,
+      }),
+    );
+
+    const vitestConfig = await readFile(
+      join(projectDir, "vitest.config.ts"),
+      "utf8",
+    );
+
+    expect(vitestConfig).toContain('macroImport: "@elfui/core"');
+    expect(vitestConfig).toContain('runtimeImport: "@elfui/core"');
   });
 
   it("does not write to disk during a dry run and skips style files for None", async () => {

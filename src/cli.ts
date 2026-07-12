@@ -66,6 +66,12 @@ const hasFlag = (rawArgs: string[], flag: string): boolean =>
     (argument) => argument === flag || argument.startsWith(`${flag}=`),
   );
 
+export const shouldPromptForFeatureSelection = (
+  rawArgs: string[],
+  defaultMode: boolean,
+): boolean =>
+  !defaultMode && !featureFlags.some((flag) => hasFlag(rawArgs, flag));
+
 const resolveLanguage = (options: CliOptions): Language | undefined => {
   if (options.ts && options.js) {
     throw new InvalidOptionError("--ts 与 --js 不能同时使用。");
@@ -169,11 +175,10 @@ const runCreate = async (
   const defaultMode = options.default === true;
   validateDefaultFlag(rawArgs, defaultMode);
 
-  const hasFeatureFlags = featureFlags.some((flag) => hasFlag(rawArgs, flag));
-  const hasInstallFlag =
-    hasFlag(rawArgs, "--install") || hasFlag(rawArgs, "--no-install");
-  const interactiveFeatureSelection =
-    !defaultMode && !hasFeatureFlags && !hasInstallFlag;
+  const interactiveFeatureSelection = shouldPromptForFeatureSelection(
+    rawArgs,
+    defaultMode,
+  );
   const needsDirectoryPrompt = !directory;
   const interactive = interactiveFeatureSelection || needsDirectoryPrompt;
   let scaffoldOptions = createInitialOptions(directory, options, rawArgs);

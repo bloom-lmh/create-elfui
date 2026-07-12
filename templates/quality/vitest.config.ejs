@@ -5,7 +5,12 @@ import { elfuiMacroPlugin } from "@elfui/vite-plugin";
 
 export default defineConfig({
 <% if (componentMode === "macro") { -%>
-  plugins: [elfuiMacroPlugin()],
+  plugins: [
+    elfuiMacroPlugin({
+      macroImport: "@elfui/core",
+      runtimeImport: "@elfui/core"
+    })
+  ],
 <% } -%>
   test: {
     environment: "jsdom"

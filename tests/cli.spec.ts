@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { createProgram } from "../src/cli";
+import { createProgram, shouldPromptForFeatureSelection } from "../src/cli";
 
 describe("CLI", () => {
   let temporaryDirectory: string;
@@ -42,10 +42,10 @@ describe("CLI", () => {
     ).rejects.toThrow("--component chain 与 --macro 不能同时使用。");
   });
 
-  it("keeps --no-install non-interactive", async () => {
+  it("keeps --default non-interactive when installing dependencies", async () => {
     const log = vi.spyOn(console, "log").mockImplementation(() => undefined);
-    const target = join(temporaryDirectory, "no-install-app");
-    const rawArgs = ["--no-install", "--dry-run", target];
+    const target = join(temporaryDirectory, "default-install-app");
+    const rawArgs = ["--default", "--install", "--dry-run", target];
 
     await createProgram(rawArgs).parseAsync([
       "node",
@@ -54,7 +54,14 @@ describe("CLI", () => {
     ]);
 
     expect(log).toHaveBeenCalledWith(
-      expect.stringContaining('"install": false'),
+      expect.stringContaining('"install": true'),
     );
+  });
+
+  it("keeps feature prompts when --install is the only option", () => {
+    expect(shouldPromptForFeatureSelection(["--install"], false)).toBe(true);
+    expect(shouldPromptForFeatureSelection(["--no-install"], false)).toBe(true);
+    expect(shouldPromptForFeatureSelection(["--router"], false)).toBe(false);
+    expect(shouldPromptForFeatureSelection(["--default"], true)).toBe(false);
   });
 });

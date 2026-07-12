@@ -1,6 +1,6 @@
 {
   "name": "create-elfui",
-  "version": "0.1.0-beta.2",
+  "version": "0.1.0-beta.3",
   "private": false,
   "description": "Project scaffolding CLI for creating ElfUI applications and libraries.",
   "type": "module",
@@ -29,9 +29,11 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "smoke": "node ./scripts/smoke.mjs",
+    "verify:consumer": "pnpm build && node ./scripts/verify-consumer.mjs",
     "pack:check": "node ./scripts/verify-package.mjs",
     "verify": "pnpm build && pnpm typecheck && pnpm lint && pnpm format:check && pnpm test && pnpm smoke && pnpm check:versions && pnpm pack:check",
-    "prepack": "pnpm build"
+    "prepack": "pnpm build",
+    "prepublishOnly": "pnpm verify && pnpm verify:consumer"
   },
   "dependencies": {
     "@clack/prompts": "^1.7.0",

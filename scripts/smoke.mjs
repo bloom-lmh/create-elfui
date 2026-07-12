@@ -34,7 +34,8 @@ const smokeCases = [
       );
       if (
         !main.includes('createApp(App).mount("#app")') ||
-        !viteConfig.includes("elfuiMacroPlugin()")
+        !viteConfig.includes('macroImport: "@elfui/core"') ||
+        !viteConfig.includes('runtimeImport: "@elfui/core"')
       ) {
         throw new Error("Macro 默认模板缺少 createApp 或 Vite 宏插件配置。");
       }

@@ -2,5 +2,10 @@ import { defineConfig } from "vite";
 import { elfuiMacroPlugin } from "@elfui/vite-plugin";
 
 export default defineConfig({
-  plugins: [elfuiMacroPlugin()]
+  plugins: [
+    elfuiMacroPlugin({
+      macroImport: "@elfui/core",
+      runtimeImport: "@elfui/core"
+    })
+  ]
 });
