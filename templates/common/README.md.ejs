@@ -11,4 +11,4 @@
 
 <% if (componentMode === "macro") { %>项目使用 Macro 组件和 `@elfui/vite-plugin`。根组件通过 `createApp(App).mount("#app")` 挂载。<% } else { %>项目使用 Chain 链式组件。根组件在模块加载时注册为 `<elf-app>`。<% } %>
 
-<% if (router) { %>已启用 hash 模式的 `@elfui/router`。<% } %>
+<% if (router) { %>已启用 <%= routerMode %> 模式的 `@elfui/router`。<% if (routerMode === "history") { %>生产环境需要将未知路径回退到 `index.html`。<% } %><% } %>

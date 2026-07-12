@@ -78,6 +78,23 @@ describe("CLI", () => {
     expect(shouldPromptForFeatureSelection(rawArgs, false)).toBe(false);
   });
 
+  it("enables Router when a router mode is provided", async () => {
+    const log = vi.spyOn(console, "log").mockImplementation(() => undefined);
+    const target = join(temporaryDirectory, "history-router-app");
+    const rawArgs = ["--router-mode", "history", "--dry-run", target];
+
+    await createProgram(rawArgs).parseAsync([
+      "node",
+      "create-elfui",
+      ...rawArgs,
+    ]);
+
+    expect(log).toHaveBeenCalledWith(expect.stringContaining('"router": true'));
+    expect(log).toHaveBeenCalledWith(
+      expect.stringContaining('"routerMode": "history"'),
+    );
+  });
+
   it("keeps feature prompts when --install is the only option", () => {
     expect(shouldPromptForFeatureSelection(["--install"], false)).toBe(true);
     expect(shouldPromptForFeatureSelection(["--no-install"], false)).toBe(true);

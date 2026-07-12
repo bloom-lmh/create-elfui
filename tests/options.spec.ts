@@ -28,6 +28,7 @@ describe("options", () => {
       componentMode: "macro",
       style: "css",
       router: false,
+      routerMode: "hash",
       git: true,
       install: false,
     });

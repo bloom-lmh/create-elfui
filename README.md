@@ -17,4 +17,7 @@ pnpm create elfui@beta my-app --default --no-git
 
 # 预设：recommended（默认）、minimal（Bare）、quality（含 Vitest）
 pnpm create elfui@beta my-app --preset quality --router --install
+
+# history 路由：生产服务器需要将未知路径回退到 index.html
+pnpm create elfui@beta my-app --router-mode history --install
 ```

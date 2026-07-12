@@ -6,11 +6,13 @@ export const languages = ["ts", "js"] as const;
 export const componentModes = ["macro", "chain"] as const;
 export const styleSolutions = ["css", "scss", "less", "none"] as const;
 export const scaffoldPresets = ["recommended", "minimal", "quality"] as const;
+export const routerModes = ["hash", "history"] as const;
 
 export type Language = (typeof languages)[number];
 export type ComponentMode = (typeof componentModes)[number];
 export type StyleSolution = (typeof styleSolutions)[number];
 export type ScaffoldPreset = (typeof scaffoldPresets)[number];
+export type RouterMode = (typeof routerModes)[number];
 
 export interface ScaffoldOptions {
   projectDir: string;
@@ -19,6 +21,7 @@ export interface ScaffoldOptions {
   componentMode: ComponentMode;
   style: StyleSolution;
   router: boolean;
+  routerMode: RouterMode;
   vitest: boolean;
   eslint: boolean;
   prettier: boolean;
@@ -37,6 +40,7 @@ export interface ScaffoldOptionOverrides {
   componentMode?: ComponentMode;
   style?: StyleSolution;
   router?: boolean;
+  routerMode?: RouterMode;
   vitest?: boolean;
   eslint?: boolean;
   prettier?: boolean;
@@ -99,6 +103,7 @@ export const createScaffoldOptions = (
     componentMode: overrides.componentMode ?? "macro",
     style: overrides.style ?? "css",
     router: overrides.router ?? false,
+    routerMode: overrides.routerMode ?? "hash",
     vitest: overrides.vitest ?? false,
     eslint: overrides.eslint ?? false,
     prettier: overrides.prettier ?? false,

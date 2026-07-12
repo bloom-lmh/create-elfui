@@ -89,6 +89,26 @@ describe("generateProject", () => {
     ).toContain(".style(styles)");
   });
 
+  it("renders the selected history Router mode and its deployment note", async () => {
+    const projectDir = join(temporaryDirectory, "history-router-app");
+    await generateProject(
+      createScaffoldOptions("pnpm", {
+        projectDir,
+        router: true,
+        routerMode: "history",
+      }),
+    );
+
+    const router = await readFile(
+      join(projectDir, "src", "router", "index.ts"),
+      "utf8",
+    );
+    const readme = await readFile(join(projectDir, "README.md"), "utf8");
+
+    expect(router).toContain('mode: "history"');
+    expect(readme).toContain("未知路径回退到 `index.html`");
+  });
+
   it("renders every language, component, style and Router combination", async () => {
     for (const language of ["ts", "js"] as const) {
       for (const componentMode of ["macro", "chain"] as const) {

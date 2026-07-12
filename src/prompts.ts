@@ -4,6 +4,7 @@ import { UserCancelledError } from "./errors";
 import {
   inferPackageName,
   isValidPackageName,
+  routerModes,
   toValidPackageName,
   type ScaffoldOptions,
 } from "./options";
@@ -100,6 +101,19 @@ export const promptForOptions = async (
   const router = await ask(
     confirm({ message: "加入 Router？", initialValue: initial.router }),
   );
+  const routerMode = router
+    ? await ask(
+        select({
+          message: "Router 模式",
+          initialValue: initial.routerMode,
+          options: routerModes.map((value) => ({
+            value,
+            label: value,
+            ...(value === "hash" ? { hint: "适合静态部署" } : {}),
+          })),
+        }),
+      )
+    : initial.routerMode;
   const vitest = await ask(
     confirm({
       message: "加入 Vitest 单元测试？",
@@ -137,6 +151,7 @@ export const promptForOptions = async (
     componentMode: componentMode as ScaffoldOptions["componentMode"],
     style: style as ScaffoldOptions["style"],
     router,
+    routerMode: routerMode as ScaffoldOptions["routerMode"],
     vitest,
     eslint,
     prettier,

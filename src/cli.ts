@@ -14,9 +14,11 @@ import { initializeGitRepository } from "./git";
 import {
   createScaffoldOptions,
   getPresetOverrides,
+  routerModes,
   scaffoldPresets,
   type ComponentMode,
   type Language,
+  type RouterMode,
   type ScaffoldOptionOverrides,
   type ScaffoldPreset,
   type StyleSolution,
@@ -42,6 +44,7 @@ interface CliOptions {
   chain?: boolean;
   style?: StyleSolution;
   router?: boolean;
+  routerMode?: RouterMode;
   vitest?: boolean;
   eslint?: boolean;
   prettier?: boolean;
@@ -62,6 +65,7 @@ const featureFlags = [
   "--chain",
   "--style",
   "--router",
+  "--router-mode",
   "--vitest",
   "--eslint",
   "--prettier",
@@ -176,6 +180,10 @@ const createInitialOptions = (
   if (componentMode) overrides.componentMode = componentMode;
   if (options.style) overrides.style = options.style;
   if (options.router) overrides.router = true;
+  if (options.routerMode) {
+    overrides.router = true;
+    overrides.routerMode = options.routerMode;
+  }
   if (options.vitest) overrides.vitest = true;
   if (options.eslint) overrides.eslint = true;
   if (options.prettier) overrides.prettier = true;
@@ -305,6 +313,11 @@ export const createProgram = (rawArgs: string[]): Command => {
       ]),
     )
     .option("--router", "加入 @elfui/router")
+    .addOption(
+      new Option("--router-mode <mode>", "选择 Router 模式").choices(
+        routerModes,
+      ),
+    )
     .option("--vitest", "加入 Vitest")
     .option("--eslint", "加入 ESLint")
     .option("--prettier", "加入 Prettier")
