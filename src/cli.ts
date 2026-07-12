@@ -32,10 +32,21 @@ import {
   type PackageManager,
 } from "./package-manager";
 import { confirmOverwrite, promptForOptions } from "./prompts";
+import {
+  deleteUserPreset,
+  getUserPreset,
+  listUserPresets,
+  saveUserPreset,
+  toUserPresetOverrides,
+} from "./user-presets";
 
 interface CliOptions {
   default?: boolean;
   preset?: ScaffoldPreset;
+  usePreset?: string;
+  savePreset?: string;
+  listPresets?: boolean;
+  deletePreset?: string;
   language?: Language;
   ts?: boolean;
   js?: boolean;
@@ -59,6 +70,7 @@ interface CliOptions {
 
 const featureFlags = [
   "--preset",
+  "--use-preset",
   "--language",
   "--ts",
   "--js",
@@ -164,17 +176,27 @@ const validateNoInteractiveFlag = (
   }
 };
 
-const createInitialOptions = (
+const validatePresetSelection = (options: CliOptions): void => {
+  if (options.preset && options.usePreset) {
+    throw new InvalidOptionError("--preset 不能与 --use-preset 同时使用。");
+  }
+};
+
+const createInitialOptions = async (
   directory: string | undefined,
   options: CliOptions,
   rawArgs: string[],
-) => {
+): Promise<ReturnType<typeof createScaffoldOptions>> => {
   const packageManager = options.packageManager ?? inferPackageManager();
   const preset =
     options.preset ?? (options.default ? "recommended" : undefined);
-  const overrides: ScaffoldOptionOverrides = preset
-    ? getPresetOverrides(preset)
+  const savedOverrides = options.usePreset
+    ? toUserPresetOverrides(await getUserPreset(options.usePreset))
     : {};
+  const overrides: ScaffoldOptionOverrides = {
+    ...(preset ? getPresetOverrides(preset) : {}),
+    ...savedOverrides,
+  };
   const language = resolveLanguage(options);
   const componentMode = resolveComponentMode(options);
   const install = getRequestedInstall(rawArgs);
@@ -193,7 +215,9 @@ const createInitialOptions = (
   if (options.eslint) overrides.eslint = true;
   if (options.prettier) overrides.prettier = true;
   if (options.bare) overrides.bare = true;
-  if (options.git !== undefined) overrides.git = options.git;
+  if (hasFlag(rawArgs, "--no-git")) {
+    overrides.git = false;
+  }
   if (options.githubActions) overrides.githubActions = true;
   if (install !== undefined) overrides.install = install;
   if (options.force) overrides.force = true;
@@ -207,16 +231,27 @@ const runCreate = async (
   options: CliOptions,
   rawArgs: string[],
 ) => {
+  if (options.listPresets) {
+    console.log(JSON.stringify(await listUserPresets(), null, 2));
+    return;
+  }
+  if (options.deletePreset) {
+    await deleteUserPreset(options.deletePreset);
+    console.log(chalk.green(`已删除预设：${options.deletePreset}`));
+    return;
+  }
+
   const defaultMode = options.default === true;
   const noInteractive = hasFlag(rawArgs, "--no-interactive");
   validateDefaultFlag(rawArgs, defaultMode);
   validateNoInteractiveFlag(directory, noInteractive);
+  validatePresetSelection(options);
 
   const interactiveFeatureSelection =
     !noInteractive && shouldPromptForFeatureSelection(rawArgs, defaultMode);
   const needsDirectoryPrompt = !directory && !noInteractive;
   const interactive = interactiveFeatureSelection || needsDirectoryPrompt;
-  let scaffoldOptions = createInitialOptions(directory, options, rawArgs);
+  let scaffoldOptions = await createInitialOptions(directory, options, rawArgs);
 
   if (interactive) {
     scaffoldOptions = await promptForOptions(scaffoldOptions, {
@@ -224,6 +259,11 @@ const runCreate = async (
       askFeatures: interactiveFeatureSelection,
       askPackageName: interactiveFeatureSelection,
     });
+  }
+
+  if (options.savePreset) {
+    await saveUserPreset(options.savePreset, scaffoldOptions);
+    console.log(chalk.cyan(`已保存预设：${options.savePreset}`));
   }
 
   const root = resolveProjectRoot(scaffoldOptions.projectDir);
@@ -296,6 +336,10 @@ export const createProgram = (rawArgs: string[]): Command => {
     .addOption(
       new Option("--preset <preset>", "使用项目预设").choices(scaffoldPresets),
     )
+    .option("--use-preset <name>", "使用已保存的用户预设")
+    .option("--save-preset <name>", "将当前选择保存为用户预设")
+    .option("--list-presets", "列出已保存的用户预设")
+    .option("--delete-preset <name>", "删除已保存的用户预设")
     .option("--no-interactive", "不进行交互；必须同时提供项目目录")
     .addOption(
       new Option("--language <language>", "选择语言").choices(["ts", "js"]),

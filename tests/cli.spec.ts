@@ -8,13 +8,24 @@ import { createProgram, shouldPromptForFeatureSelection } from "../src/cli";
 
 describe("CLI", () => {
   let temporaryDirectory: string;
+  let originalPresetPath: string | undefined;
 
   beforeEach(async () => {
     temporaryDirectory = await mkdtemp(join(tmpdir(), "create-elfui-cli-"));
+    originalPresetPath = process.env.CREATE_ELFUI_PRESETS_FILE;
+    process.env.CREATE_ELFUI_PRESETS_FILE = join(
+      temporaryDirectory,
+      "presets.json",
+    );
   });
 
   afterEach(async () => {
     await rm(temporaryDirectory, { recursive: true, force: true });
+    if (originalPresetPath === undefined) {
+      delete process.env.CREATE_ELFUI_PRESETS_FILE;
+    } else {
+      process.env.CREATE_ELFUI_PRESETS_FILE = originalPresetPath;
+    }
     vi.restoreAllMocks();
   });
 
@@ -124,6 +135,86 @@ describe("CLI", () => {
 
     expect(log).toHaveBeenCalledWith(
       expect.stringContaining('"githubActions": true'),
+    );
+  });
+
+  it("saves and reuses a named user preset", async () => {
+    const log = vi.spyOn(console, "log").mockImplementation(() => undefined);
+    const saveTarget = join(temporaryDirectory, "save-preset-app");
+    const saveArgs = [
+      "--preset",
+      "quality",
+      "--router-mode",
+      "history",
+      "--github-actions",
+      "--no-git",
+      "--save-preset",
+      "work",
+      "--dry-run",
+      saveTarget,
+    ];
+
+    await createProgram(saveArgs).parseAsync([
+      "node",
+      "create-elfui",
+      ...saveArgs,
+    ]);
+    expect(log).toHaveBeenCalledWith(
+      expect.stringContaining("已保存预设：work"),
+    );
+
+    log.mockClear();
+    const useTarget = join(temporaryDirectory, "use-preset-app");
+    const useArgs = ["--use-preset", "work", "--dry-run", useTarget];
+    await createProgram(useArgs).parseAsync([
+      "node",
+      "create-elfui",
+      ...useArgs,
+    ]);
+
+    expect(log).toHaveBeenCalledWith(
+      expect.stringContaining('"routerMode": "history"'),
+    );
+    expect(log).toHaveBeenCalledWith(
+      expect.stringContaining('"githubActions": true'),
+    );
+    expect(log).toHaveBeenCalledWith(expect.stringContaining('"git": false'));
+  });
+
+  it("lists and deletes named user presets", async () => {
+    const log = vi.spyOn(console, "log").mockImplementation(() => undefined);
+    const target = join(temporaryDirectory, "preset-app");
+    const saveArgs = [
+      "--default",
+      "--save-preset",
+      "work",
+      "--dry-run",
+      target,
+    ];
+
+    await createProgram(saveArgs).parseAsync([
+      "node",
+      "create-elfui",
+      ...saveArgs,
+    ]);
+
+    log.mockClear();
+    await createProgram(["--list-presets"]).parseAsync([
+      "node",
+      "create-elfui",
+      "--list-presets",
+    ]);
+    expect(log).toHaveBeenCalledWith(expect.stringContaining('"work"'));
+
+    log.mockClear();
+    await createProgram(["--delete-preset", "work"]).parseAsync([
+      "node",
+      "create-elfui",
+      "--delete-preset",
+      "work",
+    ]);
+    expect(log).toHaveBeenCalledWith(
+      expect.stringContaining("已删除预设：work"),
     );
   });
 

@@ -26,4 +26,10 @@ pnpm create elfui@beta my-app --playwright --install
 
 # GitHub Actions：按当前选择生成 CI 步骤
 pnpm create elfui@beta my-app --github-actions --install
+
+# 保存、复用与管理个人常用配置
+pnpm create elfui@beta my-app --save-preset work
+pnpm create elfui@beta my-app --use-preset work --install
+pnpm create elfui@beta --list-presets
+pnpm create elfui@beta --delete-preset work
 ```

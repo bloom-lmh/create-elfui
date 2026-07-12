@@ -18,6 +18,7 @@
 - [x] Support `hash` and `history` Router modes.
 - [x] Add a Playwright E2E testing option.
 - [x] Generate optional GitHub Actions CI configuration.
+- [x] Save, reuse, list, and delete named user presets.
 
 ## C. Ongoing Tooling
 
