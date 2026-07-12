@@ -10,6 +10,7 @@ import {
 } from "./errors";
 import { inspectTargetDirectory, resolveProjectRoot } from "./filesystem";
 import { generateProject } from "./generator";
+import { initializeGitRepository } from "./git";
 import {
   createScaffoldOptions,
   type ComponentMode,
@@ -41,6 +42,7 @@ interface CliOptions {
   eslint?: boolean;
   prettier?: boolean;
   bare?: boolean;
+  git?: boolean;
   packageManager?: PackageManager;
   force?: boolean;
   dryRun?: boolean;
@@ -140,6 +142,15 @@ const validateDefaultFlag = (rawArgs: string[], defaultMode: boolean): void => {
   }
 };
 
+const validateNoInteractiveFlag = (
+  directory: string | undefined,
+  noInteractive: boolean,
+): void => {
+  if (noInteractive && !directory) {
+    throw new InvalidOptionError("--no-interactive 必须同时提供项目目录。");
+  }
+};
+
 const createInitialOptions = (
   directory: string | undefined,
   options: CliOptions,
@@ -160,6 +171,7 @@ const createInitialOptions = (
   if (options.eslint) overrides.eslint = true;
   if (options.prettier) overrides.prettier = true;
   if (options.bare) overrides.bare = true;
+  if (options.git !== undefined) overrides.git = options.git;
   if (install !== undefined) overrides.install = install;
   if (options.force) overrides.force = true;
   if (options.dryRun) overrides.dryRun = true;
@@ -173,13 +185,13 @@ const runCreate = async (
   rawArgs: string[],
 ) => {
   const defaultMode = options.default === true;
+  const noInteractive = hasFlag(rawArgs, "--no-interactive");
   validateDefaultFlag(rawArgs, defaultMode);
+  validateNoInteractiveFlag(directory, noInteractive);
 
-  const interactiveFeatureSelection = shouldPromptForFeatureSelection(
-    rawArgs,
-    defaultMode,
-  );
-  const needsDirectoryPrompt = !directory;
+  const interactiveFeatureSelection =
+    !noInteractive && shouldPromptForFeatureSelection(rawArgs, defaultMode);
+  const needsDirectoryPrompt = !directory && !noInteractive;
   const interactive = interactiveFeatureSelection || needsDirectoryPrompt;
   let scaffoldOptions = createInitialOptions(directory, options, rawArgs);
 
@@ -231,6 +243,15 @@ const runCreate = async (
     }
   }
 
+  if (scaffoldOptions.git) {
+    try {
+      await initializeGitRepository(result.root);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.warn(chalk.yellow(`Git 初始化失败，已保留项目文件：${message}`));
+    }
+  }
+
   const steps = createNextSteps(
     result.root,
     scaffoldOptions.packageManager,
@@ -249,6 +270,7 @@ export const createProgram = (rawArgs: string[]): Command => {
     .description("创建一个新的 ElfUI Vite 项目")
     .argument("[directory]", "项目目录")
     .option("--default", "使用默认配置并跳过功能问答")
+    .option("--no-interactive", "不进行交互；必须同时提供项目目录")
     .addOption(
       new Option("--language <language>", "选择语言").choices(["ts", "js"]),
     )
@@ -275,6 +297,7 @@ export const createProgram = (rawArgs: string[]): Command => {
     .option("--eslint", "加入 ESLint")
     .option("--prettier", "加入 Prettier")
     .option("--bare", "生成最小项目，不生成教学示例")
+    .option("--no-git", "不初始化 Git 仓库")
     .addOption(
       new Option("--package-manager <name>", "选择包管理器").choices([
         "pnpm",

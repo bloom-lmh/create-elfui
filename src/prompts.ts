@@ -122,6 +122,9 @@ export const promptForOptions = async (
       options: packageManagers.map((value) => ({ value, label: value })),
     }),
   );
+  const git = await ask(
+    confirm({ message: "初始化 Git 仓库？", initialValue: initial.git }),
+  );
   const install = await ask(
     confirm({ message: "现在安装依赖？", initialValue: initial.install }),
   );
@@ -138,6 +141,7 @@ export const promptForOptions = async (
     eslint,
     prettier,
     bare,
+    git,
     packageManager: packageManager as PackageManager,
     install,
   };

@@ -21,6 +21,7 @@ export interface ScaffoldOptions {
   eslint: boolean;
   prettier: boolean;
   bare: boolean;
+  git: boolean;
   packageManager: PackageManager;
   install: boolean;
   force: boolean;
@@ -38,6 +39,7 @@ export interface ScaffoldOptionOverrides {
   eslint?: boolean;
   prettier?: boolean;
   bare?: boolean;
+  git?: boolean;
   packageManager?: PackageManager;
   install?: boolean;
   force?: boolean;
@@ -86,6 +88,7 @@ export const createScaffoldOptions = (
     eslint: overrides.eslint ?? false,
     prettier: overrides.prettier ?? false,
     bare: overrides.bare ?? false,
+    git: overrides.git ?? true,
     packageManager: overrides.packageManager ?? packageManager,
     install: overrides.install ?? false,
     force: overrides.force ?? false,

@@ -27,6 +27,7 @@ describe("options", () => {
       componentMode: "macro",
       style: "css",
       router: false,
+      git: true,
       install: false,
     });
   });
