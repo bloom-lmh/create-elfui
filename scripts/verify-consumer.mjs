@@ -6,8 +6,17 @@ import { fileURLToPath } from "node:url";
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const cliPath = join(packageRoot, "dist", "index.js");
-const temporaryRoot = mkdtempSync(join(tmpdir(), "create-elfui-consumer-"));
-const projectRoot = join(temporaryRoot, "project");
+
+const consumerCases = [
+  {
+    packageManager: "pnpm",
+    installArgs: ["install", "--ignore-scripts"],
+  },
+  {
+    packageManager: "npm",
+    installArgs: ["install", "--ignore-scripts", "--no-audit", "--no-fund"],
+  },
+];
 
 const run = (command, args, cwd) => {
   const result = spawnSync(command, args, {
@@ -23,32 +32,43 @@ const run = (command, args, cwd) => {
   }
 };
 
-try {
-  if (!existsSync(cliPath))
-    throw new Error("Missing bundled CLI. Run pnpm build first.");
+if (!existsSync(cliPath))
+  throw new Error("Missing bundled CLI. Run pnpm build first.");
 
-  run(
-    process.execPath,
-    [
-      cliPath,
-      "--preset",
-      "quality",
-      "--router-mode",
-      "history",
-      "--playwright",
-      "--no-install",
-      projectRoot,
-    ],
-    packageRoot,
+for (const consumer of consumerCases) {
+  const temporaryRoot = mkdtempSync(
+    join(tmpdir(), `create-elfui-consumer-${consumer.packageManager}-`),
   );
-  run("pnpm", ["install", "--ignore-scripts"], projectRoot);
-  run("pnpm", ["run", "typecheck"], projectRoot);
-  run("pnpm", ["run", "test"], projectRoot);
-  run("pnpm", ["run", "build"], projectRoot);
+  const projectRoot = join(temporaryRoot, "project");
 
-  if (!existsSync(join(projectRoot, "dist", "index.html"))) {
-    throw new Error("Generated consumer did not produce dist/index.html.");
+  try {
+    run(
+      process.execPath,
+      [
+        cliPath,
+        "--preset",
+        "quality",
+        "--router-mode",
+        "history",
+        "--playwright",
+        "--package-manager",
+        consumer.packageManager,
+        "--no-install",
+        projectRoot,
+      ],
+      packageRoot,
+    );
+    run(consumer.packageManager, consumer.installArgs, projectRoot);
+    run(consumer.packageManager, ["run", "typecheck"], projectRoot);
+    run(consumer.packageManager, ["run", "test"], projectRoot);
+    run(consumer.packageManager, ["run", "build"], projectRoot);
+
+    if (!existsSync(join(projectRoot, "dist", "index.html"))) {
+      throw new Error(
+        `${consumer.packageManager} consumer did not produce dist/index.html.`,
+      );
+    }
+  } finally {
+    rmSync(temporaryRoot, { recursive: true, force: true });
   }
-} finally {
-  rmSync(temporaryRoot, { recursive: true, force: true });
 }

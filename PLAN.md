@@ -7,7 +7,7 @@
 - [x] Macro projects declare `@elfui/runtime` directly for pnpm-compatible runtime imports.
 - [x] Publish gate generates a real Macro consumer, installs with pnpm, and runs a Vite production build.
 - [x] Validate a pnpm consumer with history Router, Vitest, and Playwright configuration.
-- [ ] Validate the equivalent consumer matrix with npm.
+- [x] Validate the equivalent consumer matrix with npm.
 - [ ] Add a framework-version compatibility check before generation.
 
 ## B. Creation Experience
