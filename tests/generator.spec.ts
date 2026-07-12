@@ -14,6 +14,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { TargetDirectoryNotEmptyError } from "../src/errors";
 import { generateProject, listGeneratedFiles } from "../src/generator";
 import { createScaffoldOptions } from "../src/options";
+import { dependencyVersions } from "../src/versions";
 
 describe("generateProject", () => {
   let temporaryDirectory: string;
@@ -283,6 +284,18 @@ describe("generateProject", () => {
 
     expect(result.files).toEqual(listGeneratedFiles(options));
     expect(result.files.some((file) => file.includes("styles"))).toBe(false);
+    await expect(access(projectDir)).rejects.toThrow();
+  });
+
+  it("rejects incompatible framework versions before writing a project", async () => {
+    const projectDir = join(temporaryDirectory, "incompatible-framework-app");
+
+    await expect(
+      generateProject(createScaffoldOptions("pnpm", { projectDir }), {
+        versions: { ...dependencyVersions, runtime: "^0.1.0-beta.2" },
+      }),
+    ).rejects.toThrow("@elfui/runtime 为 ^0.1.0-beta.2");
+
     await expect(access(projectDir)).rejects.toThrow();
   });
 

@@ -2,6 +2,7 @@ import { mkdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import { TargetDirectoryNotEmptyError } from "./errors";
+import { assertFrameworkCompatibility } from "./framework-compatibility";
 import {
   clearDirectoryPreservingGit,
   createStagingDirectory,
@@ -273,6 +274,10 @@ export const generateProject = async (
   options: ScaffoldOptions,
   generationOptions: GenerateProjectOptions = {},
 ): Promise<GenerateProjectResult> => {
+  assertFrameworkCompatibility(
+    options,
+    generationOptions.versions ?? dependencyVersions,
+  );
   const root = resolveProjectRoot(options.projectDir);
   const files = listGeneratedFiles(options);
   const targetState = await inspectTargetDirectory(root);
