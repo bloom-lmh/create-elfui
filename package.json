@@ -20,6 +20,9 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "changeset": "changeset",
+    "release:status": "changeset status",
+    "release:version": "changeset version",
     "sync:versions": "node ./scripts/sync-framework-versions.mjs",
     "check:versions": "node ./scripts/sync-framework-versions.mjs --check",
     "build": "node ./scripts/build.mjs",
@@ -42,6 +45,7 @@
     "ejs": "^6.0.1"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.0",
     "@types/ejs": "^3.1.5",
     "@types/node": "25.8.0",
     "esbuild": "^0.28.0",

@@ -1,0 +1,8 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "create-elfui": "0.1.0-beta.8"
+  },
+  "changesets": []
+}
