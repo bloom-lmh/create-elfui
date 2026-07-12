@@ -34,6 +34,8 @@ export const createPackageManifest = (
 
   if (options.componentMode === "macro") {
     dependencies["@elfui/core"] = versions.core;
+    // 宏编译产物直接导入 @elfui/runtime/internal，pnpm 不会提升传递依赖。
+    dependencies["@elfui/runtime"] = versions.runtime;
     devDependencies["@elfui/vite-plugin"] = versions.vitePlugin;
   } else {
     dependencies["@elfui/chain"] = versions.chain;

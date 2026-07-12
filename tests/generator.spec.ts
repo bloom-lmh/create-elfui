@@ -46,6 +46,7 @@ describe("generateProject", () => {
     expect(viteConfig).toContain('macroImport: "@elfui/core"');
     expect(viteConfig).toContain('runtimeImport: "@elfui/core"');
     expect(manifest.dependencies).toHaveProperty("@elfui/core");
+    expect(manifest.dependencies).toHaveProperty("@elfui/runtime");
     expect(manifest.devDependencies).toHaveProperty("@elfui/vite-plugin");
     expect(manifest.dependencies).not.toHaveProperty("@elfui/chain");
     await access(join(projectDir, ".gitignore"));
@@ -136,11 +137,15 @@ describe("generateProject", () => {
             );
             expect(manifest.devDependencies).toHaveProperty("vite");
             if (componentMode === "macro") {
+              expect(manifest.dependencies).toHaveProperty("@elfui/runtime");
               expect(manifest.devDependencies).toHaveProperty(
                 "@elfui/vite-plugin",
                 "^0.1.0-beta.1",
               );
             } else {
+              expect(manifest.dependencies).not.toHaveProperty(
+                "@elfui/runtime",
+              );
               expect(manifest.devDependencies).not.toHaveProperty(
                 "@elfui/vite-plugin",
               );

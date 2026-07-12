@@ -13,7 +13,8 @@ const run = (command, args, cwd) => {
   const result = spawnSync(command, args, {
     cwd,
     stdio: "inherit",
-    shell: process.platform === "win32" && command === "npm",
+    shell:
+      process.platform === "win32" && (command === "npm" || command === "pnpm"),
   });
   if (result.status !== 0) {
     throw new Error(
@@ -31,12 +32,8 @@ try {
     [cliPath, "--default", "--no-install", projectRoot],
     packageRoot,
   );
-  run(
-    "npm",
-    ["install", "--ignore-scripts", "--no-audit", "--no-fund"],
-    projectRoot,
-  );
-  run("npm", ["run", "build"], projectRoot);
+  run("pnpm", ["install", "--ignore-scripts"], projectRoot);
+  run("pnpm", ["run", "build"], projectRoot);
 
   if (!existsSync(join(projectRoot, "dist", "index.html"))) {
     throw new Error("Generated consumer did not produce dist/index.html.");
