@@ -13,7 +13,7 @@
 
 - [x] Support deterministic `--no-interactive` generation with an explicit target directory.
 - [x] Initialize a Git repository by default, with `--no-git` to opt out.
-- [ ] Add recommended, minimal, and quality presets without expanding the default prompt flow.
+- [x] Add recommended, minimal, and quality presets without expanding the default prompt flow.
 - [ ] Support `hash` and `history` Router modes.
 - [ ] Add a Playwright E2E testing option.
 - [ ] Generate optional GitHub Actions CI configuration.

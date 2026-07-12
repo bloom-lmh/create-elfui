@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   createScaffoldOptions,
+  getPresetOverrides,
   inferPackageName,
   isValidPackageName,
   toValidPackageName,
@@ -37,6 +38,19 @@ describe("options", () => {
     expect(isValidPackageName("My ElfUI App")).toBe(false);
     expect(toValidPackageName("My ElfUI App!")).toBe("my-elfui-app");
     expect(inferPackageName("My ElfUI App!")).toBe("my-elfui-app");
+  });
+
+  it("provides focused presets without changing the base defaults", () => {
+    expect(getPresetOverrides("recommended")).toEqual({
+      eslint: true,
+      prettier: true,
+    });
+    expect(getPresetOverrides("minimal")).toEqual({ bare: true });
+    expect(getPresetOverrides("quality")).toEqual({
+      eslint: true,
+      prettier: true,
+      vitest: true,
+    });
   });
 
   it("infers supported package managers from npm user agents", () => {

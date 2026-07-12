@@ -56,6 +56,26 @@ describe("CLI", () => {
     expect(log).toHaveBeenCalledWith(
       expect.stringContaining('"install": true'),
     );
+    expect(log).toHaveBeenCalledWith(expect.stringContaining('"eslint": true'));
+    expect(log).toHaveBeenCalledWith(
+      expect.stringContaining('"prettier": true'),
+    );
+  });
+
+  it("applies quality presets without entering feature prompts", async () => {
+    const log = vi.spyOn(console, "log").mockImplementation(() => undefined);
+    const target = join(temporaryDirectory, "quality-preset-app");
+    const rawArgs = ["--preset", "quality", "--dry-run", target];
+
+    await createProgram(rawArgs).parseAsync([
+      "node",
+      "create-elfui",
+      ...rawArgs,
+    ]);
+
+    expect(log).toHaveBeenCalledWith(expect.stringContaining('"vitest": true'));
+    expect(log).toHaveBeenCalledWith(expect.stringContaining('"eslint": true'));
+    expect(shouldPromptForFeatureSelection(rawArgs, false)).toBe(false);
   });
 
   it("keeps feature prompts when --install is the only option", () => {

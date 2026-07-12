@@ -5,10 +5,12 @@ import type { PackageManager } from "./package-manager";
 export const languages = ["ts", "js"] as const;
 export const componentModes = ["macro", "chain"] as const;
 export const styleSolutions = ["css", "scss", "less", "none"] as const;
+export const scaffoldPresets = ["recommended", "minimal", "quality"] as const;
 
 export type Language = (typeof languages)[number];
 export type ComponentMode = (typeof componentModes)[number];
 export type StyleSolution = (typeof styleSolutions)[number];
+export type ScaffoldPreset = (typeof scaffoldPresets)[number];
 
 export interface ScaffoldOptions {
   projectDir: string;
@@ -45,6 +47,19 @@ export interface ScaffoldOptionOverrides {
   force?: boolean;
   dryRun?: boolean;
 }
+
+export const getPresetOverrides = (
+  preset: ScaffoldPreset,
+): ScaffoldOptionOverrides => {
+  switch (preset) {
+    case "minimal":
+      return { bare: true };
+    case "quality":
+      return { eslint: true, prettier: true, vitest: true };
+    case "recommended":
+      return { eslint: true, prettier: true };
+  }
+};
 
 export const isValidPackageName = (value: string): boolean =>
   /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/.test(value);

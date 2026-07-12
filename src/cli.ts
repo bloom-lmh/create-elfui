@@ -13,9 +13,12 @@ import { generateProject } from "./generator";
 import { initializeGitRepository } from "./git";
 import {
   createScaffoldOptions,
+  getPresetOverrides,
+  scaffoldPresets,
   type ComponentMode,
   type Language,
   type ScaffoldOptionOverrides,
+  type ScaffoldPreset,
   type StyleSolution,
 } from "./options";
 import {
@@ -30,6 +33,7 @@ import { confirmOverwrite, promptForOptions } from "./prompts";
 
 interface CliOptions {
   default?: boolean;
+  preset?: ScaffoldPreset;
   language?: Language;
   ts?: boolean;
   js?: boolean;
@@ -49,6 +53,7 @@ interface CliOptions {
 }
 
 const featureFlags = [
+  "--preset",
   "--language",
   "--ts",
   "--js",
@@ -157,7 +162,11 @@ const createInitialOptions = (
   rawArgs: string[],
 ) => {
   const packageManager = options.packageManager ?? inferPackageManager();
-  const overrides: ScaffoldOptionOverrides = {};
+  const preset =
+    options.preset ?? (options.default ? "recommended" : undefined);
+  const overrides: ScaffoldOptionOverrides = preset
+    ? getPresetOverrides(preset)
+    : {};
   const language = resolveLanguage(options);
   const componentMode = resolveComponentMode(options);
   const install = getRequestedInstall(rawArgs);
@@ -269,7 +278,10 @@ export const createProgram = (rawArgs: string[]): Command => {
     .name("create-elfui")
     .description("创建一个新的 ElfUI Vite 项目")
     .argument("[directory]", "项目目录")
-    .option("--default", "使用默认配置并跳过功能问答")
+    .option("--default", "使用推荐配置并跳过功能问答")
+    .addOption(
+      new Option("--preset <preset>", "使用项目预设").choices(scaffoldPresets),
+    )
     .option("--no-interactive", "不进行交互；必须同时提供项目目录")
     .addOption(
       new Option("--language <language>", "选择语言").choices(["ts", "js"]),
