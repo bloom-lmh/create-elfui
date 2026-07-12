@@ -111,6 +111,22 @@ describe("CLI", () => {
     );
   });
 
+  it("selects GitHub Actions without entering feature prompts", async () => {
+    const log = vi.spyOn(console, "log").mockImplementation(() => undefined);
+    const target = join(temporaryDirectory, "github-actions-app");
+    const rawArgs = ["--github-actions", "--dry-run", target];
+
+    await createProgram(rawArgs).parseAsync([
+      "node",
+      "create-elfui",
+      ...rawArgs,
+    ]);
+
+    expect(log).toHaveBeenCalledWith(
+      expect.stringContaining('"githubActions": true'),
+    );
+  });
+
   it("keeps feature prompts when --install is the only option", () => {
     expect(shouldPromptForFeatureSelection(["--install"], false)).toBe(true);
     expect(shouldPromptForFeatureSelection(["--no-install"], false)).toBe(true);

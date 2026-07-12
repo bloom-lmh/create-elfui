@@ -23,4 +23,7 @@ pnpm create elfui@beta my-app --router-mode history --install
 
 # Playwright E2E：创建后按 README 显式安装 Chromium
 pnpm create elfui@beta my-app --playwright --install
+
+# GitHub Actions：按当前选择生成 CI 步骤
+pnpm create elfui@beta my-app --github-actions --install
 ```

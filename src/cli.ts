@@ -51,6 +51,7 @@ interface CliOptions {
   prettier?: boolean;
   bare?: boolean;
   git?: boolean;
+  githubActions?: boolean;
   packageManager?: PackageManager;
   force?: boolean;
   dryRun?: boolean;
@@ -72,6 +73,7 @@ const featureFlags = [
   "--eslint",
   "--prettier",
   "--bare",
+  "--github-actions",
 ] as const;
 
 const hasFlag = (rawArgs: string[], flag: string): boolean =>
@@ -192,6 +194,7 @@ const createInitialOptions = (
   if (options.prettier) overrides.prettier = true;
   if (options.bare) overrides.bare = true;
   if (options.git !== undefined) overrides.git = options.git;
+  if (options.githubActions) overrides.githubActions = true;
   if (install !== undefined) overrides.install = install;
   if (options.force) overrides.force = true;
   if (options.dryRun) overrides.dryRun = true;
@@ -327,6 +330,7 @@ export const createProgram = (rawArgs: string[]): Command => {
     .option("--prettier", "加入 Prettier")
     .option("--bare", "生成最小项目，不生成教学示例")
     .option("--no-git", "不初始化 Git 仓库")
+    .option("--github-actions", "生成 GitHub Actions CI 工作流")
     .addOption(
       new Option("--package-manager <name>", "选择包管理器").choices([
         "pnpm",

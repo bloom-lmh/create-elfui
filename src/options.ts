@@ -28,6 +28,7 @@ export interface ScaffoldOptions {
   prettier: boolean;
   bare: boolean;
   git: boolean;
+  githubActions: boolean;
   packageManager: PackageManager;
   install: boolean;
   force: boolean;
@@ -48,6 +49,7 @@ export interface ScaffoldOptionOverrides {
   prettier?: boolean;
   bare?: boolean;
   git?: boolean;
+  githubActions?: boolean;
   packageManager?: PackageManager;
   install?: boolean;
   force?: boolean;
@@ -112,6 +114,7 @@ export const createScaffoldOptions = (
     prettier: overrides.prettier ?? false,
     bare: overrides.bare ?? false,
     git: overrides.git ?? true,
+    githubActions: overrides.githubActions ?? false,
     packageManager: overrides.packageManager ?? packageManager,
     install: overrides.install ?? false,
     force: overrides.force ?? false,

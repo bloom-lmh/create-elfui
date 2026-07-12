@@ -20,3 +20,5 @@ npx playwright install chromium
 <%= packageManager === "npm" ? "npm run test:e2e" : `${packageManager} test:e2e` %>
 ```
 <% } %>
+
+<% if (githubActions) { %>GitHub Actions 工作流已生成在 `.github/workflows/ci.yml`。<% } %>

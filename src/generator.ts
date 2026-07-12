@@ -81,6 +81,7 @@ export const listGeneratedFiles = (options: ScaffoldOptions): string[] => {
       `playwright.config.${sourceExtension}`,
       `e2e/app.spec.${sourceExtension}`,
     );
+  if (options.githubActions) files.push(".github/workflows/ci.yml");
   if (options.eslint) files.push("eslint.config.js");
   if (options.prettier) files.push("prettier.config.js", ".prettierignore");
 
@@ -227,6 +228,16 @@ const writeProject = async (
       root,
       "quality/playwright.spec.ejs",
       `e2e/app.spec.${sourceExtension}`,
+      context,
+      templateRoot,
+    );
+  }
+
+  if (options.githubActions) {
+    await renderTemplate(
+      root,
+      "quality/github-actions-ci.yml.ejs",
+      ".github/workflows/ci.yml",
       context,
       templateRoot,
     );

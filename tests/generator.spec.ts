@@ -225,6 +225,33 @@ describe("generateProject", () => {
     expect(manifest.scripts).toHaveProperty("test:e2e", "playwright test");
   });
 
+  it("renders a CI workflow with only the selected quality checks", async () => {
+    const projectDir = join(temporaryDirectory, "ci-app");
+    await generateProject(
+      createScaffoldOptions("pnpm", {
+        projectDir,
+        eslint: true,
+        vitest: true,
+        playwright: true,
+        githubActions: true,
+      }),
+    );
+
+    const workflow = await readFile(
+      join(projectDir, ".github", "workflows", "ci.yml"),
+      "utf8",
+    );
+
+    expect(workflow).toContain("pnpm/action-setup@v4");
+    expect(workflow).toContain("pnpm install --frozen-lockfile");
+    expect(workflow).toContain("pnpm lint");
+    expect(workflow).toContain("pnpm test");
+    expect(workflow).toContain(
+      "pnpm exec playwright install --with-deps chromium",
+    );
+    expect(workflow).toContain("pnpm test:e2e");
+  });
+
   it("configures the Macro compiler for @elfui/core in Vitest projects", async () => {
     const projectDir = join(temporaryDirectory, "macro-vitest-app");
     await generateProject(

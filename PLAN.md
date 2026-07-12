@@ -17,7 +17,7 @@
 - [x] Add recommended, minimal, and quality presets without expanding the default prompt flow.
 - [x] Support `hash` and `history` Router modes.
 - [x] Add a Playwright E2E testing option.
-- [ ] Generate optional GitHub Actions CI configuration.
+- [x] Generate optional GitHub Actions CI configuration.
 
 ## C. Ongoing Tooling
 

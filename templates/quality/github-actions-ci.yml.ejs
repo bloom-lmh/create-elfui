@@ -1,0 +1,68 @@
+<%
+const runScript = (script) => packageManager === "npm" ? `npm run ${script}` : `${packageManager} ${script}`;
+const installCommand = packageManager === "npm"
+  ? "npm ci"
+  : packageManager === "pnpm"
+    ? "pnpm install --frozen-lockfile"
+    : packageManager === "yarn"
+      ? "yarn install --immutable"
+      : "bun install --frozen-lockfile";
+const playwrightCommand = packageManager === "npm"
+  ? "npx playwright"
+  : packageManager === "bun"
+    ? "bunx playwright"
+    : `${packageManager} exec playwright`;
+-%>
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+<% if (packageManager === "pnpm") { -%>
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+<% } -%>
+<% if (packageManager === "bun") { -%>
+      - uses: oven-sh/setup-bun@v2
+<% } else { -%>
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: <%= packageManager %>
+<% if (packageManager === "yarn") { -%>
+      - name: Enable Corepack
+        run: corepack enable
+<% } -%>
+<% } -%>
+      - name: Install dependencies
+        run: <%= installCommand %>
+<% if (language === "ts") { -%>
+      - name: Typecheck
+        run: <%= runScript("typecheck") %>
+<% } -%>
+<% if (eslint) { -%>
+      - name: Lint
+        run: <%= runScript("lint") %>
+<% } -%>
+<% if (vitest) { -%>
+      - name: Unit tests
+        run: <%= runScript("test") %>
+<% } -%>
+<% if (playwright) { -%>
+      - name: Install Chromium
+        run: <%= playwrightCommand %> install --with-deps chromium
+      - name: E2E tests
+        run: <%= runScript("test:e2e") %>
+<% } -%>
+      - name: Build
+        run: <%= runScript("build") %>

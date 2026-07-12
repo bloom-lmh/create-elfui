@@ -145,6 +145,12 @@ export const promptForOptions = async (
   const git = await ask(
     confirm({ message: "初始化 Git 仓库？", initialValue: initial.git }),
   );
+  const githubActions = await ask(
+    confirm({
+      message: "生成 GitHub Actions CI？",
+      initialValue: initial.githubActions,
+    }),
+  );
   const install = await ask(
     confirm({ message: "现在安装依赖？", initialValue: initial.install }),
   );
@@ -164,6 +170,7 @@ export const promptForOptions = async (
     prettier,
     bare,
     git,
+    githubActions,
     packageManager: packageManager as PackageManager,
     install,
   };

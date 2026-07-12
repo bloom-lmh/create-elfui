@@ -30,6 +30,7 @@ describe("options", () => {
       router: false,
       routerMode: "hash",
       playwright: false,
+      githubActions: false,
       git: true,
       install: false,
     });
