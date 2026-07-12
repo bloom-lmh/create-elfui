@@ -60,6 +60,11 @@ export const createPackageManifest = (
     scripts["test:watch"] = "vitest";
   }
 
+  if (options.playwright) {
+    devDependencies["@playwright/test"] = versions.playwright;
+    scripts["test:e2e"] = "playwright test";
+  }
+
   if (options.eslint) {
     devDependencies.eslint = versions.eslint;
     devDependencies["@eslint/js"] = versions.eslintJs;

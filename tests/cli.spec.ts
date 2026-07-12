@@ -95,6 +95,22 @@ describe("CLI", () => {
     );
   });
 
+  it("selects Playwright without entering feature prompts", async () => {
+    const log = vi.spyOn(console, "log").mockImplementation(() => undefined);
+    const target = join(temporaryDirectory, "playwright-app");
+    const rawArgs = ["--playwright", "--dry-run", target];
+
+    await createProgram(rawArgs).parseAsync([
+      "node",
+      "create-elfui",
+      ...rawArgs,
+    ]);
+
+    expect(log).toHaveBeenCalledWith(
+      expect.stringContaining('"playwright": true'),
+    );
+  });
+
   it("keeps feature prompts when --install is the only option", () => {
     expect(shouldPromptForFeatureSelection(["--install"], false)).toBe(true);
     expect(shouldPromptForFeatureSelection(["--no-install"], false)).toBe(true);

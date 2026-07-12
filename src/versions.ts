@@ -8,6 +8,7 @@ export interface DependencyVersions extends FrameworkDependencyVersions {
   typescript: string;
   nodeTypes: string;
   vitest: string;
+  playwright: string;
   jsdom: string;
   eslint: string;
   eslintJs: string;
@@ -24,6 +25,7 @@ export const dependencyVersions: DependencyVersions = {
   typescript: "^5.9.3",
   nodeTypes: "^25.8.0",
   vitest: "^4.1.10",
+  playwright: "^1.61.1",
   jsdom: "^29.1.1",
   eslint: "^10.7.0",
   eslintJs: "^10.0.1",

@@ -46,6 +46,7 @@ interface CliOptions {
   router?: boolean;
   routerMode?: RouterMode;
   vitest?: boolean;
+  playwright?: boolean;
   eslint?: boolean;
   prettier?: boolean;
   bare?: boolean;
@@ -67,6 +68,7 @@ const featureFlags = [
   "--router",
   "--router-mode",
   "--vitest",
+  "--playwright",
   "--eslint",
   "--prettier",
   "--bare",
@@ -185,6 +187,7 @@ const createInitialOptions = (
     overrides.routerMode = options.routerMode;
   }
   if (options.vitest) overrides.vitest = true;
+  if (options.playwright) overrides.playwright = true;
   if (options.eslint) overrides.eslint = true;
   if (options.prettier) overrides.prettier = true;
   if (options.bare) overrides.bare = true;
@@ -319,6 +322,7 @@ export const createProgram = (rawArgs: string[]): Command => {
       ),
     )
     .option("--vitest", "加入 Vitest")
+    .option("--playwright", "加入 Playwright E2E 测试")
     .option("--eslint", "加入 ESLint")
     .option("--prettier", "加入 Prettier")
     .option("--bare", "生成最小项目，不生成教学示例")

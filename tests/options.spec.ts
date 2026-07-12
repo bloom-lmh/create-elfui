@@ -29,6 +29,7 @@ describe("options", () => {
       style: "css",
       router: false,
       routerMode: "hash",
+      playwright: false,
       git: true,
       install: false,
     });

@@ -76,6 +76,11 @@ export const listGeneratedFiles = (options: ScaffoldOptions): string[] => {
       `vitest.config.${sourceExtension}`,
       `src/__tests__/App.spec.${sourceExtension}`,
     );
+  if (options.playwright)
+    files.push(
+      `playwright.config.${sourceExtension}`,
+      `e2e/app.spec.${sourceExtension}`,
+    );
   if (options.eslint) files.push("eslint.config.js");
   if (options.prettier) files.push("prettier.config.js", ".prettierignore");
 
@@ -205,6 +210,23 @@ const writeProject = async (
       root,
       `quality/${codeMode}.spec.ejs`,
       `src/__tests__/App.spec.${sourceExtension}`,
+      context,
+      templateRoot,
+    );
+  }
+
+  if (options.playwright) {
+    await renderTemplate(
+      root,
+      "quality/playwright.config.ejs",
+      `playwright.config.${sourceExtension}`,
+      context,
+      templateRoot,
+    );
+    await renderTemplate(
+      root,
+      "quality/playwright.spec.ejs",
+      `e2e/app.spec.${sourceExtension}`,
       context,
       templateRoot,
     );

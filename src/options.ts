@@ -23,6 +23,7 @@ export interface ScaffoldOptions {
   router: boolean;
   routerMode: RouterMode;
   vitest: boolean;
+  playwright: boolean;
   eslint: boolean;
   prettier: boolean;
   bare: boolean;
@@ -42,6 +43,7 @@ export interface ScaffoldOptionOverrides {
   router?: boolean;
   routerMode?: RouterMode;
   vitest?: boolean;
+  playwright?: boolean;
   eslint?: boolean;
   prettier?: boolean;
   bare?: boolean;
@@ -105,6 +107,7 @@ export const createScaffoldOptions = (
     router: overrides.router ?? false,
     routerMode: overrides.routerMode ?? "hash",
     vitest: overrides.vitest ?? false,
+    playwright: overrides.playwright ?? false,
     eslint: overrides.eslint ?? false,
     prettier: overrides.prettier ?? false,
     bare: overrides.bare ?? false,

@@ -29,10 +29,21 @@ try {
 
   run(
     process.execPath,
-    [cliPath, "--default", "--no-install", projectRoot],
+    [
+      cliPath,
+      "--preset",
+      "quality",
+      "--router-mode",
+      "history",
+      "--playwright",
+      "--no-install",
+      projectRoot,
+    ],
     packageRoot,
   );
   run("pnpm", ["install", "--ignore-scripts"], projectRoot);
+  run("pnpm", ["run", "typecheck"], projectRoot);
+  run("pnpm", ["run", "test"], projectRoot);
   run("pnpm", ["run", "build"], projectRoot);
 
   if (!existsSync(join(projectRoot, "dist", "index.html"))) {

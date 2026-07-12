@@ -48,4 +48,16 @@ describe("createPackageManifest", () => {
     expect(manifest.devDependencies).not.toHaveProperty("typescript");
     expect(manifest.scripts).not.toHaveProperty("typecheck");
   });
+
+  it("adds Playwright only when E2E testing is selected", () => {
+    const manifest = createPackageManifest(
+      createScaffoldOptions("pnpm", { playwright: true }),
+    );
+
+    expect(manifest.devDependencies).toHaveProperty(
+      "@playwright/test",
+      "^1.61.1",
+    );
+    expect(manifest.scripts).toHaveProperty("test:e2e", "playwright test");
+  });
 });

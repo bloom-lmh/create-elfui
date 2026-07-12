@@ -202,6 +202,29 @@ describe("generateProject", () => {
     expect(eslintConfig).toContain("eslintConfigPrettier");
   });
 
+  it("renders Playwright configuration and its first browser test", async () => {
+    const projectDir = join(temporaryDirectory, "playwright-app");
+    await generateProject(
+      createScaffoldOptions("pnpm", { projectDir, playwright: true }),
+    );
+
+    const playwrightConfig = await readFile(
+      join(projectDir, "playwright.config.ts"),
+      "utf8",
+    );
+    const browserTest = await readFile(
+      join(projectDir, "e2e", "app.spec.ts"),
+      "utf8",
+    );
+    const manifest = JSON.parse(
+      await readFile(join(projectDir, "package.json"), "utf8"),
+    ) as { scripts: Record<string, string> };
+
+    expect(playwrightConfig).toContain("127.0.0.1:4173");
+    expect(browserTest).toContain('page.goto("/")');
+    expect(manifest.scripts).toHaveProperty("test:e2e", "playwright test");
+  });
+
   it("configures the Macro compiler for @elfui/core in Vitest projects", async () => {
     const projectDir = join(temporaryDirectory, "macro-vitest-app");
     await generateProject(
@@ -218,6 +241,7 @@ describe("generateProject", () => {
 
     expect(vitestConfig).toContain('macroImport: "@elfui/core"');
     expect(vitestConfig).toContain('runtimeImport: "@elfui/core"');
+    expect(vitestConfig).toContain('"e2e/**"');
   });
 
   it("does not write to disk during a dry run and skips style files for None", async () => {

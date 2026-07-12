@@ -1,4 +1,4 @@
-import { defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 <% if (componentMode === "macro") { -%>
 import { elfuiMacroPlugin } from "@elfui/vite-plugin";
 <% } -%>
@@ -13,6 +13,7 @@ export default defineConfig({
   ],
 <% } -%>
   test: {
-    environment: "jsdom"
+    environment: "jsdom",
+    exclude: [...configDefaults.exclude, "e2e/**"]
   }
 });

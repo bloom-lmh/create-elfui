@@ -20,4 +20,7 @@ pnpm create elfui@beta my-app --preset quality --router --install
 
 # history 路由：生产服务器需要将未知路径回退到 index.html
 pnpm create elfui@beta my-app --router-mode history --install
+
+# Playwright E2E：创建后按 README 显式安装 Chromium
+pnpm create elfui@beta my-app --playwright --install
 ```

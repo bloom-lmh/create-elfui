@@ -6,7 +6,8 @@
 
 - [x] Macro projects declare `@elfui/runtime` directly for pnpm-compatible runtime imports.
 - [x] Publish gate generates a real Macro consumer, installs with pnpm, and runs a Vite production build.
-- [ ] Validate the consumer matrix with both pnpm and npm, including Router and Vitest variants.
+- [x] Validate a pnpm consumer with history Router, Vitest, and Playwright configuration.
+- [ ] Validate the equivalent consumer matrix with npm.
 - [ ] Add a framework-version compatibility check before generation.
 
 ## B. Creation Experience
@@ -15,7 +16,7 @@
 - [x] Initialize a Git repository by default, with `--no-git` to opt out.
 - [x] Add recommended, minimal, and quality presets without expanding the default prompt flow.
 - [x] Support `hash` and `history` Router modes.
-- [ ] Add a Playwright E2E testing option.
+- [x] Add a Playwright E2E testing option.
 - [ ] Generate optional GitHub Actions CI configuration.
 
 ## C. Ongoing Tooling

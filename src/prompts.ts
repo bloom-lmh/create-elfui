@@ -120,6 +120,12 @@ export const promptForOptions = async (
       initialValue: initial.vitest,
     }),
   );
+  const playwright = await ask(
+    confirm({
+      message: "加入 Playwright E2E 测试？",
+      initialValue: initial.playwright,
+    }),
+  );
   const eslint = await ask(
     confirm({ message: "加入 ESLint？", initialValue: initial.eslint }),
   );
@@ -153,6 +159,7 @@ export const promptForOptions = async (
     router,
     routerMode: routerMode as ScaffoldOptions["routerMode"],
     vitest,
+    playwright,
     eslint,
     prettier,
     bare,
