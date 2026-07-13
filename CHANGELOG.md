@@ -1,5 +1,11 @@
 # create-elfui
 
+## 0.1.0-beta.14
+
+### Minor Changes
+
+- 1bd32cd: Refresh generated application starter screens with the official ElfUI mark, a responsive workspace layout, and Router-aware landing pages.
+
 ## 0.1.0-beta.13
 
 ### Minor Changes
