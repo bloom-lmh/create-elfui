@@ -7,6 +7,17 @@ import { fileURLToPath } from "node:url";
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const cliPath = join(packageRoot, "dist", "index.js");
 
+const npmEnvironment = () =>
+  Object.fromEntries(
+    Object.entries(process.env).filter(
+      ([key]) =>
+        !key.startsWith("npm_config_") &&
+        !key.startsWith("npm_package_") &&
+        !key.startsWith("npm_lifecycle_") &&
+        key !== "npm_command",
+    ),
+  );
+
 const consumerCases = [
   {
     packageManager: "pnpm",
@@ -30,6 +41,7 @@ const run = (command, args, cwd) => {
   const result = spawnSync(command, args, {
     cwd,
     stdio: "inherit",
+    env: command === "npm" ? npmEnvironment() : process.env,
     shell:
       process.platform === "win32" && (command === "npm" || command === "pnpm"),
   });
