@@ -25,3 +25,7 @@
 - [x] Add `elfui generate component <name>` for Macro and Chain components.
 - [x] Add `elfui add <feature>` for Router, tests, formatting, and other optional integrations.
 - [x] Offer curated application and component-library templates.
+
+## D. Parity Refinement
+
+- [x] Let interactive users select an application or component-library template, and support explicit scoped package names for non-interactive publishing workflows.

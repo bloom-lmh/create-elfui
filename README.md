@@ -19,7 +19,7 @@ pnpm create elfui@beta my-app --default --no-git
 
 # 列出模板，或创建可发布的组件库
 pnpm create elfui@beta --list-templates
-pnpm create elfui@beta my-components --template library --default --install
+pnpm create elfui@beta my-components --template library --package-name @scope/my-components --default --install
 
 # 预设：recommended（默认）、minimal（Bare）、quality（含 Vitest）
 pnpm create elfui@beta my-app --preset quality --router --install

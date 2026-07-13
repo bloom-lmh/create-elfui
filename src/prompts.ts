@@ -5,6 +5,7 @@ import {
   inferPackageName,
   isValidPackageName,
   routerModes,
+  scaffoldTemplates,
   toValidPackageName,
   type ScaffoldOptions,
 } from "./options";
@@ -62,6 +63,20 @@ export const promptForOptions = async (
   if (!promptOptions.askFeatures)
     return { ...initial, projectDir, packageName };
 
+  const template = await ask(
+    select({
+      message: "项目模板",
+      initialValue: initial.template,
+      options: scaffoldTemplates.map((value) => ({
+        value,
+        label: value === "app" ? "应用项目" : "组件库",
+        ...(value === "app"
+          ? { hint: "Vite 单页应用" }
+          : { hint: "可发布的组件包" }),
+      })),
+    }),
+  );
+
   const language = await ask(
     select({
       message: "开发语言",
@@ -98,9 +113,12 @@ export const promptForOptions = async (
       ],
     }),
   );
-  const router = await ask(
-    confirm({ message: "加入 Router？", initialValue: initial.router }),
-  );
+  const router =
+    template === "app"
+      ? await ask(
+          confirm({ message: "加入 Router？", initialValue: initial.router }),
+        )
+      : false;
   const routerMode = router
     ? await ask(
         select({
@@ -120,21 +138,30 @@ export const promptForOptions = async (
       initialValue: initial.vitest,
     }),
   );
-  const playwright = await ask(
-    confirm({
-      message: "加入 Playwright E2E 测试？",
-      initialValue: initial.playwright,
-    }),
-  );
+  const playwright =
+    template === "app"
+      ? await ask(
+          confirm({
+            message: "加入 Playwright E2E 测试？",
+            initialValue: initial.playwright,
+          }),
+        )
+      : false;
   const eslint = await ask(
     confirm({ message: "加入 ESLint？", initialValue: initial.eslint }),
   );
   const prettier = await ask(
     confirm({ message: "加入 Prettier？", initialValue: initial.prettier }),
   );
-  const bare = await ask(
-    confirm({ message: "生成 Bare 最小项目？", initialValue: initial.bare }),
-  );
+  const bare =
+    template === "app"
+      ? await ask(
+          confirm({
+            message: "生成 Bare 最小项目？",
+            initialValue: initial.bare,
+          }),
+        )
+      : false;
   const packageManager = await ask(
     select({
       message: "包管理器",
@@ -159,6 +186,7 @@ export const promptForOptions = async (
     ...initial,
     projectDir,
     packageName,
+    template: template as ScaffoldOptions["template"],
     language: language as ScaffoldOptions["language"],
     componentMode: componentMode as ScaffoldOptions["componentMode"],
     style: style as ScaffoldOptions["style"],

@@ -20,6 +20,7 @@ import { initializeGitRepository } from "./git";
 import {
   createScaffoldOptions,
   getPresetOverrides,
+  isValidPackageName,
   routerModes,
   scaffoldPresets,
   scaffoldTemplates,
@@ -51,6 +52,7 @@ import {
 
 interface CliOptions {
   template?: ScaffoldTemplate;
+  packageName?: string;
   listTemplates?: boolean;
   default?: boolean;
   preset?: ScaffoldPreset;
@@ -94,6 +96,7 @@ interface AddFeatureCliOptions {
 
 const featureFlags = [
   "--template",
+  "--package-name",
   "--preset",
   "--use-preset",
   "--language",
@@ -185,7 +188,7 @@ const createNextSteps = (
 const validateDefaultFlag = (rawArgs: string[], defaultMode: boolean): void => {
   if (!defaultMode) return;
   const changedFeature = featureFlags
-    .filter((flag) => flag !== "--template")
+    .filter((flag) => !["--template", "--package-name"].includes(flag))
     .find((flag) => hasFlag(rawArgs, flag));
   if (changedFeature) {
     throw new InvalidOptionError(
@@ -225,6 +228,16 @@ const validateTemplateCompatibility = (
   }
 };
 
+const validatePackageName = (
+  options: ReturnType<typeof createScaffoldOptions>,
+): void => {
+  if (!isValidPackageName(options.packageName)) {
+    throw new InvalidOptionError(
+      `无效的 package name：${options.packageName}。请使用有效的 npm 包名。`,
+    );
+  }
+};
+
 const createInitialOptions = async (
   directory: string | undefined,
   options: CliOptions,
@@ -246,6 +259,7 @@ const createInitialOptions = async (
 
   if (options.template) overrides.template = options.template;
   if (directory) overrides.projectDir = directory;
+  if (options.packageName) overrides.packageName = options.packageName;
   if (language) overrides.language = language;
   if (componentMode) overrides.componentMode = componentMode;
   if (options.style) overrides.style = options.style;
@@ -322,6 +336,7 @@ const runCreate = async (
   }
 
   validateTemplateCompatibility(scaffoldOptions);
+  validatePackageName(scaffoldOptions);
 
   if (options.savePreset) {
     await saveUserPreset(options.savePreset, scaffoldOptions);
@@ -446,6 +461,7 @@ export const createProgram = (rawArgs: string[]): Command => {
       ),
     )
     .option("--list-templates", "列出可用项目模板")
+    .option("--package-name <name>", "设置 package.json 的包名")
     .option("--default", "使用推荐配置并跳过功能问答")
     .addOption(
       new Option("--preset <preset>", "使用项目预设").choices(scaffoldPresets),

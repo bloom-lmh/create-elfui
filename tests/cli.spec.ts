@@ -55,7 +55,15 @@ describe("CLI", () => {
 
     log.mockClear();
     const target = join(temporaryDirectory, "component-library");
-    const rawArgs = ["--template", "library", "--default", "--dry-run", target];
+    const rawArgs = [
+      "--template",
+      "library",
+      "--package-name",
+      "@elfui/components",
+      "--default",
+      "--dry-run",
+      target,
+    ];
     await createProgram(rawArgs).parseAsync([
       "node",
       "create-elfui",
@@ -63,6 +71,9 @@ describe("CLI", () => {
     ]);
     expect(log).toHaveBeenCalledWith(
       expect.stringContaining('"template": "library"'),
+    );
+    expect(log).toHaveBeenCalledWith(
+      expect.stringContaining('"packageName": "@elfui/components"'),
     );
     expect(log).toHaveBeenCalledWith(
       expect.stringContaining("src/ElfLibraryButton.ts"),
@@ -76,6 +87,21 @@ describe("CLI", () => {
     await expect(
       createProgram(rawArgs).parseAsync(["node", "create-elfui", ...rawArgs]),
     ).rejects.toThrow("组件库模板不支持 Router");
+  });
+
+  it("rejects invalid package names before generation", async () => {
+    const target = join(temporaryDirectory, "invalid-package-name");
+    const rawArgs = [
+      "--default",
+      "--package-name",
+      "Invalid Package",
+      "--dry-run",
+      target,
+    ];
+
+    await expect(
+      createProgram(rawArgs).parseAsync(["node", "create-elfui", ...rawArgs]),
+    ).rejects.toThrow("无效的 package name");
   });
 
   it("rejects contradictory component flags", async () => {
