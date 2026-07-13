@@ -1,5 +1,12 @@
 # create-elfui
 
+## 0.1.0-beta.13
+
+### Minor Changes
+
+- 139fca5: Compact the interactive creation flow with preset and feature selectors, support saving presets directly from the flow, and preserve exact project directory names.
+- 035bc3a: Add interactive template selection and a `--package-name` option for scoped application and component-library packages.
+
 ## 0.1.0-beta.12
 
 ### Minor Changes

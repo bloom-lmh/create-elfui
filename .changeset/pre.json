@@ -7,9 +7,11 @@
   "changesets": [
     "add-library-template",
     "add-project-features",
+    "compact-interactive-flow",
     "generate-components",
     "harden-consumer-release",
     "isolate-npm-lifecycle",
+    "refine-template-selection",
     "release-process"
   ]
 }
