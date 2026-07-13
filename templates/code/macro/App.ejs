@@ -1,5 +1,4 @@
 import { defineHtml, html<% if (hasStyle) { %>, defineStyle<% } %><% if (!router && !bare) { %>, useRef<% } %> } from "@elfui/core";
-import elfuiMark from "./assets/elfui-mark.png";
 <% if (hasStyle) { -%>
 import styles from "./App.<%= styleExtension %>?inline";
 
@@ -61,7 +60,7 @@ export default defineHtml(html`
           </div>
         </div>
         <aside class="hero-mark-wrap" aria-label="ElfUI 标识">
-          <img class="hero-mark" :src=${elfuiMark} alt="ElfUI 雪花标识" />
+          <img class="hero-mark" :src=${new URL("./assets/elfui-mark.png", import.meta.url).href} alt="ElfUI 雪花标识" />
         </aside>
       </section>
 

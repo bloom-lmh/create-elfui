@@ -54,7 +54,9 @@ describe("generateProject", () => {
     await access(join(projectDir, "src", "assets", "elfui-mark.png"));
     await expect(
       readFile(join(projectDir, "src", "App.ts"), "utf8"),
-    ).resolves.toContain(":src=${elfuiMark}");
+    ).resolves.toContain(
+      'new URL("./assets/elfui-mark.png", import.meta.url).href',
+    );
   });
 
   it("generates Chain, Router and Less without adding the Macro plugin", async () => {
