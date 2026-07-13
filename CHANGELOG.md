@@ -1,5 +1,12 @@
 # create-elfui
 
+## 0.1.0-beta.12
+
+### Minor Changes
+
+- 293fe00: Add a publishable component-library template through `--template library`, including TypeScript declarations, peer dependencies, and optional quality tooling.
+- 47783d7: Add `elfui add <feature>` for Router, Vitest, Playwright, ESLint, Prettier, and GitHub Actions in existing projects.
+
 ## 0.1.0-beta.11
 
 ### Patch Changes

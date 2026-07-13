@@ -5,6 +5,8 @@
     "create-elfui": "0.1.0-beta.8"
   },
   "changesets": [
+    "add-library-template",
+    "add-project-features",
     "generate-components",
     "harden-consumer-release",
     "isolate-npm-lifecycle",

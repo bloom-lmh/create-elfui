@@ -1,6 +1,6 @@
 {
   "name": "create-elfui",
-  "version": "0.1.0-beta.11",
+  "version": "0.1.0-beta.12",
   "private": false,
   "description": "Project scaffolding CLI for creating ElfUI applications and libraries.",
   "type": "module",
