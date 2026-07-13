@@ -1,5 +1,11 @@
 # create-elfui
 
+## 0.1.0-beta.10
+
+### Patch Changes
+
+- 3966bba: Retry transient npm consumer installs during release verification and use the supported Node 22 release runtime.
+
 ## 0.1.0-beta.9
 
 ### Minor Changes

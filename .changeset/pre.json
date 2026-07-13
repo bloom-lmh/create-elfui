@@ -4,5 +4,9 @@
   "initialVersions": {
     "create-elfui": "0.1.0-beta.8"
   },
-  "changesets": ["generate-components", "release-process"]
+  "changesets": [
+    "generate-components",
+    "harden-consumer-release",
+    "release-process"
+  ]
 }
