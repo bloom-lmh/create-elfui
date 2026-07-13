@@ -14,7 +14,15 @@ const consumerCases = [
   },
   {
     packageManager: "npm",
-    installArgs: ["install", "--ignore-scripts", "--no-audit", "--no-fund"],
+    installArgs: [
+      "install",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund",
+      "--fetch-retries=5",
+      "--fetch-retry-mintimeout=1000",
+      "--fetch-retry-maxtimeout=10000",
+    ],
   },
 ];
 
@@ -30,6 +38,24 @@ const run = (command, args, cwd) => {
       `${command} ${args.join(" ")} failed with exit code ${result.status}`,
     );
   }
+};
+
+const runWithRetries = (command, args, cwd, attempts) => {
+  let lastError;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      run(command, args, cwd);
+      return;
+    } catch (error) {
+      lastError = error;
+      if (attempt < attempts) {
+        console.warn(
+          `${command} install failed (attempt ${attempt}/${attempts}); retrying.`,
+        );
+      }
+    }
+  }
+  throw lastError;
 };
 
 if (!existsSync(cliPath))
@@ -58,7 +84,12 @@ for (const consumer of consumerCases) {
       ],
       packageRoot,
     );
-    run(consumer.packageManager, consumer.installArgs, projectRoot);
+    runWithRetries(
+      consumer.packageManager,
+      consumer.installArgs,
+      projectRoot,
+      consumer.packageManager === "npm" ? 3 : 1,
+    );
     run(
       process.execPath,
       [cliPath, "generate", "component", "UserCard"],
