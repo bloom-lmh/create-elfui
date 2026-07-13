@@ -183,11 +183,12 @@ const ensureWritable = async (
 };
 
 const isScaffoldApp = (source: string, mode: ComponentMode): boolean =>
-  mode === "macro"
+  source.includes("ELFUI / WORKSPACE") ||
+  (mode === "macro"
     ? source.includes("ElfUI + Vite") ||
       source.includes('class="app-shell"></main>')
     : source.includes("ElfUI + Vite") ||
-      source.includes('`<main class="app-shell"></main>`');
+      source.includes('`<main class="app-shell"></main>`'));
 
 const hasFeature = async (
   context: ProjectContext,

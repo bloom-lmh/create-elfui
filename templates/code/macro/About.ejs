@@ -7,8 +7,15 @@ defineStyle(styles);
 
 export default defineHtml(html`
   <section class="page">
-    <p class="eyebrow">关于</p>
-    <h1>Macro 组件</h1>
-    <p>组件在普通 TypeScript 或 JavaScript 文件中定义，并由 Vite 插件在构建期编译。</p>
+    <p class="eyebrow">ELFUI / ARCHITECTURE</p>
+    <h1>为真实产品保留<br /><span>足够的余地。</span></h1>
+    <p class="page-intro">
+      当前项目使用 Macro 组件模式：模板在构建期编译，动态位置会直接更新目标 DOM。
+    </p>
+    <div class="page-grid">
+      <article class="page-card"><h2>组件</h2><p>每个界面单元都是标准 Web Component，可以跨项目复用。</p></article>
+      <article class="page-card"><h2>响应式</h2><p>状态变化只触达实际依赖它的动态位置，避免整树重绘。</p></article>
+      <article class="page-card"><h2>工具链</h2><p>Vite 已接管开发与构建，后续能力可以通过脚手架增量加入。</p></article>
+    </div>
   </section>
 `);

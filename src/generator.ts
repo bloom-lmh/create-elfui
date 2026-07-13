@@ -80,6 +80,7 @@ export const listGeneratedFiles = (options: ScaffoldOptions): string[] => {
     "index.html",
     "package.json",
     `vite.config.${sourceExtension}`,
+    "src/assets/elfui-mark.png",
     `src/main.${sourceExtension}`,
     `src/App.${sourceExtension}`,
   ];
@@ -236,6 +237,12 @@ const writeProject = async (
     "utf8",
   );
   await copyTemplate(root, "common/_gitignore", ".gitignore", templateRoot);
+  await copyTemplate(
+    root,
+    "common/assets/elfui-mark.png",
+    "src/assets/elfui-mark.png",
+    templateRoot,
+  );
   await renderTemplate(
     root,
     "common/README.md.ejs",

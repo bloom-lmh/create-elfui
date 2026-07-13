@@ -1,4 +1,5 @@
 import { defineHtml, html<% if (hasStyle) { %>, defineStyle<% } %> } from "@elfui/core";
+import elfuiMark from "../assets/elfui-mark.png";
 <% if (hasStyle) { -%>
 import styles from "./page.<%= styleExtension %>?inline";
 
@@ -7,8 +8,20 @@ defineStyle(styles);
 
 export default defineHtml(html`
   <section class="page">
-    <p class="eyebrow">首页</p>
-    <h1>欢迎来到 ElfUI</h1>
-    <p>从这里开始创建你的 Web Components 应用。</p>
+    <div class="page-hero">
+      <div>
+        <p class="eyebrow">ELFUI / ROUTED APP</p>
+        <h1>从一个清晰的<br /><span>工作区开始。</span></h1>
+        <p class="page-intro">
+          路由已经连接完成。这里适合放置你的产品概览、任务流或第一段真实业务体验。
+        </p>
+      </div>
+      <div class="page-mark"><img :src=${elfuiMark} alt="ElfUI 雪花标识" /></div>
+    </div>
+    <div class="page-grid">
+      <article class="page-card"><h2>布局</h2><p>从 <code>src/App</code> 调整全局导航与页面壳层。</p></article>
+      <article class="page-card"><h2>路由</h2><p>从 <code>src/router</code> 增加业务页面与导航入口。</p></article>
+      <article class="page-card"><h2>组件</h2><p>通过 <code>elfui generate component</code> 开始沉淀界面单元。</p></article>
+    </div>
   </section>
 `);

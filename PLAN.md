@@ -30,3 +30,4 @@
 
 - [x] Let interactive users select an application or component-library template, and support explicit scoped package names for non-interactive publishing workflows.
 - [x] Compact interactive feature selection, expose built-in and saved user presets, and preserve exact project-directory input.
+- [x] Refresh generated application starter screens with the official ElfUI mark, responsive workspace layout, and useful Router landing pages.

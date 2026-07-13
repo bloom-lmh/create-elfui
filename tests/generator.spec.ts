@@ -51,6 +51,10 @@ describe("generateProject", () => {
     expect(manifest.devDependencies).toHaveProperty("@elfui/vite-plugin");
     expect(manifest.dependencies).not.toHaveProperty("@elfui/chain");
     await access(join(projectDir, ".gitignore"));
+    await access(join(projectDir, "src", "assets", "elfui-mark.png"));
+    await expect(
+      readFile(join(projectDir, "src", "App.ts"), "utf8"),
+    ).resolves.toContain(":src=${elfuiMark}");
   });
 
   it("generates Chain, Router and Less without adding the Macro plugin", async () => {
@@ -138,9 +142,9 @@ describe("generateProject", () => {
               true,
             );
             const generatedContents = await Promise.all(
-              result.files.map((file) =>
-                readFile(join(projectDir, file), "utf8"),
-              ),
+              result.files
+                .filter((file) => !file.endsWith(".png"))
+                .map((file) => readFile(join(projectDir, file), "utf8")),
             );
             expect(generatedContents.join("\n")).not.toMatch(/<%[-=#]?|%>/);
             expect(result.files).toContain(`src/App.${language}`);

@@ -1,4 +1,5 @@
 import { ElfUI<% if (!router && !bare) { %>, useRef<% } %> } from "@elfui/chain";
+import elfuiMark from "./assets/elfui-mark.png";
 <% if (hasStyle) { -%>
 import styles from "./App.<%= styleExtension %>?inline";
 <% } -%>
@@ -17,23 +18,77 @@ export const App = ElfUI.createComponent()
   .template(
 <% if (router) { -%>
     `<main class="app-shell">
-      <header class="app-header">
-        <a class="brand" href="#/">ElfUI</a>
-        <nav class="app-nav" aria-label="主导航">
-          <elf-link to="/">首页</elf-link>
-          <elf-link to="/about">关于</elf-link>
-        </nav>
-      </header>
+      <div class="app-frame">
+        <header class="app-header">
+          <a class="brand" href="#/" aria-label="ElfUI 首页">
+            <img class="brand-mark" src="${elfuiMark}" alt="" />
+            <span>ElfUI</span>
+          </a>
+          <nav class="app-nav" aria-label="主导航">
+            <elf-link to="/">工作区</elf-link>
+            <elf-link to="/about">架构</elf-link>
+          </nav>
+          <span class="header-status">Vite ready</span>
+        </header>
+      </div>
       <elf-router-view></elf-router-view>
     </main>`
 <% } else if (bare) { -%>
     `<main class="app-shell"></main>`
 <% } else { -%>
     `<main class="app-shell">
-      <p class="eyebrow">ElfUI + Vite</p>
-      <h1>项目已经启动</h1>
-      <p>这是一个运行时模板的 Chain 应用。</p>
-      <button class="counter" @click="increment">已点击 {{ count }} 次</button>
+      <div class="app-frame">
+        <header class="app-header">
+          <a class="brand" href="#workspace" aria-label="ElfUI 工作区">
+            <img class="brand-mark" src="${elfuiMark}" alt="" />
+            <span>ElfUI</span>
+          </a>
+          <nav class="app-nav" aria-label="主导航">
+            <a href="#workspace">工作区</a>
+            <a href="#starter">起步</a>
+          </nav>
+          <span class="header-status">Chain + Vite</span>
+        </header>
+
+        <section class="hero" id="workspace">
+          <div class="hero-copy">
+            <p class="eyebrow">ELFUI / WORKSPACE</p>
+            <h1>让界面像雪花一样，<span>精准生长。</span></h1>
+            <p class="hero-description">
+              这是一个为 Web Components 准备的高性能起点。直接从组件、状态与路由开始，而不是从空白页开始。
+            </p>
+            <div class="hero-actions">
+              <a class="primary-action" href="#starter">查看起步结构</a>
+              <button class="counter" @click="increment">响应式状态 {{ count }}</button>
+            </div>
+          </div>
+          <aside class="hero-signal" aria-label="ElfUI 标识">
+            <img class="hero-mark" src="${elfuiMark}" alt="ElfUI 雪花标识" />
+            <div class="signal-caption">
+              <span class="signal-dot"></span>
+              <span>Fine-grained runtime</span>
+            </div>
+          </aside>
+        </section>
+
+        <section class="starter-grid" id="starter" aria-label="项目起步入口">
+          <article class="starter-card">
+            <span class="card-index">01</span>
+            <h2>组件优先</h2>
+            <p>从 <code>src/App</code> 开始，按业务拆分你的首个自定义元素。</p>
+          </article>
+          <article class="starter-card accent-card">
+            <span class="card-index">02</span>
+            <h2>状态即更新</h2>
+            <p>当前计数器已经连接细粒度响应式状态，可以直接替换成业务数据。</p>
+          </article>
+          <article class="starter-card">
+            <span class="card-index">03</span>
+            <h2>按需扩展</h2>
+            <p>通过 <code>elfui add</code> 按需加入 Router、测试、格式化与 CI。</p>
+          </article>
+        </section>
+      </div>
     </main>`
 <% } -%>
   )

@@ -31,7 +31,12 @@ if (unexpectedFiles.length > 0) {
   );
 }
 
-for (const requiredFile of ["LICENSE", "README.md", "dist/index.js"]) {
+for (const requiredFile of [
+  "LICENSE",
+  "README.md",
+  "dist/index.js",
+  "templates/common/assets/elfui-mark.png",
+]) {
   if (!tarball.files.some((file) => file.path === requiredFile)) {
     throw new Error(`Tarball is missing ${requiredFile}.`);
   }
