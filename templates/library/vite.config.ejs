@@ -1,0 +1,20 @@
+import { defineConfig } from "vite";
+<% if (componentMode === "macro") { -%>
+import { elfuiMacroPlugin } from "@elfui/vite-plugin";
+<% } -%>
+
+export default defineConfig({
+<% if (componentMode === "macro") { -%>
+  plugins: [elfuiMacroPlugin({ macroImport: "@elfui/core", runtimeImport: "@elfui/core" })],
+<% } -%>
+  build: {
+    lib: {
+      entry: "src/index.<%= sourceExtension %>",
+      formats: ["es"],
+      fileName: "index"
+    },
+    rollupOptions: {
+      external: [<%- componentMode === "macro" ? '"@elfui/core", "@elfui/runtime"' : '"@elfui/chain"' %>]
+    }
+  }
+});

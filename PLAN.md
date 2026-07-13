@@ -24,4 +24,4 @@
 
 - [x] Add `elfui generate component <name>` for Macro and Chain components.
 - [x] Add `elfui add <feature>` for Router, tests, formatting, and other optional integrations.
-- [ ] Offer curated application and component-library templates.
+- [x] Offer curated application and component-library templates.

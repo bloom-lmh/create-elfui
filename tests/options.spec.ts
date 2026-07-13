@@ -22,6 +22,7 @@ describe("options", () => {
     });
 
     expect(options).toMatchObject({
+      template: "app",
       projectDir: "my-elfui-app",
       packageName: "my-elfui-app",
       language: "ts",

@@ -22,12 +22,14 @@ import {
   getPresetOverrides,
   routerModes,
   scaffoldPresets,
+  scaffoldTemplates,
   styleSolutions,
   type ComponentMode,
   type Language,
   type RouterMode,
   type ScaffoldOptionOverrides,
   type ScaffoldPreset,
+  type ScaffoldTemplate,
   type StyleSolution,
 } from "./options";
 import {
@@ -48,6 +50,8 @@ import {
 } from "./user-presets";
 
 interface CliOptions {
+  template?: ScaffoldTemplate;
+  listTemplates?: boolean;
   default?: boolean;
   preset?: ScaffoldPreset;
   usePreset?: string;
@@ -89,6 +93,7 @@ interface AddFeatureCliOptions {
 }
 
 const featureFlags = [
+  "--template",
   "--preset",
   "--use-preset",
   "--language",
@@ -179,7 +184,9 @@ const createNextSteps = (
 
 const validateDefaultFlag = (rawArgs: string[], defaultMode: boolean): void => {
   if (!defaultMode) return;
-  const changedFeature = featureFlags.find((flag) => hasFlag(rawArgs, flag));
+  const changedFeature = featureFlags
+    .filter((flag) => flag !== "--template")
+    .find((flag) => hasFlag(rawArgs, flag));
   if (changedFeature) {
     throw new InvalidOptionError(
       `--default 不能与 ${changedFeature} 同时使用。`,
@@ -202,6 +209,22 @@ const validatePresetSelection = (options: CliOptions): void => {
   }
 };
 
+const validateTemplateCompatibility = (
+  options: ReturnType<typeof createScaffoldOptions>,
+): void => {
+  if (options.template !== "library") return;
+  const unsupportedFeature = [
+    ["Router", options.router],
+    ["Playwright", options.playwright],
+    ["Bare", options.bare],
+  ].find(([, enabled]) => enabled)?.[0];
+  if (unsupportedFeature) {
+    throw new InvalidOptionError(
+      `组件库模板不支持 ${unsupportedFeature}；请移除对应选项后重试。`,
+    );
+  }
+};
+
 const createInitialOptions = async (
   directory: string | undefined,
   options: CliOptions,
@@ -221,6 +244,7 @@ const createInitialOptions = async (
   const componentMode = resolveComponentMode(options);
   const install = getRequestedInstall(rawArgs);
 
+  if (options.template) overrides.template = options.template;
   if (directory) overrides.projectDir = directory;
   if (language) overrides.language = language;
   if (componentMode) overrides.componentMode = componentMode;
@@ -251,6 +275,22 @@ const runCreate = async (
   options: CliOptions,
   rawArgs: string[],
 ) => {
+  if (options.listTemplates) {
+    console.log(
+      JSON.stringify(
+        [
+          { name: "app", description: "ElfUI Vite application" },
+          {
+            name: "library",
+            description: "Publishable ElfUI component library",
+          },
+        ],
+        null,
+        2,
+      ),
+    );
+    return;
+  }
   if (options.listPresets) {
     console.log(JSON.stringify(await listUserPresets(), null, 2));
     return;
@@ -280,6 +320,8 @@ const runCreate = async (
       askPackageName: interactiveFeatureSelection,
     });
   }
+
+  validateTemplateCompatibility(scaffoldOptions);
 
   if (options.savePreset) {
     await saveUserPreset(options.savePreset, scaffoldOptions);
@@ -398,6 +440,12 @@ export const createProgram = (rawArgs: string[]): Command => {
     .name("create-elfui")
     .description("创建一个新的 ElfUI Vite 项目")
     .argument("[directory]", "项目目录")
+    .addOption(
+      new Option("--template <template>", "选择项目模板").choices(
+        scaffoldTemplates,
+      ),
+    )
+    .option("--list-templates", "列出可用项目模板")
     .option("--default", "使用推荐配置并跳过功能问答")
     .addOption(
       new Option("--preset <preset>", "使用项目预设").choices(scaffoldPresets),

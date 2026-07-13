@@ -6,9 +6,16 @@ export interface PackageManifest {
   version: string;
   private: boolean;
   type: "module";
+  types?: string;
   scripts: Record<string, string>;
   dependencies?: Record<string, string>;
   devDependencies?: Record<string, string>;
+  peerDependencies?: Record<string, string>;
+}
+
+export interface LibraryPackageManifest extends PackageManifest {
+  files: string[];
+  exports: Record<string, Record<string, string>>;
 }
 
 const sortObject = (entries: Record<string, string>): Record<string, string> =>
@@ -93,5 +100,59 @@ export const createPackageManifest = (
     ...(Object.keys(devDependencies).length > 0
       ? { devDependencies: sortObject(devDependencies) }
       : {}),
+  };
+};
+
+export const createLibraryPackageManifest = (
+  options: ScaffoldOptions,
+  versions: DependencyVersions = dependencyVersions,
+): LibraryPackageManifest => {
+  const manifest = createPackageManifest(options, versions);
+  const libraryManifest: Omit<PackageManifest, "scripts"> = {
+    name: manifest.name,
+    version: manifest.version,
+    private: manifest.private,
+    type: manifest.type,
+    ...(manifest.devDependencies
+      ? { devDependencies: manifest.devDependencies }
+      : {}),
+  };
+  const baseScripts = Object.fromEntries(
+    Object.entries(manifest.scripts).filter(
+      ([name]) => !["build", "dev", "preview"].includes(name),
+    ),
+  );
+  const peerDependencies: Record<string, string> =
+    options.componentMode === "macro"
+      ? {
+          "@elfui/core": versions.core,
+          "@elfui/runtime": versions.runtime,
+        }
+      : { "@elfui/chain": versions.chain };
+  const scripts = {
+    ...baseScripts,
+    build:
+      options.language === "ts"
+        ? "vite build && tsc --emitDeclarationOnly"
+        : "vite build",
+  };
+
+  return {
+    ...libraryManifest,
+    scripts,
+    private: false,
+    ...(options.language === "ts" ? { types: "./dist/index.d.ts" } : {}),
+    peerDependencies: sortObject(peerDependencies),
+    devDependencies: sortObject({
+      ...manifest.devDependencies,
+      ...peerDependencies,
+    }),
+    files: ["dist"],
+    exports: {
+      ".": {
+        import: "./dist/index.js",
+        ...(options.language === "ts" ? { types: "./dist/index.d.ts" } : {}),
+      },
+    },
   };
 };

@@ -44,6 +44,40 @@ describe("CLI", () => {
     expect(log).toHaveBeenCalledWith(expect.stringContaining("src/App.ts"));
   });
 
+  it("lists templates and previews a component library", async () => {
+    const log = vi.spyOn(console, "log").mockImplementation(() => undefined);
+    await createProgram(["--list-templates"]).parseAsync([
+      "node",
+      "create-elfui",
+      "--list-templates",
+    ]);
+    expect(log).toHaveBeenCalledWith(expect.stringContaining('"library"'));
+
+    log.mockClear();
+    const target = join(temporaryDirectory, "component-library");
+    const rawArgs = ["--template", "library", "--default", "--dry-run", target];
+    await createProgram(rawArgs).parseAsync([
+      "node",
+      "create-elfui",
+      ...rawArgs,
+    ]);
+    expect(log).toHaveBeenCalledWith(
+      expect.stringContaining('"template": "library"'),
+    );
+    expect(log).toHaveBeenCalledWith(
+      expect.stringContaining("src/ElfLibraryButton.ts"),
+    );
+  });
+
+  it("rejects application-only features for component libraries", async () => {
+    const target = join(temporaryDirectory, "library-with-router");
+    const rawArgs = ["--template", "library", "--router", "--dry-run", target];
+
+    await expect(
+      createProgram(rawArgs).parseAsync(["node", "create-elfui", ...rawArgs]),
+    ).rejects.toThrow("组件库模板不支持 Router");
+  });
+
   it("rejects contradictory component flags", async () => {
     const target = join(temporaryDirectory, "conflict-app");
     const rawArgs = ["--component", "chain", "--macro", "--dry-run", target];

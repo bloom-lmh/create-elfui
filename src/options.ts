@@ -6,15 +6,18 @@ export const languages = ["ts", "js"] as const;
 export const componentModes = ["macro", "chain"] as const;
 export const styleSolutions = ["css", "scss", "less", "none"] as const;
 export const scaffoldPresets = ["recommended", "minimal", "quality"] as const;
+export const scaffoldTemplates = ["app", "library"] as const;
 export const routerModes = ["hash", "history"] as const;
 
 export type Language = (typeof languages)[number];
 export type ComponentMode = (typeof componentModes)[number];
 export type StyleSolution = (typeof styleSolutions)[number];
 export type ScaffoldPreset = (typeof scaffoldPresets)[number];
+export type ScaffoldTemplate = (typeof scaffoldTemplates)[number];
 export type RouterMode = (typeof routerModes)[number];
 
 export interface ScaffoldOptions {
+  template: ScaffoldTemplate;
   projectDir: string;
   packageName: string;
   language: Language;
@@ -36,6 +39,7 @@ export interface ScaffoldOptions {
 }
 
 export interface ScaffoldOptionOverrides {
+  template?: ScaffoldTemplate;
   projectDir?: string;
   packageName?: string;
   language?: Language;
@@ -101,6 +105,7 @@ export const createScaffoldOptions = (
     overrides.packageName?.trim() || inferPackageName(projectDir);
 
   return {
+    template: overrides.template ?? "app",
     projectDir,
     packageName,
     language: overrides.language ?? "ts",

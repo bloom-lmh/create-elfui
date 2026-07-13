@@ -64,4 +64,32 @@ describe("user presets", () => {
       "预设配置文件格式无效",
     );
   });
+
+  it("treats presets saved before templates as application presets", async () => {
+    const legacyPreset = {
+      language: "ts",
+      componentMode: "macro",
+      style: "css",
+      router: false,
+      routerMode: "hash",
+      vitest: false,
+      playwright: false,
+      eslint: true,
+      prettier: true,
+      bare: false,
+      git: true,
+      githubActions: false,
+      packageManager: "pnpm",
+      install: false,
+    };
+    await writeFile(
+      presetPath,
+      JSON.stringify({ version: 1, presets: { legacy: legacyPreset } }),
+      "utf8",
+    );
+
+    await expect(getUserPreset("legacy", presetPath)).resolves.toMatchObject({
+      template: "app",
+    });
+  });
 });

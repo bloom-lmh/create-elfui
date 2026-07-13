@@ -10,7 +10,10 @@ import {
   moveStagingDirectory,
   resolveProjectRoot,
 } from "./filesystem";
-import { createPackageManifest } from "./manifest";
+import {
+  createLibraryPackageManifest,
+  createPackageManifest,
+} from "./manifest";
 import type { ScaffoldOptions, StyleSolution } from "./options";
 import {
   copyTemplate,
@@ -46,6 +49,29 @@ const getTemplateContext = (options: ScaffoldOptions): TemplateContext => ({
 });
 
 export const listGeneratedFiles = (options: ScaffoldOptions): string[] => {
+  if (options.template === "library") {
+    const sourceExtension = getSourceExtension(options);
+    const styleExtension = getStyleExtension(options.style);
+    const files = [
+      ".gitignore",
+      "README.md",
+      "package.json",
+      `vite.config.${sourceExtension}`,
+      `src/ElfLibraryButton.${sourceExtension}`,
+      `src/index.${sourceExtension}`,
+    ];
+    if (options.language === "ts") files.push("tsconfig.json", "src/env.d.ts");
+    if (styleExtension) files.push(`src/ElfLibraryButton.${styleExtension}`);
+    if (options.vitest)
+      files.push(
+        `vitest.config.${sourceExtension}`,
+        `src/__tests__/ElfLibraryButton.spec.${sourceExtension}`,
+      );
+    if (options.githubActions) files.push(".github/workflows/ci.yml");
+    if (options.eslint) files.push("eslint.config.js");
+    if (options.prettier) files.push("prettier.config.js", ".prettierignore");
+    return files.sort();
+  }
   const sourceExtension = getSourceExtension(options);
   const styleExtension = getStyleExtension(options.style);
   const files = [
@@ -101,6 +127,109 @@ const writeProject = async (
   const codeMode = options.componentMode;
 
   await mkdir(root, { recursive: true });
+  if (options.template === "library") {
+    await writeFile(
+      join(root, "package.json"),
+      `${JSON.stringify(createLibraryPackageManifest(options, generationOptions.versions ?? dependencyVersions), null, 2)}\n`,
+      "utf8",
+    );
+    await copyTemplate(root, "common/_gitignore", ".gitignore", templateRoot);
+    await renderTemplate(
+      root,
+      "library/README.md.ejs",
+      "README.md",
+      context,
+      templateRoot,
+    );
+    await renderTemplate(
+      root,
+      "library/vite.config.ejs",
+      `vite.config.${sourceExtension}`,
+      context,
+      templateRoot,
+    );
+    await renderTemplate(
+      root,
+      "library/index.ejs",
+      `src/index.${sourceExtension}`,
+      context,
+      templateRoot,
+    );
+    await renderTemplate(
+      root,
+      `library/${codeMode}.ejs`,
+      `src/ElfLibraryButton.${sourceExtension}`,
+      context,
+      templateRoot,
+    );
+    if (options.language === "ts") {
+      await copyTemplate(
+        root,
+        "library/tsconfig.json",
+        "tsconfig.json",
+        templateRoot,
+      );
+      await copyTemplate(root, "common/env.d.ts", "src/env.d.ts", templateRoot);
+    }
+    if (styleExtension) {
+      await renderTemplate(
+        root,
+        "library/style.ejs",
+        `src/ElfLibraryButton.${styleExtension}`,
+        context,
+        templateRoot,
+      );
+    }
+    if (options.vitest) {
+      await renderTemplate(
+        root,
+        "quality/vitest.config.ejs",
+        `vitest.config.${sourceExtension}`,
+        context,
+        templateRoot,
+      );
+      await renderTemplate(
+        root,
+        "library/component.spec.ejs",
+        `src/__tests__/ElfLibraryButton.spec.${sourceExtension}`,
+        context,
+        templateRoot,
+      );
+    }
+    if (options.githubActions) {
+      await renderTemplate(
+        root,
+        "quality/github-actions-ci.yml.ejs",
+        ".github/workflows/ci.yml",
+        context,
+        templateRoot,
+      );
+    }
+    if (options.eslint) {
+      await renderTemplate(
+        root,
+        "quality/eslint.config.ejs",
+        "eslint.config.js",
+        context,
+        templateRoot,
+      );
+    }
+    if (options.prettier) {
+      await copyTemplate(
+        root,
+        "quality/prettier.config.js",
+        "prettier.config.js",
+        templateRoot,
+      );
+      await copyTemplate(
+        root,
+        "quality/_prettierignore",
+        ".prettierignore",
+        templateRoot,
+      );
+    }
+    return;
+  }
   await writeFile(
     join(root, "package.json"),
     `${JSON.stringify(createPackageManifest(options, generationOptions.versions ?? dependencyVersions), null, 2)}\n`,

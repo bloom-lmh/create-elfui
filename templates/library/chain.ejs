@@ -1,0 +1,12 @@
+import { ElfUI } from "@elfui/chain";
+<% if (hasStyle) { -%>
+import styles from "./ElfLibraryButton.<%= styleExtension %>?inline";
+<% } -%>
+
+export default ElfUI.createComponent()
+  .name("elf-library-button")
+  .template(`<button class="elf-library-button"><slot></slot></button>`)
+<% if (hasStyle) { -%>
+  .style(styles)
+<% } -%>
+  .register();

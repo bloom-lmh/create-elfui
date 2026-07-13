@@ -287,6 +287,55 @@ describe("generateProject", () => {
     await expect(access(projectDir)).rejects.toThrow();
   });
 
+  it("generates a publishable Macro component library", async () => {
+    const projectDir = join(temporaryDirectory, "component-library");
+    const options = createScaffoldOptions("pnpm", {
+      projectDir,
+      template: "library",
+      style: "scss",
+      vitest: true,
+      eslint: true,
+      prettier: true,
+      githubActions: true,
+    });
+
+    const result = await generateProject(options);
+    const manifest = JSON.parse(
+      await readFile(join(projectDir, "package.json"), "utf8"),
+    ) as {
+      files: string[];
+      private: boolean;
+      dependencies?: Record<string, string>;
+      peerDependencies: Record<string, string>;
+      exports: Record<string, Record<string, string>>;
+    };
+
+    expect(result.files).toContain("src/ElfLibraryButton.ts");
+    expect(result.files).toContain("src/env.d.ts");
+    expect(result.files).toContain("src/__tests__/ElfLibraryButton.spec.ts");
+    expect(result.files).not.toContain("index.html");
+    expect(manifest.files).toEqual(["dist"]);
+    expect(manifest.private).toBe(false);
+    expect(manifest.dependencies).toBeUndefined();
+    expect(manifest.peerDependencies).toMatchObject({
+      "@elfui/core": expect.any(String),
+      "@elfui/runtime": expect.any(String),
+    });
+    expect(manifest.exports["."]).toMatchObject({
+      import: "./dist/index.js",
+      types: "./dist/index.d.ts",
+    });
+    await expect(
+      readFile(join(projectDir, "vite.config.ts"), "utf8"),
+    ).resolves.toContain("build: {");
+    await expect(
+      readFile(join(projectDir, "src", "ElfLibraryButton.scss"), "utf8"),
+    ).resolves.toContain(".elf-library-button");
+    await expect(
+      access(join(projectDir, "eslint.config.js")),
+    ).resolves.toBeUndefined();
+  });
+
   it("rejects incompatible framework versions before writing a project", async () => {
     const projectDir = join(temporaryDirectory, "incompatible-framework-app");
 

@@ -7,6 +7,7 @@ import {
   componentModes,
   languages,
   routerModes,
+  scaffoldTemplates,
   styleSolutions,
   type ScaffoldOptionOverrides,
   type ScaffoldOptions,
@@ -16,6 +17,7 @@ import { packageManagers } from "./package-manager";
 const presetNamePattern = /^[a-z][a-z0-9-]{0,63}$/;
 
 export interface UserPreset {
+  template: ScaffoldOptions["template"];
   language: ScaffoldOptions["language"];
   componentMode: ScaffoldOptions["componentMode"];
   style: ScaffoldOptions["style"];
@@ -50,8 +52,11 @@ const isOneOf = <T extends readonly string[]>(
 
 const parsePreset = (value: unknown): UserPreset | null => {
   if (!isRecord(value)) return null;
+  // beta.11 及以前保存的预设没有 template 字段，按原有应用项目语义读取。
+  const template = value.template ?? "app";
   if (
     !isOneOf(value.language, languages) ||
+    !isOneOf(template, scaffoldTemplates) ||
     !isOneOf(value.componentMode, componentModes) ||
     !isOneOf(value.style, styleSolutions) ||
     !isOneOf(value.routerMode, routerModes) ||
@@ -70,6 +75,7 @@ const parsePreset = (value: unknown): UserPreset | null => {
   }
 
   return {
+    template,
     language: value.language,
     componentMode: value.componentMode,
     style: value.style,
@@ -143,6 +149,7 @@ const writePresetFile = async (
 };
 
 export const toUserPreset = (options: ScaffoldOptions): UserPreset => ({
+  template: options.template,
   language: options.language,
   componentMode: options.componentMode,
   style: options.style,
