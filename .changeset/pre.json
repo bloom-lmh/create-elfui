@@ -7,6 +7,7 @@
   "changesets": [
     "generate-components",
     "harden-consumer-release",
+    "isolate-npm-lifecycle",
     "release-process"
   ]
 }
