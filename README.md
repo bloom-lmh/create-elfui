@@ -14,6 +14,10 @@ pnpm create elfui@beta my-app --install
 # CI 或自动化：不显示提问，未指定项使用默认配置
 pnpm create elfui@beta my-app --no-interactive --install
 
+# 创建后立即启动 Vite；--open 会自动打开浏览器（两者都会自动安装依赖）
+pnpm create elfui@beta my-app --start
+pnpm create elfui@beta my-app --open
+
 # 默认初始化 Git；不需要时关闭
 pnpm create elfui@beta my-app --default --no-git
 

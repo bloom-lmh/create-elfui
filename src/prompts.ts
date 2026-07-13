@@ -33,6 +33,7 @@ export interface PromptOptions {
 export interface PromptResult {
   options: ScaffoldOptions;
   savePresetName?: string;
+  startDevServer?: boolean;
 }
 
 type OptionalFeature =
@@ -253,6 +254,16 @@ export const promptForOptions = async (
     }),
   );
 
+  const startDevServer =
+    selectedTemplate === "app" && install
+      ? await ask(
+          confirm({
+            message: "完成后启动开发服务器并打开浏览器？",
+            initialValue: false,
+          }),
+        )
+      : false;
+
   let savePresetName: string | undefined;
   if (promptOptions.askSavePreset) {
     const shouldSavePreset = await ask(
@@ -294,6 +305,7 @@ export const promptForOptions = async (
       install,
     },
     ...(savePresetName ? { savePresetName } : {}),
+    ...(startDevServer ? { startDevServer } : {}),
   };
 };
 

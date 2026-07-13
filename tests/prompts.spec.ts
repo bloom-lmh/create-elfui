@@ -90,4 +90,32 @@ describe("prompts", () => {
     });
     expect(result.savePresetName).toBe("desktop");
   });
+
+  it("offers to start the application after dependency installation", async () => {
+    promptMocks.text.mockImplementation(({ initialValue }) =>
+      Promise.resolve(initialValue),
+    );
+    promptMocks.select.mockImplementation(({ initialValue }) =>
+      Promise.resolve(initialValue),
+    );
+    promptMocks.multiselect.mockResolvedValue([]);
+    promptMocks.confirm.mockImplementation(({ message, initialValue }) =>
+      Promise.resolve(
+        message === "完成后启动开发服务器并打开浏览器？" ? true : initialValue,
+      ),
+    );
+
+    const result = await promptForOptions(
+      createScaffoldOptions("pnpm", { install: true }),
+      {
+        askProjectDirectory: false,
+        askFeatures: true,
+        askPackageName: true,
+        askSavePreset: false,
+      },
+    );
+
+    expect(result.options.install).toBe(true);
+    expect(result.startDevServer).toBe(true);
+  });
 });

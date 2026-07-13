@@ -28,9 +28,21 @@ export const getInstallCommand = (
 
 export const getDevCommand = (
   packageManager: PackageManager,
+  open = false,
 ): PackageManagerCommand => {
-  if (packageManager === "npm") return { command: "npm", args: ["run", "dev"] };
-  return { command: packageManager, args: ["dev"] };
+  const command =
+    packageManager === "npm"
+      ? { command: "npm", args: ["run", "dev"] }
+      : { command: packageManager, args: ["dev"] };
+  if (!open) return command;
+
+  return {
+    command: command.command,
+    args:
+      packageManager === "yarn"
+        ? [...command.args, "--open"]
+        : [...command.args, "--", "--open"],
+  };
 };
 
 export const formatCommand = ({
@@ -63,6 +75,33 @@ export const runInstall = async (
             `${formatCommand({ command, args })} 执行失败，退出码：${code ?? "unknown"}`,
           ),
         );
+    });
+  });
+};
+
+export const runDevServer = async (
+  cwd: string,
+  packageManager: PackageManager,
+  open: boolean,
+): Promise<void> => {
+  const { command, args } = getDevCommand(packageManager, open);
+
+  await new Promise<void>((resolve, reject) => {
+    const child = spawn(command, args, {
+      cwd,
+      stdio: "inherit",
+      shell: requiresPackageManagerShell(),
+    });
+    child.once("error", reject);
+    child.once("exit", (code, signal) => {
+      if (code === 0 || signal === "SIGINT") resolve();
+      else {
+        reject(
+          new Error(
+            `${formatCommand({ command, args })} 执行失败，退出码：${code ?? "unknown"}`,
+          ),
+        );
+      }
     });
   });
 };

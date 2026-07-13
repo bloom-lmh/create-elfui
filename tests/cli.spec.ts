@@ -133,6 +133,31 @@ describe("CLI", () => {
     );
   });
 
+  it("starts after installing when --start is requested", async () => {
+    const log = vi.spyOn(console, "log").mockImplementation(() => undefined);
+    const target = join(temporaryDirectory, "start-app");
+    const rawArgs = ["--default", "--start", "--dry-run", target];
+
+    await createProgram(rawArgs).parseAsync([
+      "node",
+      "create-elfui",
+      ...rawArgs,
+    ]);
+
+    expect(log).toHaveBeenCalledWith(
+      expect.stringContaining('"install": true'),
+    );
+  });
+
+  it("rejects starting a server without installing dependencies", async () => {
+    const target = join(temporaryDirectory, "no-install-start-app");
+    const rawArgs = ["--default", "--start", "--no-install", target];
+
+    await expect(
+      createProgram(rawArgs).parseAsync(["node", "create-elfui", ...rawArgs]),
+    ).rejects.toThrow("--start 或 --open 不能与 --no-install 同时使用");
+  });
+
   it("applies quality presets without entering feature prompts", async () => {
     const log = vi.spyOn(console, "log").mockImplementation(() => undefined);
     const target = join(temporaryDirectory, "quality-preset-app");

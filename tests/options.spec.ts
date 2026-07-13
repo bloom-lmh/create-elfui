@@ -76,5 +76,12 @@ describe("options", () => {
     expect(formatCommand(getInstallCommand("pnpm"))).toBe("pnpm install");
     expect(formatCommand(getDevCommand("npm"))).toBe("npm run dev");
     expect(formatCommand(getDevCommand("bun"))).toBe("bun dev");
+    expect(formatCommand(getDevCommand("pnpm", true))).toBe(
+      "pnpm dev -- --open",
+    );
+    expect(formatCommand(getDevCommand("npm", true))).toBe(
+      "npm run dev -- --open",
+    );
+    expect(formatCommand(getDevCommand("yarn", true))).toBe("yarn dev --open");
   });
 });

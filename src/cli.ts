@@ -38,6 +38,7 @@ import {
   getInstallCommand,
   inferPackageManager,
   formatCommand,
+  runDevServer,
   runInstall,
   type PackageManager,
 } from "./package-manager";
@@ -77,6 +78,8 @@ interface CliOptions {
   git?: boolean;
   githubActions?: boolean;
   packageManager?: PackageManager;
+  start?: boolean;
+  open?: boolean;
   force?: boolean;
   dryRun?: boolean;
 }
@@ -167,6 +170,30 @@ const getRequestedInstall = (rawArgs: string[]): boolean | undefined => {
   if (install) return true;
   if (noInstall) return false;
   return undefined;
+};
+
+const shouldStartDevServer = (options: CliOptions): boolean =>
+  options.start === true || options.open === true;
+
+const validateStartRequest = (rawArgs: string[], options: CliOptions): void => {
+  if (shouldStartDevServer(options) && getRequestedInstall(rawArgs) === false) {
+    throw new InvalidOptionError(
+      "--start 或 --open 不能与 --no-install 同时使用。",
+    );
+  }
+};
+
+const validateStartOptions = (
+  options: ReturnType<typeof createScaffoldOptions>,
+  startDevServer: boolean,
+): void => {
+  if (!startDevServer) return;
+  if (options.template !== "app") {
+    throw new InvalidOptionError("组件库模板不支持启动开发服务器。");
+  }
+  if (!options.install) {
+    throw new InvalidOptionError("启动开发服务器前必须先安装依赖。");
+  }
 };
 
 const formatDirectory = (root: string): string => {
@@ -278,6 +305,7 @@ const createInitialOptions = async (
   }
   if (options.githubActions) overrides.githubActions = true;
   if (install !== undefined) overrides.install = install;
+  if (shouldStartDevServer(options)) overrides.install = true;
   if (options.force) overrides.force = true;
   if (options.dryRun) overrides.dryRun = true;
 
@@ -320,6 +348,7 @@ const runCreate = async (
   validateDefaultFlag(rawArgs, defaultMode);
   validateNoInteractiveFlag(directory, noInteractive);
   validatePresetSelection(options);
+  validateStartRequest(rawArgs, options);
 
   const interactiveFeatureSelection =
     !noInteractive && shouldPromptForFeatureSelection(rawArgs, defaultMode);
@@ -327,6 +356,8 @@ const runCreate = async (
   const interactive = interactiveFeatureSelection || needsDirectoryPrompt;
   let scaffoldOptions = await createInitialOptions(directory, options, rawArgs);
   let promptedPresetName: string | undefined;
+  let startDevServer = shouldStartDevServer(options);
+  let openBrowser = options.open === true;
 
   if (interactive) {
     const promptResult = await promptForOptions(scaffoldOptions, {
@@ -343,10 +374,15 @@ const runCreate = async (
     });
     scaffoldOptions = promptResult.options;
     promptedPresetName = promptResult.savePresetName;
+    if (promptResult.startDevServer) {
+      startDevServer = true;
+      openBrowser = true;
+    }
   }
 
   validateTemplateCompatibility(scaffoldOptions);
   validatePackageName(scaffoldOptions);
+  validateStartOptions(scaffoldOptions, startDevServer);
 
   const savePresetName = options.savePreset ?? promptedPresetName;
   if (savePresetName) {
@@ -401,6 +437,18 @@ const runCreate = async (
       const message = error instanceof Error ? error.message : String(error);
       console.warn(chalk.yellow(`Git 初始化失败，已保留项目文件：${message}`));
     }
+  }
+
+  if (startDevServer) {
+    const message = `项目已创建：${result.root}\n\n正在启动开发服务器${openBrowser ? "并打开浏览器" : ""}...`;
+    if (interactive) outro(message);
+    else console.log(chalk.green(message));
+    await runDevServer(
+      result.root,
+      scaffoldOptions.packageManager,
+      openBrowser,
+    );
+    return;
   }
 
   const steps = createNextSteps(
@@ -526,6 +574,8 @@ export const createProgram = (rawArgs: string[]): Command => {
     )
     .option("--install", "生成后安装依赖")
     .option("--no-install", "生成后不安装依赖")
+    .option("--start", "安装后启动开发服务器")
+    .option("--open", "安装后启动开发服务器并打开浏览器")
     .option("--force", "允许清理非空目标目录")
     .option("--dry-run", "输出配置和文件清单，不写磁盘")
     .helpOption("-h, --help", "显示帮助")
