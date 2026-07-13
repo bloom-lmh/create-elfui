@@ -97,8 +97,11 @@ export const resolveUserPresetPath = (): string =>
   process.env.CREATE_ELFUI_PRESETS_FILE ??
   join(homedir(), ".create-elfui", "presets.json");
 
+export const isValidPresetName = (name: string): boolean =>
+  presetNamePattern.test(name);
+
 export const assertValidPresetName = (name: string): void => {
-  if (!presetNamePattern.test(name)) {
+  if (!isValidPresetName(name)) {
     throw new InvalidOptionError(
       "预设名称只能使用小写字母、数字和连字符，且必须以字母开头。",
     );

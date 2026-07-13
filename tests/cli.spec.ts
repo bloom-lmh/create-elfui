@@ -341,4 +341,35 @@ describe("CLI", () => {
     ]);
     await expect(access(join(noGitTarget, ".git"))).rejects.toThrow();
   });
+
+  it("does not confuse a numbered directory with an adjacent existing directory", async () => {
+    const existingTarget = join(temporaryDirectory, "elfui-demo");
+    const requestedTarget = join(temporaryDirectory, "elfui-demo2");
+    await createProgram([
+      "--default",
+      "--no-install",
+      existingTarget,
+    ]).parseAsync([
+      "node",
+      "create-elfui",
+      "--default",
+      "--no-install",
+      existingTarget,
+    ]);
+
+    await createProgram([
+      "--default",
+      "--no-install",
+      requestedTarget,
+    ]).parseAsync([
+      "node",
+      "create-elfui",
+      "--default",
+      "--no-install",
+      requestedTarget,
+    ]);
+
+    await access(join(existingTarget, "package.json"));
+    await access(join(requestedTarget, "package.json"));
+  });
 });

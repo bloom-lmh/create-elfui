@@ -38,6 +38,7 @@ pnpm create elfui@beta my-app --save-preset work
 pnpm create elfui@beta my-app --use-preset work --install
 pnpm create elfui@beta --list-presets
 pnpm create elfui@beta --delete-preset work
+# 交互创建时也可在最后一步保存为用户预设，下一次会在“配置预设”中出现
 
 # 在已有项目中生成组件：自动识别 Macro / Chain、语言、样式和 Vitest
 pnpm dlx create-elfui@beta generate component UserCard

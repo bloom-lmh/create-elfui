@@ -326,21 +326,32 @@ const runCreate = async (
   const needsDirectoryPrompt = !directory && !noInteractive;
   const interactive = interactiveFeatureSelection || needsDirectoryPrompt;
   let scaffoldOptions = await createInitialOptions(directory, options, rawArgs);
+  let promptedPresetName: string | undefined;
 
   if (interactive) {
-    scaffoldOptions = await promptForOptions(scaffoldOptions, {
+    const promptResult = await promptForOptions(scaffoldOptions, {
       askProjectDirectory: needsDirectoryPrompt,
       askFeatures: interactiveFeatureSelection,
       askPackageName: interactiveFeatureSelection,
+      askSavePreset: interactiveFeatureSelection && !options.savePreset,
+      userPresets: Object.fromEntries(
+        Object.entries(await listUserPresets()).map(([name, preset]) => [
+          name,
+          toUserPresetOverrides(preset),
+        ]),
+      ),
     });
+    scaffoldOptions = promptResult.options;
+    promptedPresetName = promptResult.savePresetName;
   }
 
   validateTemplateCompatibility(scaffoldOptions);
   validatePackageName(scaffoldOptions);
 
-  if (options.savePreset) {
-    await saveUserPreset(options.savePreset, scaffoldOptions);
-    console.log(chalk.cyan(`已保存预设：${options.savePreset}`));
+  const savePresetName = options.savePreset ?? promptedPresetName;
+  if (savePresetName) {
+    await saveUserPreset(savePresetName, scaffoldOptions);
+    console.log(chalk.cyan(`已保存预设：${savePresetName}`));
   }
 
   const root = resolveProjectRoot(scaffoldOptions.projectDir);
