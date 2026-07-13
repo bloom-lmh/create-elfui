@@ -52,16 +52,13 @@ h1 span {
   min-height: 300px;
   display: grid;
   place-items: center;
-  overflow: hidden;
-  border: 1px solid #203955;
-  border-radius: 8px;
-  background: #0c1625;
 }
 
 .page-mark img {
-  width: min(238px, 72%);
+  width: min(290px, 82%);
   aspect-ratio: 1;
   object-fit: cover;
+  filter: drop-shadow(0 18px 24px rgba(40, 96, 130, 0.18));
 }
 
 .page-grid {

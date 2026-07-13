@@ -40,15 +40,6 @@
   letter-spacing: 0;
 }
 
-.brand-mark {
-  width: 34px;
-  height: 34px;
-  border: 1px solid #243d5d;
-  border-radius: 8px;
-  object-fit: cover;
-  background: #0b1018;
-}
-
 .app-nav {
   display: flex;
   align-items: center;
@@ -157,61 +148,17 @@ h1 span {
   background: #eefaff;
 }
 
-.hero-signal {
-  position: relative;
+.hero-mark-wrap {
   display: grid;
   min-height: 356px;
   place-items: center;
-  overflow: hidden;
-  border: 1px solid #203955;
-  border-radius: 8px;
-  background: #0c1625;
-  box-shadow: 0 24px 54px rgba(18, 45, 70, 0.19);
-}
-
-.hero-signal::before,
-.hero-signal::after {
-  position: absolute;
-  width: 260px;
-  height: 1px;
-  background: rgba(137, 219, 246, 0.34);
-  content: "";
-}
-
-.hero-signal::before {
-  transform: rotate(38deg);
-}
-
-.hero-signal::after {
-  transform: rotate(-38deg);
 }
 
 .hero-mark {
-  position: relative;
-  z-index: 1;
-  width: min(285px, 74%);
+  width: min(360px, 88%);
   aspect-ratio: 1;
   object-fit: cover;
-}
-
-.signal-caption {
-  position: absolute;
-  z-index: 1;
-  bottom: 22px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #d3eafa;
-  font-family: "SFMono-Regular", Consolas, monospace;
-  font-size: 11px;
-}
-
-.signal-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #6be0c1;
-  box-shadow: 0 0 0 4px rgba(107, 224, 193, 0.13);
+  filter: drop-shadow(0 18px 24px rgba(40, 96, 130, 0.18));
 }
 
 .starter-grid {
@@ -289,7 +236,7 @@ code {
     order: 1;
   }
 
-  .hero-signal {
+  .hero-mark-wrap {
     order: 0;
     min-height: 260px;
   }
