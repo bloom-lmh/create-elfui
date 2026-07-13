@@ -1,5 +1,11 @@
 # create-elfui
 
+## 0.1.0-beta.16
+
+### Minor Changes
+
+- d37fbc2: Simplify generated application starter branding with a single transparent snowflake mark on light pages.
+
 ## 0.1.0-beta.15
 
 ### Minor Changes
