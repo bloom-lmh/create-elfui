@@ -107,6 +107,7 @@ for (const consumer of consumerCases) {
       [cliPath, "generate", "component", "UserCard"],
       projectRoot,
     );
+    run(process.execPath, [cliPath, "add", "github-actions"], projectRoot);
     run(consumer.packageManager, ["run", "typecheck"], projectRoot);
     run(consumer.packageManager, ["run", "test"], projectRoot);
     run(consumer.packageManager, ["run", "build"], projectRoot);

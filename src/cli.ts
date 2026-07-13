@@ -1,9 +1,14 @@
 import { outro } from "@clack/prompts";
 import chalk from "chalk";
-import { Command, Option } from "commander";
+import { Argument, Command, Option } from "commander";
 import { relative } from "node:path";
 
 import { generateComponent } from "./component-generator";
+import {
+  addFeature,
+  addableFeatures,
+  type AddableFeature,
+} from "./feature-adder";
 import {
   InvalidOptionError,
   TargetDirectoryNotEmptyError,
@@ -73,6 +78,12 @@ interface CliOptions {
 interface GenerateComponentCliOptions {
   dir?: string;
   style?: StyleSolution;
+  force?: boolean;
+  dryRun?: boolean;
+}
+
+interface AddFeatureCliOptions {
+  routerMode?: RouterMode;
   force?: boolean;
   dryRun?: boolean;
 }
@@ -354,6 +365,32 @@ const runGenerateComponent = async (
   for (const file of result.files) console.log(`  ${file}`);
 };
 
+const runAddFeature = async (
+  feature: AddableFeature,
+  options: AddFeatureCliOptions,
+): Promise<void> => {
+  const result = await addFeature({
+    feature,
+    routerMode: options.routerMode,
+    force: options.force,
+    dryRun: options.dryRun,
+  });
+
+  if (result.alreadyAdded) {
+    console.log(chalk.yellow(`功能已存在：${feature}`));
+    return;
+  }
+  console.log(
+    options.dryRun
+      ? chalk.cyan(`将添加功能：${feature}`)
+      : chalk.green(`功能已添加：${feature}`),
+  );
+  for (const file of result.files) console.log(`  ${file}`);
+  if (!options.dryRun) {
+    console.log(chalk.cyan("请运行包管理器 install 命令以安装新增依赖。"));
+  }
+};
+
 export const createProgram = (rawArgs: string[]): Command => {
   const program = new Command();
 
@@ -434,6 +471,19 @@ export const createProgram = (rawArgs: string[]): Command => {
     .option("--dry-run", "输出文件清单，不写磁盘")
     .action(async (name, options: GenerateComponentCliOptions) => {
       await runGenerateComponent(name, options);
+    });
+
+  program
+    .command("add")
+    .description("向现有 ElfUI 项目增量添加功能")
+    .addArgument(new Argument("<feature>").choices(addableFeatures))
+    .addOption(
+      new Option("--router-mode <mode>", "Router 模式").choices(routerModes),
+    )
+    .option("--force", "覆盖脚手架管理的同名配置文件")
+    .option("--dry-run", "输出变更清单，不写磁盘")
+    .action(async (feature: AddableFeature, options: AddFeatureCliOptions) => {
+      await runAddFeature(feature, options);
     });
 
   program.action(async (directory) => {

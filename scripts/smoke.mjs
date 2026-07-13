@@ -106,6 +106,16 @@ for (const smokeCase of smokeCases) {
     if (!component.includes("UserCard")) {
       throw new Error("组件生成命令未写入预期的组件文件。");
     }
+    await run(process.execPath, [cliPath, "add", "vitest"], {
+      cwd: projectRoot,
+    });
+    const vitestConfig = await readFile(
+      join(projectRoot, "vitest.config.ts"),
+      "utf8",
+    );
+    if (!vitestConfig.includes("defineConfig")) {
+      throw new Error("功能添加命令未写入预期的 Vitest 配置。");
+    }
   } finally {
     await rm(temporaryRoot, { recursive: true, force: true });
   }

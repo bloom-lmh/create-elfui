@@ -37,4 +37,10 @@ pnpm create elfui@beta --delete-preset work
 pnpm dlx create-elfui@beta generate component UserCard
 pnpm exec elfui generate component UserCard --dir src/ui
 pnpm exec elfui generate component user-card --style scss --dry-run
+
+# 向已有项目增量添加功能：Router、测试、格式化或 CI
+pnpm exec elfui add router --router-mode history
+pnpm exec elfui add vitest
+pnpm exec elfui add prettier
+pnpm exec elfui add github-actions --dry-run
 ```

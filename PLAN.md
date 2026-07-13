@@ -23,5 +23,5 @@
 ## C. Ongoing Tooling
 
 - [x] Add `elfui generate component <name>` for Macro and Chain components.
-- [ ] Add `elfui add <feature>` for Router, tests, formatting, and other optional integrations.
+- [x] Add `elfui add <feature>` for Router, tests, formatting, and other optional integrations.
 - [ ] Offer curated application and component-library templates.
