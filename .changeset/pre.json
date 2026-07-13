@@ -13,6 +13,7 @@
     "isolate-npm-lifecycle",
     "refine-template-selection",
     "refresh-starter-experience",
-    "release-process"
+    "release-process",
+    "start-generated-application"
   ]
 }

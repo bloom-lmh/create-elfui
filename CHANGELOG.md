@@ -1,5 +1,11 @@
 # create-elfui
 
+## 0.1.0-beta.15
+
+### Minor Changes
+
+- b9fa84d: Add interactive and command-line options to start a generated application and open it in a browser after dependency installation.
+
 ## 0.1.0-beta.14
 
 ### Minor Changes
