@@ -92,6 +92,20 @@ for (const smokeCase of smokeCases) {
       cwd: temporaryRoot,
     });
     await smokeCase.verify(projectRoot);
+    await run(
+      process.execPath,
+      [cliPath, "generate", "component", "UserCard"],
+      {
+        cwd: projectRoot,
+      },
+    );
+    const component = await readFile(
+      join(projectRoot, "src", "components", "UserCard.ts"),
+      "utf8",
+    );
+    if (!component.includes("UserCard")) {
+      throw new Error("组件生成命令未写入预期的组件文件。");
+    }
   } finally {
     await rm(temporaryRoot, { recursive: true, force: true });
   }

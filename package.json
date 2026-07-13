@@ -5,7 +5,8 @@
   "description": "Project scaffolding CLI for creating ElfUI applications and libraries.",
   "type": "module",
   "bin": {
-    "create-elfui": "dist/index.js"
+    "create-elfui": "dist/index.js",
+    "elfui": "dist/index.js"
   },
   "publishConfig": {
     "access": "public"

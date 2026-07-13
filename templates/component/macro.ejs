@@ -1,0 +1,12 @@
+import { defineHtml, html<% if (hasStyle) { %>, defineStyle<% } %> } from "<%= macroImport %>";
+<% if (hasStyle) { -%>
+import styles from "./<%= componentName %>.<%= styleExtension %>?inline";
+
+defineStyle(styles);
+<% } -%>
+
+export default defineHtml(html`
+  <section class="<%= kebabName %>">
+    <slot></slot>
+  </section>
+`);

@@ -1,0 +1,9 @@
+import { describe, expect, it } from "vitest";
+
+import <%= componentName %> from "../<%= componentName %>";
+
+describe("<%= componentName %>", () => {
+  it("registers the custom element", () => {
+    expect(customElements.get("elf-<%= kebabName %>")).toBe(<%= componentName %>);
+  });
+});

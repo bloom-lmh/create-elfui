@@ -1,0 +1,13 @@
+import { describe, expect, it } from "vitest";
+import { createApp } from "<%= macroImport %>";
+
+import <%= componentName %> from "../<%= componentName %>";
+
+describe("<%= componentName %>", () => {
+  it("mounts the component", () => {
+    const target = document.createElement("div");
+    createApp(<%= componentName %>).mount(target);
+
+    expect(target.firstElementChild).toBeInstanceOf(HTMLElement);
+  });
+});

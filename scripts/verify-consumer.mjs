@@ -59,6 +59,11 @@ for (const consumer of consumerCases) {
       packageRoot,
     );
     run(consumer.packageManager, consumer.installArgs, projectRoot);
+    run(
+      process.execPath,
+      [cliPath, "generate", "component", "UserCard"],
+      projectRoot,
+    );
     run(consumer.packageManager, ["run", "typecheck"], projectRoot);
     run(consumer.packageManager, ["run", "test"], projectRoot);
     run(consumer.packageManager, ["run", "build"], projectRoot);
@@ -69,6 +74,11 @@ for (const consumer of consumerCases) {
       );
     }
   } finally {
-    rmSync(temporaryRoot, { recursive: true, force: true });
+    rmSync(temporaryRoot, {
+      recursive: true,
+      force: true,
+      maxRetries: 10,
+      retryDelay: 200,
+    });
   }
 }

@@ -1,0 +1,14 @@
+import { ElfUI } from "@elfui/chain";
+<% if (hasStyle) { -%>
+import styles from "./<%= componentName %>.<%= styleExtension %>?inline";
+<% } -%>
+
+export const <%= componentName %> = ElfUI.createComponent()
+  .name("elf-<%= kebabName %>")
+  .template(`<section class="<%= kebabName %>"><slot></slot></section>`)
+<% if (hasStyle) { -%>
+  .style(styles)
+<% } -%>
+  .register();
+
+export default <%= componentName %>;

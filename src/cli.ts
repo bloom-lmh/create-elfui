@@ -3,6 +3,7 @@ import chalk from "chalk";
 import { Command, Option } from "commander";
 import { relative } from "node:path";
 
+import { generateComponent } from "./component-generator";
 import {
   InvalidOptionError,
   TargetDirectoryNotEmptyError,
@@ -16,6 +17,7 @@ import {
   getPresetOverrides,
   routerModes,
   scaffoldPresets,
+  styleSolutions,
   type ComponentMode,
   type Language,
   type RouterMode,
@@ -64,6 +66,13 @@ interface CliOptions {
   git?: boolean;
   githubActions?: boolean;
   packageManager?: PackageManager;
+  force?: boolean;
+  dryRun?: boolean;
+}
+
+interface GenerateComponentCliOptions {
+  dir?: string;
+  style?: StyleSolution;
   force?: boolean;
   dryRun?: boolean;
 }
@@ -325,6 +334,26 @@ const runCreate = async (
   else console.log(chalk.green(message));
 };
 
+const runGenerateComponent = async (
+  name: string,
+  options: GenerateComponentCliOptions,
+): Promise<void> => {
+  const result = await generateComponent({
+    name,
+    directory: options.dir,
+    style: options.style,
+    force: options.force,
+    dryRun: options.dryRun,
+  });
+
+  if (options.dryRun) {
+    console.log(chalk.cyan("将生成以下组件文件："));
+  } else {
+    console.log(chalk.green(`组件已生成：${result.componentName}`));
+  }
+  for (const file of result.files) console.log(`  ${file}`);
+};
+
 export const createProgram = (rawArgs: string[]): Command => {
   const program = new Command();
 
@@ -389,6 +418,23 @@ export const createProgram = (rawArgs: string[]): Command => {
     .option("--dry-run", "输出配置和文件清单，不写磁盘")
     .helpOption("-h, --help", "显示帮助")
     .version("0.0.0", "-v, --version", "输出版本");
+
+  program
+    .command("generate")
+    .description("在现有 ElfUI 项目中生成代码")
+    .command("component <name>")
+    .description("生成与当前项目模式匹配的组件")
+    .option("--dir <path>", "组件目录，默认 src/components")
+    .addOption(
+      new Option("--style <style>", "覆盖自动识别的样式方案").choices(
+        styleSolutions,
+      ),
+    )
+    .option("--force", "覆盖同名生成文件")
+    .option("--dry-run", "输出文件清单，不写磁盘")
+    .action(async (name, options: GenerateComponentCliOptions) => {
+      await runGenerateComponent(name, options);
+    });
 
   program.action(async (directory) => {
     await runCreate(

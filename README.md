@@ -32,4 +32,9 @@ pnpm create elfui@beta my-app --save-preset work
 pnpm create elfui@beta my-app --use-preset work --install
 pnpm create elfui@beta --list-presets
 pnpm create elfui@beta --delete-preset work
+
+# 在已有项目中生成组件：自动识别 Macro / Chain、语言、样式和 Vitest
+pnpm dlx create-elfui@beta generate component UserCard
+pnpm exec elfui generate component UserCard --dir src/ui
+pnpm exec elfui generate component user-card --style scss --dry-run
 ```

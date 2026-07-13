@@ -11,6 +11,6 @@ runCli().catch((error: unknown) => {
   }
 
   const message = error instanceof Error ? error.message : String(error);
-  console.error(chalk.red(`创建项目失败：${message}`));
+  console.error(chalk.red(`ElfUI 命令执行失败：${message}`));
   process.exitCode = 1;
 });
