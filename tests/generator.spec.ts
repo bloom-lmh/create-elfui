@@ -89,11 +89,15 @@ describe("generateProject", () => {
     expect(manifest.devDependencies).toHaveProperty("less");
     expect(manifest.devDependencies).not.toHaveProperty("@elfui/vite-plugin");
     await access(join(projectDir, "src", "router", "index.js"));
+    await access(join(projectDir, "src", "pages", "Example.js"));
     await access(join(projectDir, "src", "App.less"));
     await access(join(projectDir, "src", "pages", "page.less"));
     expect(
       await readFile(join(projectDir, "src", "pages", "Home.js"), "utf8"),
     ).toContain(".style(styles)");
+    await expect(
+      readFile(join(projectDir, "src", "App.js"), "utf8"),
+    ).resolves.toContain('to="/example"');
   });
 
   it("renders the selected history Router mode and its deployment note", async () => {
@@ -167,7 +171,7 @@ describe("generateProject", () => {
               expect(manifest.dependencies).toHaveProperty("@elfui/runtime");
               expect(manifest.devDependencies).toHaveProperty(
                 "@elfui/vite-plugin",
-                "^0.1.0-beta.1",
+                "0.1.0-beta.1",
               );
             } else {
               expect(manifest.dependencies).not.toHaveProperty(

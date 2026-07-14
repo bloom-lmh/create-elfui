@@ -36,6 +36,7 @@ describe("addFeature", () => {
     ) as { dependencies: Record<string, string> };
 
     expect(result.files).toContain("src/router/index.ts");
+    expect(result.files).toContain("src/pages/Example.ts");
     expect(manifest.dependencies).toHaveProperty("@elfui/router");
     await expect(
       readFile(join(projectRoot, "src", "App.ts"), "utf8"),

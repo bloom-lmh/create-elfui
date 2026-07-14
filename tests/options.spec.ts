@@ -46,6 +46,11 @@ describe("options", () => {
 
   it("provides focused presets without changing the base defaults", () => {
     expect(getPresetOverrides("recommended")).toEqual({
+      router: true,
+      eslint: true,
+      prettier: true,
+    });
+    expect(getPresetOverrides("recommended", "library")).toEqual({
       eslint: true,
       prettier: true,
     });

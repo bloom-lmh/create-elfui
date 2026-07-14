@@ -6,21 +6,17 @@ defineStyle(styles);
 <% } -%>
 
 export default defineHtml(html`
-  <section class="page">
-    <div class="page-hero">
-      <div>
-        <p class="eyebrow">ELFUI / ROUTED APP</p>
-        <h1>从一个清晰的<br /><span>工作区开始。</span></h1>
-        <p class="page-intro">
-          路由已经连接完成。这里适合放置你的产品概览、任务流或第一段真实业务体验。
-        </p>
+  <section class="page home-page">
+    <div class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">WEB COMPONENT FRAMEWORK</p>
+        <h1>ElfUI</h1>
+        <p class="hero-description">一款专为组件而生的 Web Component 框架</p>
+        <elf-link class="hero-link" to="/example">查看组件示例 <span aria-hidden="true">→</span></elf-link>
       </div>
-      <div class="page-mark"><img :src=${new URL("../assets/elfui-mark.png", import.meta.url).href} alt="ElfUI 雪花标识" /></div>
-    </div>
-    <div class="page-grid">
-      <article class="page-card"><h2>布局</h2><p>从 <code>src/App</code> 调整全局导航与页面壳层。</p></article>
-      <article class="page-card"><h2>路由</h2><p>从 <code>src/router</code> 增加业务页面与导航入口。</p></article>
-      <article class="page-card"><h2>组件</h2><p>通过 <code>elfui generate component</code> 开始沉淀界面单元。</p></article>
+      <div class="hero-mark-wrap" aria-label="ElfUI 标识">
+        <img class="hero-mark" :src=${new URL("../assets/elfui-mark.png", import.meta.url).href} alt="ElfUI 雪花标识" />
+      </div>
     </div>
   </section>
 `);

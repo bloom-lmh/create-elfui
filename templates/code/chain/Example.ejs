@@ -1,0 +1,66 @@
+import { ElfUI, useRef } from "@elfui/chain";
+<% if (hasStyle) { -%>
+import styles from "./page.<%= styleExtension %>?inline";
+<% } -%>
+
+export default ElfUI.createComponent()
+  .name("elf-example-page")
+  .setup(() => {
+    const count = useRef(0);
+    const increment = ()<% if (isTypeScript) { %>: void<% } %> => {
+      count.set(count.peek() + 1);
+    };
+    const reset = ()<% if (isTypeScript) { %>: void<% } %> => {
+      count.set(0);
+    };
+    return { count, increment, reset };
+  })
+  .template(
+    `<section class="page example-page">
+      <header class="example-heading">
+        <p class="eyebrow">CHAIN COMPONENT</p>
+        <h1>一份代码，直接成为组件。</h1>
+        <p>左侧是链式组件源码，右侧是同一份响应式逻辑的实时结果。</p>
+      </header>
+
+      <div class="component-lab">
+        <article class="code-panel" aria-label="链式组件代码">
+          <div class="panel-header">
+            <span>Counter.ts</span>
+            <span class="panel-badge">Chain</span>
+          </div>
+          <pre><code>import { ElfUI, useRef } from "@elfui/chain";
+
+export default ElfUI.createComponent()
+  .setup(() =&gt; {
+    const count = useRef(0);
+    const increment = () =&gt; count.set(count.peek() + 1);
+    return { count, increment };
+  })
+  .template(&#96;&lt;button @click="increment"&gt;
+    已点击 {{ count }} 次
+  &lt;/button&gt;&#96;);</code></pre>
+        </article>
+
+        <article class="preview-panel" aria-label="组件实时预览">
+          <div class="panel-header preview-header">
+            <span>实时预览</span>
+            <span class="live-status"><i></i> 可交互</span>
+          </div>
+          <div class="preview-stage">
+            <p>ELFUI COUNTER</p>
+            <strong>{{ count }}</strong>
+            <span>次交互</span>
+            <div class="preview-actions">
+              <button class="increment-button" @click="increment">增加一次</button>
+              <button class="reset-button" @click="reset">重置</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>`
+  )
+<% if (hasStyle) { -%>
+  .style(styles)
+<% } -%>
+  .register();

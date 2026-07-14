@@ -1,12 +1,12 @@
 import { createRouter } from "@elfui/router";
 
-import About from "../pages/About";
+import Example from "../pages/Example";
 import Home from "../pages/Home";
 
 export const router = createRouter({
   mode: "<%= routerMode %>",
   routes: [
     { path: "/", component: Home },
-    { path: "/about", component: About }
+    { path: "/example", component: Example }
   ]
 });

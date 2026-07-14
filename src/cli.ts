@@ -277,7 +277,12 @@ const createInitialOptions = async (
     ? toUserPresetOverrides(await getUserPreset(options.usePreset))
     : {};
   const overrides: ScaffoldOptionOverrides = {
-    ...(preset ? getPresetOverrides(preset) : {}),
+    ...(preset
+      ? getPresetOverrides(
+          preset,
+          options.template ?? savedOverrides.template ?? "app",
+        )
+      : {}),
     ...savedOverrides,
   };
   const language = resolveLanguage(options);

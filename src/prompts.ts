@@ -140,7 +140,11 @@ export const promptForOptions = async (
       message: "配置预设",
       initialValue: "recommended",
       options: [
-        { value: "recommended", label: "推荐", hint: "ESLint + Prettier" },
+        {
+          value: "recommended",
+          label: "推荐",
+          hint: "Router + ESLint + Prettier",
+        },
         { value: "minimal", label: "Bare", hint: "最小应用骨架" },
         { value: "quality", label: "质量", hint: "ESLint + Prettier + Vitest" },
         { value: "custom", label: "自定义", hint: "从空配置开始" },
@@ -159,6 +163,7 @@ export const promptForOptions = async (
         ? (userPresets[presetSelection.slice("user:".length)] ?? {})
         : getPresetOverrides(
             presetSelection as (typeof scaffoldPresets)[number],
+            initial.template,
           );
   const selectedInitial = { ...initial, ...selectedOptions };
 

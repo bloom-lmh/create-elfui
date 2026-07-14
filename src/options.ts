@@ -62,6 +62,7 @@ export interface ScaffoldOptionOverrides {
 
 export const getPresetOverrides = (
   preset: ScaffoldPreset,
+  template: ScaffoldTemplate = "app",
 ): ScaffoldOptionOverrides => {
   switch (preset) {
     case "minimal":
@@ -69,7 +70,11 @@ export const getPresetOverrides = (
     case "quality":
       return { eslint: true, prettier: true, vitest: true };
     case "recommended":
-      return { eslint: true, prettier: true };
+      return {
+        ...(template === "app" ? { router: true } : {}),
+        eslint: true,
+        prettier: true,
+      };
   }
 };
 

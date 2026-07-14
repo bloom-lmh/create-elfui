@@ -5,3 +5,18 @@ test("renders the ElfUI application", async ({ page }) => {
 
   await expect(page.locator("body")).toContainText("ElfUI");
 });
+<% if (router) { -%>
+
+test("navigates to the interactive component example", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("link", { name: "组件示例" }).first().click();
+
+  await expect(page).toHaveURL(/\/example$/);
+  await page.getByRole("button", { name: "增加一次" }).click();
+  await expect(
+    page
+      .getByRole("article", { name: "组件实时预览" })
+      .getByText("1", { exact: true }),
+  ).toBeVisible();
+});
+<% } -%>

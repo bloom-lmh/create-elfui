@@ -99,7 +99,7 @@ pnpm create elfui@beta --list-templates
 
 内置预设：
 
-- `recommended`：推荐应用配置
+- `recommended`：Router + ESLint + Prettier，适合直接开始应用开发
 - `minimal`：最小 Bare 配置
 - `quality`：带 Vitest 的质量基线
 

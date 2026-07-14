@@ -33,3 +33,4 @@
 - [x] Refresh generated application starter screens with the official ElfUI mark, responsive workspace layout, and useful Router landing pages.
 - [x] Let creators start the generated application and open it in a browser directly from the creation flow.
 - [x] Simplify generated starter branding to one transparent snowflake mark without a dark image panel.
+- [x] Make recommended apps routable by default, simplify the home screen, and add an interactive component example page.

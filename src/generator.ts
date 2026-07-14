@@ -95,7 +95,7 @@ export const listGeneratedFiles = (options: ScaffoldOptions): string[] => {
     files.push(
       `src/router/index.${sourceExtension}`,
       `src/pages/Home.${sourceExtension}`,
-      `src/pages/About.${sourceExtension}`,
+      `src/pages/Example.${sourceExtension}`,
     );
     if (styleExtension) files.push(`src/pages/page.${styleExtension}`);
   }
@@ -321,8 +321,8 @@ const writeProject = async (
     );
     await renderTemplate(
       root,
-      `code/${codeMode}/About.ejs`,
-      `src/pages/About.${sourceExtension}`,
+      `code/${codeMode}/Example.ejs`,
+      `src/pages/Example.${sourceExtension}`,
       context,
       templateRoot,
     );

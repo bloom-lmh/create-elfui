@@ -183,7 +183,7 @@ const ensureWritable = async (
 };
 
 const isScaffoldApp = (source: string, mode: ComponentMode): boolean =>
-  source.includes("ELFUI / WORKSPACE") ||
+  source.includes("WEB COMPONENT FRAMEWORK") ||
   (mode === "macro"
     ? source.includes("ElfUI + Vite") ||
       source.includes('class="app-shell"></main>')
@@ -282,7 +282,7 @@ export const addFeature = async (
     const routerFiles = [
       `src/router/index.${extension}`,
       `src/pages/Home.${extension}`,
-      `src/pages/About.${extension}`,
+      `src/pages/Example.${extension}`,
       ...(styleExtension ? [`src/pages/page.${styleExtension}`] : []),
     ];
     await ensureWritable(root, routerFiles, options.force);
@@ -314,7 +314,7 @@ export const addFeature = async (
       );
       await renderTemplate(
         root,
-        `code/${context.componentMode}/About.ejs`,
+        `code/${context.componentMode}/Example.ejs`,
         routerFiles[2],
         templateContext,
       );
