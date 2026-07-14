@@ -11,6 +11,7 @@
     "generate-components",
     "harden-consumer-release",
     "isolate-npm-lifecycle",
+    "polish-starter-brand-code",
     "refine-template-selection",
     "refresh-routed-starter",
     "refresh-starter-experience",
