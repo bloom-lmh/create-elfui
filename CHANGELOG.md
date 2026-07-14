@@ -1,5 +1,11 @@
 # create-elfui
 
+## 0.1.0-beta.19
+
+### Minor Changes
+
+- 0846242: Simplify generated starter branding with continuous copy and a subtle horizontal wordmark gradient, and replace the component showcase with equal-width code and interactive counter panels.
+
 ## 0.1.0-beta.18
 
 ### Minor Changes
