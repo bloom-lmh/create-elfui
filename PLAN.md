@@ -35,3 +35,4 @@
 - [x] Simplify generated starter branding to one transparent snowflake mark without a dark image panel.
 - [x] Make recommended apps routable by default, simplify the home screen, and add an interactive component example page.
 - [x] Center the starter brand lockup, animate the snowflake behind the wordmark, add route-entry motion, and show verified syntax-highlighted TypeScript component source.
+- [x] Keep starter brand copy continuous, soften the horizontal wordmark gradient, and reduce the component showcase to equal-width counter panels.

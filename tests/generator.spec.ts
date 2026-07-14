@@ -100,7 +100,7 @@ describe("generateProject", () => {
       "utf8",
     );
     expect(example).toContain("{{ codeTick }}");
-    expect(example).toContain("{{ codeValue }}");
+    expect(example).toContain("{{ codeButton }}");
     expect(example).not.toContain("&#96;");
     expect(example).not.toContain("=&gt;");
     await expect(
@@ -138,15 +138,23 @@ describe("generateProject", () => {
 
     expect(router).toContain('mode: "history"');
     expect(readme).toContain("未知路径回退到 `index.html`");
-    expect(home).toContain('class="hero-title"');
+    expect(home).toContain('<h1 class="hero-title">ElfUI</h1>');
+    expect(home).toContain("一款专为组件而生的 Web Component 框架");
+    expect(home).not.toContain('aria-hidden="true">E');
     expect(home).toContain('class="hero-mark"');
     expect(example).toContain("Counter.ts");
-    expect(example).toContain("defineStyle");
+    expect(example).toContain("counter-button");
     expect(example).toContain('class="token-keyword"');
-    expect(example).toContain("codeValue");
+    expect(example).toContain("codeButton");
     expect(example).toContain("${count}");
+    expect(example).not.toContain("reset");
     expect(pageStyle).toContain("snowflake-spin 32s linear infinite");
     expect(pageStyle).toContain("route-enter 420ms");
+    expect(pageStyle).toContain("linear-gradient(90deg");
+    expect(pageStyle).not.toContain("-webkit-text-stroke");
+    expect(pageStyle).toContain(
+      "grid-template-columns: repeat(2, minmax(0, 1fr))",
+    );
   });
 
   it("renders every language, component, style and Router combination", async () => {

@@ -11,12 +11,8 @@ export default defineHtml(html`
       <div class="hero-copy">
         <div class="hero-lockup">
           <img class="hero-mark" :src=${new URL("../assets/elfui-mark.png", import.meta.url).href} alt="" aria-hidden="true" />
-          <h1 class="hero-title" aria-label="ElfUI">
-            <span aria-hidden="true">E</span><span aria-hidden="true">l</span><span aria-hidden="true">f</span><span aria-hidden="true">U</span><span aria-hidden="true">I</span>
-          </h1>
-          <p class="hero-description" aria-label="一款专为组件而生的 Web Component 框架">
-            <span>一款</span><span>专为组件而生的</span><span>Web Component</span><span>框架</span>
-          </p>
+          <h1 class="hero-title">ElfUI</h1>
+          <p class="hero-description">一款专为组件而生的 Web Component 框架</p>
         </div>
         <elf-link class="hero-link" to="/example">查看组件示例 <span aria-hidden="true">→</span></elf-link>
       </div>
