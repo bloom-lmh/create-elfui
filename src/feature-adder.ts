@@ -183,7 +183,7 @@ const ensureWritable = async (
 };
 
 const isScaffoldApp = (source: string, mode: ComponentMode): boolean =>
-  source.includes("WEB COMPONENT FRAMEWORK") ||
+  source.includes("hero-lockup") ||
   (mode === "macro"
     ? source.includes("ElfUI + Vite") ||
       source.includes('class="app-shell"></main>')

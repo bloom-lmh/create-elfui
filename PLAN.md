@@ -34,3 +34,4 @@
 - [x] Let creators start the generated application and open it in a browser directly from the creation flow.
 - [x] Simplify generated starter branding to one transparent snowflake mark without a dark image panel.
 - [x] Make recommended apps routable by default, simplify the home screen, and add an interactive component example page.
+- [x] Center the starter brand lockup, animate the snowflake behind the wordmark, add route-entry motion, and show verified syntax-highlighted TypeScript component source.

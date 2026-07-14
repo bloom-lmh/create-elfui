@@ -95,6 +95,14 @@ describe("generateProject", () => {
     expect(
       await readFile(join(projectDir, "src", "pages", "Home.js"), "utf8"),
     ).toContain(".style(styles)");
+    const example = await readFile(
+      join(projectDir, "src", "pages", "Example.js"),
+      "utf8",
+    );
+    expect(example).toContain("{{ codeTick }}");
+    expect(example).toContain("{{ codeValue }}");
+    expect(example).not.toContain("&#96;");
+    expect(example).not.toContain("=&gt;");
     await expect(
       readFile(join(projectDir, "src", "App.js"), "utf8"),
     ).resolves.toContain('to="/example"');
@@ -115,9 +123,30 @@ describe("generateProject", () => {
       "utf8",
     );
     const readme = await readFile(join(projectDir, "README.md"), "utf8");
+    const home = await readFile(
+      join(projectDir, "src", "pages", "Home.ts"),
+      "utf8",
+    );
+    const example = await readFile(
+      join(projectDir, "src", "pages", "Example.ts"),
+      "utf8",
+    );
+    const pageStyle = await readFile(
+      join(projectDir, "src", "pages", "page.css"),
+      "utf8",
+    );
 
     expect(router).toContain('mode: "history"');
     expect(readme).toContain("未知路径回退到 `index.html`");
+    expect(home).toContain('class="hero-title"');
+    expect(home).toContain('class="hero-mark"');
+    expect(example).toContain("Counter.ts");
+    expect(example).toContain("defineStyle");
+    expect(example).toContain('class="token-keyword"');
+    expect(example).toContain("codeValue");
+    expect(example).toContain("${count}");
+    expect(pageStyle).toContain("snowflake-spin 32s linear infinite");
+    expect(pageStyle).toContain("route-enter 420ms");
   });
 
   it("renders every language, component, style and Router combination", async () => {
