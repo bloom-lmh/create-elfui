@@ -1,5 +1,11 @@
 # create-elfui
 
+## 0.1.0-beta.17
+
+### Minor Changes
+
+- c08b409: Enable Router in the recommended preset, simplify the generated home page, add an interactive component example, and pin the verified ElfUI beta dependency set.
+
 ## 0.1.0-beta.16
 
 ### Minor Changes

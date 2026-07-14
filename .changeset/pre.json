@@ -12,6 +12,7 @@
     "harden-consumer-release",
     "isolate-npm-lifecycle",
     "refine-template-selection",
+    "refresh-routed-starter",
     "refresh-starter-experience",
     "release-process",
     "simplify-starter-snowflake",
