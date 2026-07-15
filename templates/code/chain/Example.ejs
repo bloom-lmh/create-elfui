@@ -12,14 +12,16 @@ export default ElfUI.createComponent()
     };
     const codeTick = "`";
     const codeArrow = "=>";
-    const codeButton = '<button @click="increment">点击 {{ count }} 次</button>';
-    return { count, increment, codeTick, codeArrow, codeButton };
+    const codeButtonOpen = '<button @click="increment">';
+    const codeCount = "<strong>{{ count }}</strong>";
+    const codeButtonClose = "<span>Increment</span></button>";
+    return { count, increment, codeTick, codeArrow, codeButtonOpen, codeCount, codeButtonClose };
   })
   .template(
     `<section class="page example-page">
       <header class="example-heading">
         <p class="eyebrow">TS 单文件组件</p>
-        <h1>几行代码，一个组件</h1>
+        <h1>优雅的组件定义方式</h1>
         <p>状态与模板都在同一个 TypeScript 文件中。</p>
       </header>
 
@@ -31,15 +33,19 @@ export default ElfUI.createComponent()
           </div>
           <pre class="code-content"><code>
 <span class="code-line" data-line="1"><span class="token-keyword">import</span> { <span class="token-function">ElfUI</span>, <span class="token-function">useRef</span> } <span class="token-keyword">from</span> <span class="token-string">"@elfui/chain"</span>;</span>
-<span class="code-line" data-line="2"></span>
-<span class="code-line" data-line="3"><span class="token-keyword">export default</span> ElfUI.<span class="token-function">createComponent</span>()</span>
-<span class="code-line indent-1" data-line="4">.<span class="token-function">setup</span>(() {{ codeArrow }} {</span>
-<span class="code-line indent-2" data-line="5"><span class="token-keyword">const</span> count = <span class="token-function">useRef</span>(<span class="token-number">0</span>);</span>
-<span class="code-line indent-2" data-line="6"><span class="token-keyword">const</span> increment = (): <span class="token-type">void</span> {{ codeArrow }} count.<span class="token-function">set</span>(count.<span class="token-function">peek</span>() + <span class="token-number">1</span>);</span>
-<span class="code-line indent-2" data-line="7"><span class="token-keyword">return</span> { count, increment };</span>
-<span class="code-line indent-1" data-line="8">})</span>
-<span class="code-line indent-1" data-line="9">.<span class="token-function">template</span>({{ codeTick }}<span class="token-tag">{{ codeButton }}</span>{{ codeTick }})</span>
-<span class="code-line indent-1" data-line="10">.<span class="token-function">register</span>();</span>
+<span class="code-line" data-line="2"><span class="token-keyword">const</span> count = <span class="token-function">useRef</span>(<span class="token-number">0</span>);</span>
+<span class="code-line" data-line="3"><span class="token-keyword">const</span> increment = (): <span class="token-type">void</span> {{ codeArrow }} count.<span class="token-function">set</span>(count.<span class="token-function">peek</span>() + <span class="token-number">1</span>);</span>
+<span class="code-line" data-line="4"><span class="token-keyword">export default</span> ElfUI.<span class="token-function">createComponent</span>()</span>
+<span class="code-line indent-1" data-line="5">.<span class="token-function">setup</span>(() {{ codeArrow }} ({ count, increment }))</span>
+<span class="code-line indent-1" data-line="6">.<span class="token-function">style</span>({{ codeTick }}<span class="token-selector">button</span> {</span>
+<span class="code-line indent-2" data-line="7"><span class="token-property">width</span>: <span class="token-number">188px</span>; <span class="token-property">height</span>: <span class="token-number">128px</span>; <span class="token-property">border</span>: <span class="token-number">0</span>;</span>
+<span class="code-line indent-2" data-line="8"><span class="token-property">border-radius</span>: <span class="token-number">18px</span>; <span class="token-property">background</span>: <span class="token-string">#47cae9</span>;</span>
+<span class="code-line indent-1 token-selector" data-line="9">}</span>
+<span class="code-line indent-1" data-line="10"><span class="token-selector">strong, span</span> { <span class="token-property">display</span>: block; }</span>
+<span class="code-line indent-1" data-line="11"><span class="token-selector">strong</span> { <span class="token-property">font-size</span>: <span class="token-number">56px</span>; }{{ codeTick }})</span>
+<span class="code-line indent-1" data-line="12">.<span class="token-function">template</span>({{ codeTick }}<span class="token-tag">{{ codeButtonOpen }}</span></span>
+<span class="code-line indent-2 token-tag" data-line="13">{{ codeCount }}{{ codeButtonClose }}{{ codeTick }})</span>
+<span class="code-line indent-1" data-line="14">.<span class="token-function">register</span>();</span>
           </code></pre>
         </article>
 
@@ -49,7 +55,10 @@ export default ElfUI.createComponent()
             <span class="live-status"><i></i> 可交互</span>
           </div>
           <div class="preview-stage">
-            <button class="counter-button" @click="increment">点击 {{ count }} 次</button>
+            <button class="counter-button" @click="increment">
+              <strong>{{ count }}</strong>
+              <span>Increment</span>
+            </button>
           </div>
         </article>
       </div>

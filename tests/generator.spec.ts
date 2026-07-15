@@ -100,7 +100,10 @@ describe("generateProject", () => {
       "utf8",
     );
     expect(example).toContain("{{ codeTick }}");
-    expect(example).toContain("{{ codeButton }}");
+    expect(example).toContain("{{ codeButtonOpen }}");
+    expect(example).toContain("{{ codeCount }}");
+    expect(example).toContain("优雅的组件定义方式");
+    expect(example).not.toContain('data-line="2"></span>');
     expect(example).not.toContain("&#96;");
     expect(example).not.toContain("=&gt;");
     await expect(
@@ -145,9 +148,12 @@ describe("generateProject", () => {
     expect(example).toContain("Counter.ts");
     expect(example).toContain("counter-button");
     expect(example).toContain('class="token-keyword"');
-    expect(example).toContain("codeButton");
+    expect(example).toContain("codeButtonOpen");
+    expect(example).toContain("优雅的组件定义方式");
+    expect(example).toContain("<strong>${count}</strong>");
     expect(example).toContain("${count}");
     expect(example).not.toContain("reset");
+    expect(example).not.toContain('data-line="2"></span>');
     expect(pageStyle).toContain("snowflake-spin 32s linear infinite");
     expect(pageStyle).toContain("route-enter 420ms");
     expect(pageStyle).toContain("linear-gradient(90deg");
@@ -155,6 +161,10 @@ describe("generateProject", () => {
     expect(pageStyle).toContain(
       "grid-template-columns: repeat(2, minmax(0, 1fr))",
     );
+    expect(pageStyle).toContain("width: 188px");
+    expect(pageStyle).toContain("height: 128px");
+    expect(pageStyle).toContain("border-radius: 18px");
+    expect(pageStyle).toContain("white-space: pre-wrap");
   });
 
   it("renders every language, component, style and Router combination", async () => {
