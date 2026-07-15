@@ -1,5 +1,11 @@
 # create-elfui
 
+## 0.1.0-beta.20
+
+### Minor Changes
+
+- 204ed08: Refine the generated component showcase with a large interactive counter tile, compact continuous source lines, embedded button styles, and overflow-safe code panels.
+
 ## 0.1.0-beta.19
 
 ### Minor Changes
