@@ -1,5 +1,11 @@
 # create-elfui
 
+## 0.1.0-beta.22
+
+### Patch Changes
+
+- eeb1e93: Report the actual published `create-elfui` package version from `--version` and verify the bundled CLI version during the release gate.
+
 ## 0.1.0-beta.21
 
 ### Patch Changes
