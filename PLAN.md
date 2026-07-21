@@ -9,6 +9,7 @@
 - [x] Validate a pnpm consumer with history Router, Vitest, and Playwright configuration.
 - [x] Validate the equivalent consumer matrix with npm.
 - [x] Add a framework-version compatibility check before generation.
+- [x] Report the published package version from the CLI and verify it during package checks.
 
 ## B. Creation Experience
 

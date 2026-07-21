@@ -1,6 +1,7 @@
 import { outro } from "@clack/prompts";
 import chalk from "chalk";
 import { Argument, Command, Option } from "commander";
+import { readFileSync } from "node:fs";
 import { relative } from "node:path";
 
 import { generateComponent } from "./component-generator";
@@ -50,6 +51,10 @@ import {
   saveUserPreset,
   toUserPresetOverrides,
 } from "./user-presets";
+
+const { version: cliVersion } = JSON.parse(
+  readFileSync(new URL("../package.json", import.meta.url), "utf8"),
+) as { version: string };
 
 interface CliOptions {
   template?: ScaffoldTemplate;
@@ -584,7 +589,7 @@ export const createProgram = (rawArgs: string[]): Command => {
     .option("--force", "允许清理非空目标目录")
     .option("--dry-run", "输出配置和文件清单，不写磁盘")
     .helpOption("-h, --help", "显示帮助")
-    .version("0.0.0", "-v, --version", "输出版本");
+    .version(cliVersion, "-v, --version", "输出版本");
 
   program
     .command("generate")
