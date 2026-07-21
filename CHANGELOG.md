@@ -1,5 +1,11 @@
 # create-elfui
 
+## 0.1.0-beta.21
+
+### Patch Changes
+
+- f41dba7: Generate Macro applications and component libraries for the ElfUI beta.6 Core internal bridge. New scaffolds use `@elfui/core` as their only direct runtime dependency, externalize `@elfui/core/internal` in component libraries, and follow the independent Router and Chain beta versions.
+
 ## 0.1.0-beta.20
 
 ### Minor Changes
