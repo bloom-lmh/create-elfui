@@ -4,7 +4,7 @@
 
 ## A. Reliability
 
-- [x] Macro projects declare `@elfui/runtime` directly for pnpm-compatible runtime imports.
+- [x] Macro projects use `@elfui/core` as their only direct runtime dependency and resolve compiler helpers through `@elfui/core/internal`.
 - [x] Publish gate generates a real Macro consumer, installs with pnpm, and runs a Vite production build.
 - [x] Validate a pnpm consumer with history Router, Vitest, and Playwright configuration.
 - [x] Validate the equivalent consumer matrix with npm.

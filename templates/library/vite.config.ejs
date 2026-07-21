@@ -14,7 +14,7 @@ export default defineConfig({
       fileName: "index"
     },
     rollupOptions: {
-      external: [<%- componentMode === "macro" ? '"@elfui/core", "@elfui/runtime"' : '"@elfui/chain"' %>]
+      external: [<%- componentMode === "macro" ? '"@elfui/core", "@elfui/core/internal"' : '"@elfui/chain"' %>]
     }
   }
 });

@@ -10,7 +10,6 @@ describe("createPackageManifest", () => {
 
     expect(manifest.dependencies).toEqual({
       "@elfui/core": frameworkDependencyVersions.core,
-      "@elfui/runtime": frameworkDependencyVersions.runtime,
     });
     expect(manifest.devDependencies).toMatchObject({
       "@elfui/vite-plugin": frameworkDependencyVersions.vitePlugin,

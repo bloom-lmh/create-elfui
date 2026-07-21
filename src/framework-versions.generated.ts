@@ -2,16 +2,14 @@
 
 export interface FrameworkDependencyVersions {
   core: string;
-  runtime: string;
   vitePlugin: string;
   router: string;
   chain: string;
 }
 
 export const frameworkDependencyVersions: FrameworkDependencyVersions = {
-  core: "0.1.0-beta.1",
-  runtime: "0.1.0-beta.1",
-  vitePlugin: "0.1.0-beta.1",
-  router: "0.1.0-beta.1",
-  chain: "0.1.0-beta.1",
+  core: "0.1.0-beta.6",
+  vitePlugin: "0.1.0-beta.6",
+  router: "0.1.0-beta.3",
+  chain: "0.1.0-beta.3",
 };

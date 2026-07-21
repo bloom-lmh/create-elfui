@@ -13,12 +13,9 @@ export const assertFrameworkCompatibility = (
     options.componentMode === "macro"
       ? [
           ["@elfui/core", versions.core],
-          ["@elfui/runtime", versions.runtime],
           ["@elfui/vite-plugin", versions.vitePlugin],
         ]
       : [["@elfui/chain", versions.chain]];
-
-  if (options.router) selected.push(["@elfui/router", versions.router]);
 
   const expectedVersion = normalizeVersion(selected[0][1]);
   const mismatch = selected.find(

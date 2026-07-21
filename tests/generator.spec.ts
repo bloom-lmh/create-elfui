@@ -46,9 +46,12 @@ describe("generateProject", () => {
     expect(main).toContain('createApp(App).mount("#app")');
     expect(viteConfig).toContain('macroImport: "@elfui/core"');
     expect(viteConfig).toContain('runtimeImport: "@elfui/core"');
-    expect(manifest.dependencies).toHaveProperty("@elfui/core");
-    expect(manifest.dependencies).toHaveProperty("@elfui/runtime");
-    expect(manifest.devDependencies).toHaveProperty("@elfui/vite-plugin");
+    expect(manifest.dependencies).toHaveProperty("@elfui/core", "0.1.0-beta.6");
+    expect(manifest.dependencies).not.toHaveProperty("@elfui/runtime");
+    expect(manifest.devDependencies).toHaveProperty(
+      "@elfui/vite-plugin",
+      "0.1.0-beta.6",
+    );
     expect(manifest.dependencies).not.toHaveProperty("@elfui/chain");
     await access(join(projectDir, ".gitignore"));
     await access(join(projectDir, "src", "assets", "elfui-mark.png"));
@@ -84,8 +87,14 @@ describe("generateProject", () => {
     expect(indexHtml).toContain("<elf-app></elf-app>");
     expect(app).toContain("ElfUI.createComponent()");
     expect(app).toContain(".style(styles)");
-    expect(manifest.dependencies).toHaveProperty("@elfui/chain");
-    expect(manifest.dependencies).toHaveProperty("@elfui/router");
+    expect(manifest.dependencies).toHaveProperty(
+      "@elfui/chain",
+      "0.1.0-beta.3",
+    );
+    expect(manifest.dependencies).toHaveProperty(
+      "@elfui/router",
+      "0.1.0-beta.3",
+    );
     expect(manifest.devDependencies).toHaveProperty("less");
     expect(manifest.devDependencies).not.toHaveProperty("@elfui/vite-plugin");
     await access(join(projectDir, "src", "router", "index.js"));
@@ -215,10 +224,12 @@ describe("generateProject", () => {
             );
             expect(manifest.devDependencies).toHaveProperty("vite");
             if (componentMode === "macro") {
-              expect(manifest.dependencies).toHaveProperty("@elfui/runtime");
+              expect(manifest.dependencies).not.toHaveProperty(
+                "@elfui/runtime",
+              );
               expect(manifest.devDependencies).toHaveProperty(
                 "@elfui/vite-plugin",
-                "0.1.0-beta.1",
+                "0.1.0-beta.6",
               );
             } else {
               expect(manifest.dependencies).not.toHaveProperty(
@@ -376,15 +387,19 @@ describe("generateProject", () => {
     expect(manifest.dependencies).toBeUndefined();
     expect(manifest.peerDependencies).toMatchObject({
       "@elfui/core": expect.any(String),
-      "@elfui/runtime": expect.any(String),
     });
+    expect(manifest.peerDependencies).not.toHaveProperty("@elfui/runtime");
     expect(manifest.exports["."]).toMatchObject({
       import: "./dist/index.js",
       types: "./dist/index.d.ts",
     });
-    await expect(
-      readFile(join(projectDir, "vite.config.ts"), "utf8"),
-    ).resolves.toContain("build: {");
+    const viteConfig = await readFile(
+      join(projectDir, "vite.config.ts"),
+      "utf8",
+    );
+    expect(viteConfig).toContain("build: {");
+    expect(viteConfig).toContain('"@elfui/core/internal"');
+    expect(viteConfig).not.toContain('"@elfui/runtime"');
     await expect(
       readFile(join(projectDir, "src", "ElfLibraryButton.scss"), "utf8"),
     ).resolves.toContain(".elf-library-button");
@@ -398,11 +413,34 @@ describe("generateProject", () => {
 
     await expect(
       generateProject(createScaffoldOptions("pnpm", { projectDir }), {
-        versions: { ...dependencyVersions, runtime: "^0.1.0-beta.2" },
+        versions: { ...dependencyVersions, vitePlugin: "^0.1.0-beta.2" },
       }),
-    ).rejects.toThrow("@elfui/runtime 为 ^0.1.0-beta.2");
+    ).rejects.toThrow("@elfui/vite-plugin 为 ^0.1.0-beta.2");
 
     await expect(access(projectDir)).rejects.toThrow();
+  });
+
+  it("allows Router to use its independent release version", async () => {
+    const projectDir = join(temporaryDirectory, "independent-router-version");
+
+    await expect(
+      generateProject(
+        createScaffoldOptions("pnpm", { projectDir, router: true }),
+        {
+          versions: {
+            ...dependencyVersions,
+            core: "0.1.0-beta.6",
+            vitePlugin: "0.1.0-beta.6",
+            router: "0.1.0-beta.3",
+          },
+        },
+      ),
+    ).resolves.toBeDefined();
+
+    const manifest = JSON.parse(
+      await readFile(join(projectDir, "package.json"), "utf8"),
+    ) as { dependencies: Record<string, string> };
+    expect(manifest.dependencies["@elfui/router"]).toBe("0.1.0-beta.3");
   });
 
   it("rejects non-empty directories without force", async () => {
