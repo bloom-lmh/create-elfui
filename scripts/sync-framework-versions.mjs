@@ -12,8 +12,8 @@ const generatedFile = resolve(
 const checkOnly = process.argv.includes("--check");
 
 const entries = [
-  ["core", "0.1.0-beta.6"],
-  ["vitePlugin", "0.1.0-beta.6"],
+  ["core", "0.1.0-beta.7"],
+  ["vitePlugin", "0.1.0-beta.7"],
   ["router", "0.1.0-beta.3"],
   ["chain", "0.1.0-beta.3"],
 ];

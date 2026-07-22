@@ -46,11 +46,11 @@ describe("generateProject", () => {
     expect(main).toContain('createApp(App).mount("#app")');
     expect(viteConfig).toContain('macroImport: "@elfui/core"');
     expect(viteConfig).toContain('runtimeImport: "@elfui/core"');
-    expect(manifest.dependencies).toHaveProperty("@elfui/core", "0.1.0-beta.6");
+    expect(manifest.dependencies).toHaveProperty("@elfui/core", "0.1.0-beta.7");
     expect(manifest.dependencies).not.toHaveProperty("@elfui/runtime");
     expect(manifest.devDependencies).toHaveProperty(
       "@elfui/vite-plugin",
-      "0.1.0-beta.6",
+      "0.1.0-beta.7",
     );
     expect(manifest.dependencies).not.toHaveProperty("@elfui/chain");
     await access(join(projectDir, ".gitignore"));
@@ -66,6 +66,11 @@ describe("generateProject", () => {
     await expect(
       readFile(join(projectDir, "src", "App.ts"), "utf8"),
     ).resolves.not.toContain("defineHtml(html`");
+    await expect(
+      readFile(join(projectDir, "src", "App.ts"), "utf8"),
+    ).resolves.not.toMatch(
+      /import\s*\{[^}]*\b(?:html|css|MacroHtmlTemplate)\b[^}]*\}\s*from\s*["']@elfui\/core["']/,
+    );
   });
 
   it("generates Chain, Router and Less without adding the Macro plugin", async () => {
@@ -230,12 +235,18 @@ describe("generateProject", () => {
             );
             expect(manifest.devDependencies).toHaveProperty("vite");
             if (componentMode === "macro") {
+              expect(generatedContents.join("\n")).not.toContain(
+                "defineHtml(html`",
+              );
+              expect(generatedContents.join("\n")).not.toContain(
+                "defineStyle(css`",
+              );
               expect(manifest.dependencies).not.toHaveProperty(
                 "@elfui/runtime",
               );
               expect(manifest.devDependencies).toHaveProperty(
                 "@elfui/vite-plugin",
-                "0.1.0-beta.6",
+                "0.1.0-beta.7",
               );
             } else {
               expect(manifest.dependencies).not.toHaveProperty(
@@ -409,6 +420,15 @@ describe("generateProject", () => {
     await expect(
       readFile(join(projectDir, "src", "ElfLibraryButton.scss"), "utf8"),
     ).resolves.toContain(".elf-library-button");
+    const componentSource = await readFile(
+      join(projectDir, "src", "ElfLibraryButton.ts"),
+      "utf8",
+    );
+    expect(componentSource).toContain("export default defineHtml(`");
+    expect(componentSource).not.toContain("defineHtml(html`");
+    expect(componentSource).not.toMatch(
+      /import\s*\{[^}]*\b(?:html|css|MacroHtmlTemplate)\b[^}]*\}\s*from\s*["']@elfui\/core["']/,
+    );
     await expect(
       access(join(projectDir, "eslint.config.js")),
     ).resolves.toBeUndefined();
@@ -435,8 +455,8 @@ describe("generateProject", () => {
         {
           versions: {
             ...dependencyVersions,
-            core: "0.1.0-beta.6",
-            vitePlugin: "0.1.0-beta.6",
+            core: "0.1.0-beta.7",
+            vitePlugin: "0.1.0-beta.7",
             router: "0.1.0-beta.3",
           },
         },

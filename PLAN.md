@@ -38,3 +38,4 @@
 - [x] Center the starter brand lockup, animate the snowflake behind the wordmark, add route-entry motion, and show verified syntax-highlighted TypeScript component source.
 - [x] Keep starter brand copy continuous, soften the horizontal wordmark gradient, and reduce the component showcase to equal-width counter panels.
 - [x] Present the starter counter as a large interactive tile and keep its compact styled source within the equal-width code panel.
+- [x] Adopt ElfUI beta.7 direct-string Macro syntax across application, library, and component-generator templates.
