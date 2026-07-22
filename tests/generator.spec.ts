@@ -60,6 +60,12 @@ describe("generateProject", () => {
     ).resolves.toContain(
       'new URL("./assets/elfui-mark.png", import.meta.url).href',
     );
+    await expect(
+      readFile(join(projectDir, "src", "App.ts"), "utf8"),
+    ).resolves.toContain("export default defineHtml(`");
+    await expect(
+      readFile(join(projectDir, "src", "App.ts"), "utf8"),
+    ).resolves.not.toContain("defineHtml(html`");
   });
 
   it("generates Chain, Router and Less without adding the Macro plugin", async () => {

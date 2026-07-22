@@ -1,8 +1,8 @@
-import { defineHtml, html<% if (hasStyle) { %>, defineStyle<% } %> } from "@elfui/core";
+import { defineHtml<% if (hasStyle) { %>, defineStyle<% } %> } from "@elfui/core";
 <% if (hasStyle) { -%>
 import styles from "./ElfLibraryButton.<%= styleExtension %>?inline";
 
 defineStyle(styles);
 <% } -%>
 
-export default defineHtml(html`<button class="elf-library-button"><slot></slot></button>`);
+export default defineHtml(`<button class="elf-library-button"><slot></slot></button>`);

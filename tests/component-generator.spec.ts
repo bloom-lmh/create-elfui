@@ -51,7 +51,7 @@ describe("generateComponent", () => {
     ]);
     await expect(
       readFile(join(projectRoot, "src", "components", "UserCard.ts"), "utf8"),
-    ).resolves.toContain('defineHtml, html, defineStyle } from "@elfui/core"');
+    ).resolves.toContain('defineHtml, defineStyle } from "@elfui/core"');
     await expect(
       readFile(join(projectRoot, "src", "components", "UserCard.ts"), "utf8"),
     ).resolves.toContain("export default defineHtml");

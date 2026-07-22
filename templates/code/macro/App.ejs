@@ -1,4 +1,4 @@
-import { defineHtml, html<% if (hasStyle) { %>, defineStyle<% } %> } from "@elfui/core";
+import { defineHtml<% if (hasStyle) { %>, defineStyle<% } %> } from "@elfui/core";
 <% if (hasStyle) { -%>
 import styles from "./App.<%= styleExtension %>?inline";
 
@@ -6,7 +6,7 @@ defineStyle(styles);
 <% } -%>
 <% if (router) { -%>
 
-export default defineHtml(html`
+export default defineHtml(`
   <main class="app-shell">
     <div class="app-frame">
       <header class="app-header">
@@ -23,10 +23,10 @@ export default defineHtml(html`
 `);
 <% } else if (bare) { -%>
 
-export default defineHtml(html`<main class="app-shell"></main>`);
+export default defineHtml(`<main class="app-shell"></main>`);
 <% } else { -%>
 
-export default defineHtml(html`
+export default defineHtml(`
   <main class="app-shell">
     <div class="app-frame">
       <header class="app-header">

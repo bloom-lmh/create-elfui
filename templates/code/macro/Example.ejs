@@ -1,4 +1,4 @@
-import { defineHtml, html, useRef<% if (hasStyle) { %>, defineStyle<% } %> } from "@elfui/core";
+import { defineHtml, useRef<% if (hasStyle) { %>, defineStyle<% } %> } from "@elfui/core";
 <% if (hasStyle) { -%>
 import styles from "./page.<%= styleExtension %>?inline";
 
@@ -15,7 +15,7 @@ const codeButtonOpen = '<button @click=${increment}>';
 const codeCount = "<strong>${count}</strong>";
 const codeButtonClose = "<span>Increment</span></button>";
 
-export default defineHtml(html`
+export default defineHtml(`
   <section class="page example-page">
     <header class="example-heading">
       <p class="eyebrow">TS 单文件组件</p>
@@ -30,7 +30,7 @@ export default defineHtml(html`
           <span class="panel-badge">TS · Macro</span>
         </div>
         <pre class="code-content"><code>
-<span class="code-line" data-line="1"><span class="token-keyword">import</span> { <span class="token-function">defineHtml</span>, <span class="token-function">defineStyle</span>, <span class="token-function">html</span>, <span class="token-function">useRef</span> } <span class="token-keyword">from</span> <span class="token-string">"@elfui/core"</span>;</span>
+<span class="code-line" data-line="1"><span class="token-keyword">import</span> { <span class="token-function">defineHtml</span>, <span class="token-function">defineStyle</span>, <span class="token-function">useRef</span> } <span class="token-keyword">from</span> <span class="token-string">"@elfui/core"</span>;</span>
 <span class="code-line" data-line="2"><span class="token-keyword">const</span> count = <span class="token-function">useRef</span>(<span class="token-number">0</span>);</span>
 <span class="code-line" data-line="3"><span class="token-keyword">const</span> increment = (): <span class="token-type">void</span> ${codeArrow} count.<span class="token-function">set</span>(count.<span class="token-function">peek</span>() + <span class="token-number">1</span>);</span>
 <span class="code-line" data-line="4"><span class="token-function">defineStyle</span>(${codeTick}</span>
@@ -41,7 +41,7 @@ export default defineHtml(html`
 <span class="code-line indent-1" data-line="9"><span class="token-selector">strong, span</span> { <span class="token-property">display</span>: block; }</span>
 <span class="code-line indent-1" data-line="10"><span class="token-selector">strong</span> { <span class="token-property">font-size</span>: <span class="token-number">56px</span>; }</span>
 <span class="code-line" data-line="11">${codeTick});</span>
-<span class="code-line" data-line="12"><span class="token-keyword">export default</span> <span class="token-function">defineHtml</span>(<span class="token-function">html</span>${codeTick}</span>
+<span class="code-line" data-line="12"><span class="token-keyword">export default</span> <span class="token-function">defineHtml</span>(${codeTick}</span>
 <span class="code-line indent-1 token-tag" data-line="13">${codeButtonOpen}</span>
 <span class="code-line indent-2 token-tag" data-line="14">${codeCount}${codeButtonClose}</span>
 <span class="code-line" data-line="15">${codeTick});</span>
