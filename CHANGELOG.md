@@ -1,5 +1,11 @@
 # create-elfui
 
+## 0.1.0-beta.23
+
+### Patch Changes
+
+- d3664c6: Upgrade generated Macro projects to ElfUI beta.7 and replace the removed `html`/`css` tagged-template helpers with direct string arguments in every application, library, and component-generator template.
+
 ## 0.1.0-beta.22
 
 ### Patch Changes
