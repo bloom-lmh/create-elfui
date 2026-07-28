@@ -46,11 +46,17 @@ describe("generateProject", () => {
     expect(main).toContain('createApp(App).mount("#app")');
     expect(viteConfig).toContain('macroImport: "@elfui/core"');
     expect(viteConfig).toContain('runtimeImport: "@elfui/core"');
-    expect(manifest.dependencies).toHaveProperty("@elfui/core", "0.1.0-beta.7");
+    expect(manifest.dependencies).toHaveProperty(
+      "@elfui/core",
+      "0.1.0-beta.13",
+    );
     expect(manifest.dependencies).not.toHaveProperty("@elfui/runtime");
     expect(manifest.devDependencies).toHaveProperty(
       "@elfui/vite-plugin",
-      "0.1.0-beta.7",
+      "0.1.0-beta.13",
+    );
+    expect(manifest.dependencies["@elfui/core"]).toBe(
+      manifest.devDependencies["@elfui/vite-plugin"],
     );
     expect(manifest.dependencies).not.toHaveProperty("@elfui/chain");
     await access(join(projectDir, ".gitignore"));
@@ -246,7 +252,7 @@ describe("generateProject", () => {
               );
               expect(manifest.devDependencies).toHaveProperty(
                 "@elfui/vite-plugin",
-                "0.1.0-beta.7",
+                "0.1.0-beta.13",
               );
             } else {
               expect(manifest.dependencies).not.toHaveProperty(
@@ -439,9 +445,25 @@ describe("generateProject", () => {
 
     await expect(
       generateProject(createScaffoldOptions("pnpm", { projectDir }), {
-        versions: { ...dependencyVersions, vitePlugin: "^0.1.0-beta.2" },
+        versions: { ...dependencyVersions, vitePlugin: "0.1.0-beta.12" },
       }),
-    ).rejects.toThrow("@elfui/vite-plugin 为 ^0.1.0-beta.2");
+    ).rejects.toThrow("@elfui/vite-plugin 为 0.1.0-beta.12");
+
+    await expect(access(projectDir)).rejects.toThrow();
+  });
+
+  it("rejects range-based Macro framework versions", async () => {
+    const projectDir = join(temporaryDirectory, "ranged-framework-app");
+
+    await expect(
+      generateProject(createScaffoldOptions("pnpm", { projectDir }), {
+        versions: {
+          ...dependencyVersions,
+          core: "^0.1.0-beta.13",
+          vitePlugin: "^0.1.0-beta.13",
+        },
+      }),
+    ).rejects.toThrow("Macro 依赖必须使用精确版本");
 
     await expect(access(projectDir)).rejects.toThrow();
   });
@@ -455,8 +477,8 @@ describe("generateProject", () => {
         {
           versions: {
             ...dependencyVersions,
-            core: "0.1.0-beta.7",
-            vitePlugin: "0.1.0-beta.7",
+            core: "0.1.0-beta.13",
+            vitePlugin: "0.1.0-beta.13",
             router: "0.1.0-beta.3",
           },
         },

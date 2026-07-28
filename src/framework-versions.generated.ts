@@ -8,8 +8,8 @@ export interface FrameworkDependencyVersions {
 }
 
 export const frameworkDependencyVersions: FrameworkDependencyVersions = {
-  core: "0.1.0-beta.7",
-  vitePlugin: "0.1.0-beta.7",
+  core: "0.1.0-beta.13",
+  vitePlugin: "0.1.0-beta.13",
   router: "0.1.0-beta.3",
   chain: "0.1.0-beta.3",
 };
