@@ -9,6 +9,7 @@
     "add-project-features",
     "adopt-beta-seven-macros",
     "adopt-core-internal-bridge",
+    "align-beta-thirteen-toolchain",
     "compact-interactive-flow",
     "generate-components",
     "harden-consumer-release",

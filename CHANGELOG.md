@@ -1,5 +1,11 @@
 # create-elfui
 
+## 0.1.0-beta.24
+
+### Patch Changes
+
+- 2330702: Pin generated Macro projects to matching `@elfui/core` and `@elfui/vite-plugin` beta.13 releases, reject ranged or mismatched framework versions, and verify Vite reports version mismatches during startup.
+
 ## 0.1.0-beta.23
 
 ### Patch Changes
