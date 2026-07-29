@@ -1,5 +1,11 @@
 # create-elfui
 
+## 0.1.0-beta.25
+
+### Patch Changes
+
+- 8142097: Upgrade generated projects to ElfUI beta.21 and refine the component example so its content is vertically centered without a desktop page scrollbar.
+
 ## 0.1.0-beta.24
 
 ### Patch Changes
