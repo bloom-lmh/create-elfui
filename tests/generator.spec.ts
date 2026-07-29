@@ -48,12 +48,12 @@ describe("generateProject", () => {
     expect(viteConfig).toContain('runtimeImport: "@elfui/core"');
     expect(manifest.dependencies).toHaveProperty(
       "@elfui/core",
-      "0.1.0-beta.13",
+      "0.1.0-beta.21",
     );
     expect(manifest.dependencies).not.toHaveProperty("@elfui/runtime");
     expect(manifest.devDependencies).toHaveProperty(
       "@elfui/vite-plugin",
-      "0.1.0-beta.13",
+      "0.1.0-beta.21",
     );
     expect(manifest.dependencies["@elfui/core"]).toBe(
       manifest.devDependencies["@elfui/vite-plugin"],
@@ -110,7 +110,7 @@ describe("generateProject", () => {
     );
     expect(manifest.dependencies).toHaveProperty(
       "@elfui/router",
-      "0.1.0-beta.3",
+      "0.1.0-beta.11",
     );
     expect(manifest.devDependencies).toHaveProperty("less");
     expect(manifest.devDependencies).not.toHaveProperty("@elfui/vite-plugin");
@@ -129,6 +129,7 @@ describe("generateProject", () => {
     expect(example).toContain("{{ codeButtonOpen }}");
     expect(example).toContain("{{ codeCount }}");
     expect(example).toContain("优雅的组件定义方式");
+    expect(example).not.toContain("状态与模板都在同一个 TypeScript 文件中。");
     expect(example).not.toContain('data-line="2"></span>');
     expect(example).not.toContain("&#96;");
     expect(example).not.toContain("=&gt;");
@@ -164,6 +165,7 @@ describe("generateProject", () => {
       join(projectDir, "src", "pages", "page.css"),
       "utf8",
     );
+    const appStyle = await readFile(join(projectDir, "src", "App.css"), "utf8");
 
     expect(router).toContain('mode: "history"');
     expect(readme).toContain("未知路径回退到 `index.html`");
@@ -176,6 +178,7 @@ describe("generateProject", () => {
     expect(example).toContain('class="token-keyword"');
     expect(example).toContain("codeButtonOpen");
     expect(example).toContain("优雅的组件定义方式");
+    expect(example).not.toContain("状态与模板都在同一个 TypeScript 文件中。");
     expect(example).toContain("<strong>${count}</strong>");
     expect(example).toContain("${count}");
     expect(example).not.toContain("reset");
@@ -191,6 +194,9 @@ describe("generateProject", () => {
     expect(pageStyle).toContain("height: 128px");
     expect(pageStyle).toContain("border-radius: 18px");
     expect(pageStyle).toContain("white-space: pre-wrap");
+    expect(pageStyle).toContain("box-sizing: border-box");
+    expect(pageStyle).toContain("padding: 32px 0");
+    expect(appStyle).toContain("box-sizing: border-box");
   });
 
   it("renders every language, component, style and Router combination", async () => {
@@ -252,7 +258,7 @@ describe("generateProject", () => {
               );
               expect(manifest.devDependencies).toHaveProperty(
                 "@elfui/vite-plugin",
-                "0.1.0-beta.13",
+                "0.1.0-beta.21",
               );
             } else {
               expect(manifest.dependencies).not.toHaveProperty(
@@ -445,9 +451,9 @@ describe("generateProject", () => {
 
     await expect(
       generateProject(createScaffoldOptions("pnpm", { projectDir }), {
-        versions: { ...dependencyVersions, vitePlugin: "0.1.0-beta.12" },
+        versions: { ...dependencyVersions, vitePlugin: "0.1.0-beta.20" },
       }),
-    ).rejects.toThrow("@elfui/vite-plugin 为 0.1.0-beta.12");
+    ).rejects.toThrow("@elfui/vite-plugin 为 0.1.0-beta.20");
 
     await expect(access(projectDir)).rejects.toThrow();
   });
@@ -459,8 +465,8 @@ describe("generateProject", () => {
       generateProject(createScaffoldOptions("pnpm", { projectDir }), {
         versions: {
           ...dependencyVersions,
-          core: "^0.1.0-beta.13",
-          vitePlugin: "^0.1.0-beta.13",
+          core: "^0.1.0-beta.21",
+          vitePlugin: "^0.1.0-beta.21",
         },
       }),
     ).rejects.toThrow("Macro 依赖必须使用精确版本");
@@ -477,9 +483,9 @@ describe("generateProject", () => {
         {
           versions: {
             ...dependencyVersions,
-            core: "0.1.0-beta.13",
-            vitePlugin: "0.1.0-beta.13",
-            router: "0.1.0-beta.3",
+            core: "0.1.0-beta.21",
+            vitePlugin: "0.1.0-beta.21",
+            router: "0.1.0-beta.11",
           },
         },
       ),
@@ -488,7 +494,7 @@ describe("generateProject", () => {
     const manifest = JSON.parse(
       await readFile(join(projectDir, "package.json"), "utf8"),
     ) as { dependencies: Record<string, string> };
-    expect(manifest.dependencies["@elfui/router"]).toBe("0.1.0-beta.3");
+    expect(manifest.dependencies["@elfui/router"]).toBe("0.1.0-beta.11");
   });
 
   it("rejects non-empty directories without force", async () => {
