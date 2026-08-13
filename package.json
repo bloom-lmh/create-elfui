@@ -59,10 +59,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bloom-lmh/create-elfui.git"
+    "url": "git+https://github.com/bloom-lmh/Create-ElfUI.git"
   },
-  "homepage": "https://github.com/bloom-lmh/create-elfui",
+  "homepage": "https://github.com/bloom-lmh/Create-ElfUI",
   "bugs": {
-    "url": "https://github.com/bloom-lmh/create-elfui/issues"
+    "url": "https://github.com/bloom-lmh/Create-ElfUI/issues"
   }
 }
