@@ -1,5 +1,11 @@
 # create-elfui
 
+## 0.1.0-beta.27
+
+### Patch Changes
+
+- Upgrade the release runner to npm 11.19.1 so generated npm consumers can complete dependency installation without the older Arborist `edgesOut` crash.
+
 ## 0.1.0-beta.26
 
 ### Patch Changes

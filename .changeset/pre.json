@@ -25,6 +25,7 @@
     "report-cli-version",
     "simplify-starter-counter",
     "simplify-starter-snowflake",
-    "start-generated-application"
+    "start-generated-application",
+    "upgrade-npm-release-toolchain"
   ]
 }
