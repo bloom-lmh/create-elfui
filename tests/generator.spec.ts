@@ -110,7 +110,7 @@ describe("generateProject", () => {
     );
     expect(manifest.dependencies).toHaveProperty(
       "@elfui/router",
-      "0.1.0-beta.11",
+      "0.1.0-beta.12",
     );
     expect(manifest.devDependencies).toHaveProperty("less");
     expect(manifest.devDependencies).not.toHaveProperty("@elfui/vite-plugin");

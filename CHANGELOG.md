@@ -1,5 +1,11 @@
 # create-elfui
 
+## 0.1.0-beta.26
+
+### Patch Changes
+
+- Create missing projects directly below a Windows drive root without attempting to recreate the drive, and generate Router beta.12 for routed applications.
+
 ## 0.1.0-beta.25
 
 ### Patch Changes

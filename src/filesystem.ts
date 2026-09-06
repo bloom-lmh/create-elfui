@@ -33,11 +33,19 @@ export const inspectTargetDirectory = async (
   return "non-empty";
 };
 
+export const isFileSystemRoot = (directory: string): boolean => {
+  const resolved = resolve(directory);
+  return resolved === parse(resolved).root;
+};
+
 export const createStagingDirectory = async (
   target: string,
 ): Promise<string> => {
   const parent = dirname(target);
-  await mkdir(parent, { recursive: true });
+  // Node rejects mkdir("E:\\", { recursive: true }) with EPERM on Windows,
+  // even though the drive root already exists. Nested parents still need to
+  // be created for normal project paths.
+  if (!isFileSystemRoot(parent)) await mkdir(parent, { recursive: true });
   return mkdtemp(join(parent, `.${basename(target)}-`));
 };
 

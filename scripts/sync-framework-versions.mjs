@@ -14,7 +14,7 @@ const checkOnly = process.argv.includes("--check");
 const entries = [
   ["core", "0.1.0-beta.21"],
   ["vitePlugin", "0.1.0-beta.21"],
-  ["router", "0.1.0-beta.11"],
+  ["router", "0.1.0-beta.12"],
   ["chain", "0.1.0-beta.3"],
 ];
 
